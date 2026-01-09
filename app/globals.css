@@ -1,0 +1,379 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Engage Me brand colors - Primary */
+  --cyan: #3afcad;
+  --magenta: #ff58c4;
+  --gray-light: #f5f5f5;
+  --gray-dark: #333333;
+
+  /* Updated color scheme for Engage Me branding */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0 0);
+  --primary: oklch(0.2 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.2 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Added custom styles from the WordPress template */
+
+/* Navigation styles */
+.header .f-navbar-nav a {
+  font-size: 18px;
+}
+
+.header .social-icons li i {
+  position: absolute;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  font-size: 25px;
+  transform: translate(-50%, -50%);
+  color: #fff;
+}
+
+.header .social-icons li i:hover {
+  color: #fff !important;
+}
+
+.header .social-icons li {
+  background: #3afcad;
+  border: none;
+}
+
+/* Footer scrollup button */
+.footer-scrollup i {
+  color: #3afcad;
+  font-size: 22px;
+}
+
+.footer-scrollup {
+  padding: 9px 17px;
+}
+
+/* Home section text padding */
+.home-en-text {
+  padding: 30px;
+}
+
+/* Paragraph sizing */
+.all_para_size {
+  font-size: 1.33rem;
+}
+
+/* Image content styling */
+.content_side_img {
+  height: 100%;
+}
+
+.content_side_img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Large text styling */
+.f-text-xlarge {
+  line-height: 1.5;
+}
+
+/* Offcanvas menu background */
+.f-offcanvas-bar {
+  background: #ff58c4;
+}
+
+/* Work title display control */
+.work_title {
+  display: none;
+}
+
+.grid-item:hover .work_title {
+  display: block;
+}
+
+/* Child element flexbox ordering */
+.child {
+  margin-left: auto;
+  order: 2;
+}
+
+/* Common image side text padding */
+.comn_img_side_txt {
+  padding: 30px !important;
+}
+
+/* Section featured styling */
+.section-featured .section-text {
+  min-height: 0;
+}
+
+/* Footer buttons */
+.footer_btn {
+  color: #fff;
+  padding: 10px 13px;
+  border-radius: 15px;
+}
+
+.subscribe_btn {
+  background-color: #3afcad;
+}
+
+.browser_btn {
+  background-color: #3afcad;
+}
+
+/* Carousel styling */
+.carousel-indicators li {
+  height: 12px !important;
+  width: 12px !important;
+  border-radius: 50% !important;
+  background-color: #fff !important;
+}
+
+.carousel-indicators .active {
+  background-color: #3afcad !important;
+}
+
+/* Section heading styles */
+.section-title {
+  line-height: 1 !important;
+  padding-bottom: 5px;
+}
+
+.section-description {
+  padding-top: 10px;
+}
+
+/* Floating button sizing */
+.fix-btn-scroll {
+  font-size: 0.8rem;
+  padding: 4px;
+}
+
+#banner_text {
+  font-size: 13vw;
+}
+
+/* Responsive styles */
+@media screen and (min-width: 768px) {
+  .section-featured .section-description {
+    width: 100%;
+  }
+  .image-grid {
+    padding: 0px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-en-text {
+    padding: 0px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  #banner_text {
+    position: absolute;
+    left: 58%;
+    line-height: 1;
+  }
+  #banner_text .col-sm-6 {
+    padding-top: 0px !important;
+  }
+  .banner_logo {
+    margin-top: -8%;
+  }
+  .btn-group-vertical {
+    top: 35% !important;
+  }
+  .child {
+    order: unset;
+  }
+  .home_imggroup {
+    order: 2;
+  }
+  .people_in_1 {
+    order: 1;
+  }
+  .people_in_2 {
+    order: 2;
+  }
+  .people_in_3 {
+    order: 3;
+  }
+  .people_in_4 {
+    order: 4;
+  }
+  .insigh_last {
+    padding-left: 55px !important;
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .sidecontent_order_big {
+    order: 2;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .f-navbar-nav > li > a {
+    padding: 0 10px;
+  }
+  .header .f-navbar-nav a {
+    font-size: 17px;
+  }
+  .work_title {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .f-navbar-nav > li > a {
+    padding: 0 8px;
+  }
+  .header .f-navbar-nav a {
+    font-size: 16px;
+  }
+  .header .f-navbar-nav {
+    width: 100%;
+    padding-left: 8px;
+  }
+}
+
+/* Custom button styles */
+.btn-engage {
+  background-color: #3afcad;
+  color: #000;
+  font-weight: bold;
+  padding: 8px 16px;
+  display: inline-block;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-engage:hover {
+  background-color: #00dd77;
+}
+
+/* Carousel animation */
+.carousel-item {
+  transition: all 0.5s ease-in-out;
+}
