@@ -78,22 +78,29 @@ export default function BringingBrandsToLife({
                 </ul>
 
                 {/* Carousel inner */}
-                <div className="carousel-inner content_side_img relative w-full h-full">
-                  {carouselImages.map((image, index) => (
-                    <div
-                      key={image.id}
-                      className={`carousel-item content_side_img absolute inset-0 transition-opacity duration-500 ${
-                        index === currentSlide ? "opacity-100" : "opacity-0"
-                      }`}
-                    >
-                      <Image
-                        src={image.src || "/placeholder.svg"}
-                        alt={image.alt}
-                        fill
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
+                <div className="carousel-inner content_side_img relative w-full h-full overflow-hidden">
+                  <div
+                    className="flex transition-transform duration-700 ease-in-out h-full"
+                    style={{
+                      width: `${carouselImages.length * 100}%`,
+                      transform: `translateX(-${currentSlide * (100 / carouselImages.length)}%)`,
+                    }}
+                  >
+                    {carouselImages.map((image, index) => (
+                      <div
+                        key={image.id}
+                        className="carousel-item content_side_img relative w-full h-full flex-shrink-0"
+                        style={{ width: `${100 / carouselImages.length}%` }}
+                      >
+                        <Image
+                          src={image.src || "/placeholder.svg"}
+                          alt={image.alt}
+                          fill
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Left/Right controls */}
