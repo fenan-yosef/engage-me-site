@@ -3,13 +3,9 @@
 import Image from "next/image"
 
 export default function EngagingStaff() {
-  const staffImages = Array.from({ length: 6 }, (_, i) => ({
-    id: i + 1,
-    alt: `Staff ${i + 1}`,
-  }))
 
   return (
-    <section className="bg-white py-20 pr-6">
+    <section className="bg-white py-20">
       <div className=" mx-auto">
         {/* Engaging Staff Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
@@ -35,7 +31,7 @@ export default function EngagingStaff() {
           {/* Right side - Text content */}
           <div className="comn_img_side_txt flex flex-col justify-center">
             <h2
-              className="section-title text-5xl md:text-7xl font-bold mb-8"
+              className="section-title text-5xl md:text-7xl font-bold mb-8 pr-6"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
               <div>engaging staff</div>
@@ -60,7 +56,12 @@ export default function EngagingStaff() {
         <div className="mt-20 pt-20 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Text content - order changes on mobile */}
           <div className="comn_img_side_txt order-2 md:order-1 insigh_last">
-            <h3 className="text-3xl md:text-5xl font-bold mb-6 text-gray-800">Driving Results</h3>
+            <h3
+              className="section-title text-5xl md:text-7xl font-bold mb-6"
+              style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+            >
+              Driving Results
+            </h3>
 
             <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
               With our bespoke reporting tool INSIGHT, clients can see results, feedback, pictures and videos throughout
@@ -77,21 +78,14 @@ export default function EngagingStaff() {
           </div>
 
           {/* Image grid */}
-          <div className="order-1 md:order-2 image-grid">
-            <div className="grid grid-cols-3 gap-px">
-              {staffImages.map((item) => (
-                <div
-                  key={item.id}
-                  className="relative w-full aspect-square bg-gray-300 overflow-hidden flex items-center justify-center"
-                >
-                  <Image
-                    src={`/insight-.jpg?height=200&width=200&query=insight ${item.id}`}
-                    alt={`Insight ${item.id}`}
-                    fill
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
+          <div className="order-1 md:order-2 image-grid flex items-center justify-center">
+            <div className="relative w-full h-96 bg-gray-300 overflow-hidden">
+              <Image
+                src="/driving-results.jpg"
+                alt="Driving Results"
+                fill
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
