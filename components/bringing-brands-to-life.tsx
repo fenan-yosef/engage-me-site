@@ -86,7 +86,7 @@ export default function BringingBrandsToLife({
                       transform: `translateX(-${currentSlide * (100 / carouselImages.length)}%)`,
                     }}
                   >
-                    {carouselImages.map((image, index) => (
+                    {carouselImages.map((image) => (
                       <div
                         key={image.id}
                         className="carousel-item content_side_img relative w-full h-full flex-shrink-0"
