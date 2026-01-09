@@ -3,6 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Run';
+  src: url('/fonts/run.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Engage Me brand colors - Primary */
   --cyan: #3afcad;
@@ -128,6 +136,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Run', var(--font-sans);
   }
 }
 
@@ -135,6 +144,38 @@
 
 /* Navigation styles */
 .header .f-navbar-nav a {
+  font-size: 18px;
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-weight: 300;
+  color: inherit;
+  position: relative;
+  padding-bottom: 6px;
+  text-decoration: none;
+}
+
+.header .f-navbar-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: transparent;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease, background 220ms ease;
+}
+
+.header .f-navbar-nav a:hover::after,
+.header .f-navbar-nav a:focus::after {
+  transform: scaleX(1);
+  background: #3AFCAD;
+}
+
+/* Phone number styling to match nav links */
+.header .header-phone {
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-weight: 300;
   font-size: 18px;
 }
 
@@ -153,9 +194,27 @@
   color: #fff !important;
 }
 
+
 .header .social-icons li {
   background: #3afcad;
   border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.header .social-icons li i {
+  color: #fff !important;
+  font-size: 22px;
+  position: static;
+  left: unset;
+  top: unset;
+  transform: none;
 }
 
 /* Footer scrollup button */
@@ -171,6 +230,17 @@
 /* Home section text padding */
 .home-en-text {
   padding: 30px;
+}
+
+@media screen and (min-width: 768px) {
+  .home-en-text {
+    padding-left: 120px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .home-en-text {
+    padding-left: 160px;
+  }
 }
 
 /* Paragraph sizing */
@@ -263,8 +333,16 @@
 
 /* Floating button sizing */
 .fix-btn-scroll {
-  font-size: 0.8rem;
-  padding: 4px;
+  font-size: 1rem;
+  padding: 6px 8px;
+  letter-spacing: 0.2px;
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-weight: 300; /* light */
+}
+
+/* Larger WhatsApp floater tweak for small screens */
+.fa-whatsapp {
+  line-height: 1;
 }
 
 #banner_text {

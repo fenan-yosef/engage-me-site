@@ -1,19 +1,22 @@
 "use client"
 
+
 import Link from "next/link"
 import Image from "next/image"
+import { useState } from "react"
 
 export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false)
   return (
-    <header className="header bg-white border-b border-gray-200">
+    <header className="header py-6 bg-white border-b border-gray-200">
       <nav className="f-navbar f-navbar-attached">
         <div className="f-padding-left f-padding-right">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="f-navbar-brand flex-shrink-0">
+            <Link href="/" className="f-navbar-brand flex-shrink-0 pl-6 pr-4 border-r border-gray-200">
               <span className="sr-only">go to homepage</span>
               <Image
-                src="/engage-me-logo.jpg"
+                src="/engage-me-logo.png"
                 alt="engage me"
                 width={150}
                 height={50}
@@ -23,8 +26,16 @@ export default function Header() {
 
             {/* Navigation and right elements */}
             <div className="f-navbar-flip flex items-center justify-end gap-6">
+              {/* Hamburger for mobile */}
+              <button
+                className="lg:hidden flex items-center px-3 py-2 border rounded text-cyan-500 border-cyan-400"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle navigation menu"
+              >
+                <i className="fa fa-bars text-2xl"></i>
+              </button>
               {/* Desktop Navigation */}
-              <ul className="hidden lg:flex f-navbar-nav gap-8">
+              <ul className={`hidden lg:flex f-navbar-nav gap-8`}>
                 <li>
                   <Link href="/" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
                     Home
@@ -57,6 +68,46 @@ export default function Header() {
                 </li>
               </ul>
 
+              {/* Mobile Navigation Drawer */}
+              <ul
+                className={`$${menuOpen ? "flex" : "hidden"} flex-col absolute top-16 right-4 bg-white shadow-lg rounded-lg p-6 gap-4 z-50 lg:hidden`}
+                style={{ minWidth: 180 }}
+              >
+                <li>
+                  <Link href="/" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/work" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    Work
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/people" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    People
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/insight" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    Insight
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/jobs" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    Jobs Board
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                    Get In Touch
+                  </Link>
+                </li>
+              </ul>
+
+              {/* separator before social icons */}
+              <span className="hidden lg:block mx-3 h-6 border-l border-gray-200" aria-hidden="true"></span>
+
               {/* Social Icons - Cyan background */}
               <ul className="flex gap-3 social-icons">
                 <li className="bg-cyan-400">
@@ -81,8 +132,11 @@ export default function Header() {
                 </li>
               </ul>
 
+              {/* separator after social icons */}
+              <span className="hidden lg:block mx-3 h-6 border-l border-gray-200" aria-hidden="true"></span>
+
               {/* Phone Number */}
-              <p className="hidden md:block text-gray-700 font-medium">
+              <p className="hidden md:block text-gray-700 header-phone pr-4">
                 <a href="tel:+97145856845">+971 4 585 6845</a>
               </p>
             </div>

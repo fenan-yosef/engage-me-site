@@ -6,11 +6,11 @@ export default function FloatingButtons() {
   return (
     <>
       {/* Fixed floating buttons - right side, positioned fixed */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col gap-5 z-50 pr-0">
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col gap-7 z-50 pr-0">
         {/* Brief Us Button */}
         <Link
           href="#contact"
-          className="bg-cyan-400 text-black font-bold px-4 py-3 rounded-l-full hover:bg-cyan-500 transition shadow-lg whitespace-nowrap text-sm fix-btn-scroll"
+          className="bg-[#3AFCAD] text-white font-light px-10 py-7 rounded-l-full hover:bg-[#35E6B3] transition shadow-lg whitespace-nowrap text-2xl fix-btn-scroll"
         >
           Brief Us
         </Link>
@@ -18,7 +18,7 @@ export default function FloatingButtons() {
         {/* Join Us Button */}
         <Link
           href="/careers"
-          className="bg-cyan-400 text-black font-bold px-4 py-3 rounded-l-full hover:bg-cyan-500 transition shadow-lg whitespace-nowrap text-sm fix-btn-scroll"
+          className="bg-[#3AFCAD] text-white font-light px-10 py-7 rounded-l-full hover:bg-[#35E6B3] transition shadow-lg whitespace-nowrap text-5xl fix-btn-scroll"
         >
           Join Us
         </Link>
@@ -29,10 +29,10 @@ export default function FloatingButtons() {
         href="https://wa.me/971458568645"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed right-6 bottom-6 bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition shadow-lg z-50 flex items-center justify-center"
+        className="fixed right-6 bottom-6 bg-green-500 text-white p-7 rounded-full hover:bg-green-600 transition shadow-lg z-50 flex items-center justify-center"
         title="Chat with us on WhatsApp"
       >
-        <i className="fa fa-whatsapp text-2xl"></i>
+        <i className="fa fa-whatsapp text-5xl"></i>
       </Link>
     </>
   )

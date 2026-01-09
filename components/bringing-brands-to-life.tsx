@@ -1,11 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
+import Image, { type StaticImageData } from "next/image"
+
+import carouselImage1 from "../public/carousel-image-1.jpg"
+import carouselImage2 from "../public/carousel-image-2.jpg"
+import carouselImage3 from "../public/carousel-image-3.jpg"
 
 interface CarouselImage {
   id: string
-  src: string
+  src: string | StaticImageData
   alt: string
 }
 
@@ -15,9 +19,9 @@ interface BringingBrandsToLifeProps {
 
 export default function BringingBrandsToLife({
   carouselImages = [
-    { id: "1", src: "/carousel-image-1.jpg", alt: "Carousel 1" },
-    { id: "2", src: "/carousel-image-2.jpg", alt: "Carousel 2" },
-    { id: "3", src: "/carousel-image-3.jpg", alt: "Carousel 3" },
+    { id: "1", src: carouselImage1, alt: "Carousel 1" },
+    { id: "2", src: carouselImage2, alt: "Carousel 2" },
+    { id: "3", src: carouselImage3, alt: "Carousel 3" },
   ],
 }: BringingBrandsToLifeProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -32,17 +36,20 @@ export default function BringingBrandsToLife({
   return (
     <section className="section-featured bg-white py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           {/* Left side - Text content */}
           <div className="home-en-text flex flex-col justify-center">
-            <h2 className="section-title text-5xl md:text-6xl font-bold mb-8 text-cyan-400" style={{ lineHeight: "1" }}>
+            <h2
+              className="section-title text-5xl md:text-8xl font-bold mb-8"
+              style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+            >
               <div>bringing brands</div>
               <div>to life</div>
             </h2>
 
             <p className="section-description all_para_size text-gray-600 text-base mb-8 leading-relaxed">
               Our mission is to drive results for our clients by pairing the right staff with effective on-ground
-              management. It's that simple.
+              management. It&apos;s that simple.
             </p>
 
             <a href="/work" className="subscribe_btn footer_btn text-white w-fit mb-8">
@@ -51,10 +58,10 @@ export default function BringingBrandsToLife({
           </div>
 
           {/* Right side - Carousel (empty space for user to add their carousel) */}
-          <div className="content_side_img relative flex items-center justify-center">
-            <div className="w-full relative group">
+          <div className="content_side_img relative flex items-start justify-end md:translate-x-16 md:-translate-y-8 w-full">
+            <div className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl relative group">
               <div
-                className="carousel slide relative w-full overflow-hidden bg-gray-200 h-96"
+                className="carousel slide relative w-full overflow-hidden bg-gray-200 h-[28rem] md:h-[32rem] lg:h-[36rem] rounded-xl shadow-lg"
                 id="demo"
                 data-interval="2500"
               >
@@ -63,10 +70,9 @@ export default function BringingBrandsToLife({
                   {carouselImages.map((_, index) => (
                     <li
                       key={index}
-                      className={`h-3 w-3 rounded-full cursor-pointer transition ${
-                        index === currentSlide ? "bg-cyan-400" : "bg-white"
-                      }`}
+                      className={`h-3 w-3 rounded-full cursor-pointer transition`}
                       onClick={() => setCurrentSlide(index)}
+                      style={{ backgroundColor: index === currentSlide ? "#3AFCAD" : "#FFFFFF" }}
                     ></li>
                   ))}
                 </ul>
@@ -92,22 +98,24 @@ export default function BringingBrandsToLife({
 
                 {/* Left/Right controls */}
                 <a
-                  className="carousel-control-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 text-cyan-400 hover:text-cyan-500"
+                  className="carousel-control-prev absolute left-0 top-1/2 -translate-y-1/2 z-10"
                   href="#demo"
                   role="button"
                   data-slide="prev"
                   onClick={() => setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)}
+                  style={{ color: "#3AFCAD" }}
                 >
-                  <i className="fa fa-long-arrow-left text-2xl border-2 border-cyan-400 rounded-full p-2"></i>
+                  <i className="fa fa-long-arrow-left text-2xl rounded-full p-2" style={{ border: "2px solid #3AFCAD", color: "#3AFCAD" }}></i>
                 </a>
                 <a
-                  className="carousel-control-next absolute right-0 top-1/2 -translate-y-1/2 z-10 text-cyan-400 hover:text-cyan-500"
+                  className="carousel-control-next absolute right-0 top-1/2 -translate-y-1/2 z-10"
                   href="#demo"
                   role="button"
                   data-slide="next"
                   onClick={() => setCurrentSlide((prev) => (prev + 1) % carouselImages.length)}
+                  style={{ color: "#3AFCAD" }}
                 >
-                  <i className="fa fa-long-arrow-right text-2xl border-2 border-cyan-400 rounded-full p-2"></i>
+                  <i className="fa fa-long-arrow-right text-2xl rounded-full p-2" style={{ border: "2px solid #3AFCAD", color: "#3AFCAD" }}></i>
                 </a>
               </div>
             </div>
