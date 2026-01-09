@@ -19,9 +19,9 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="relative z-10">
             {/* Banner Text */}
-            <h1 className="flex justify-between text-4xl md:text-6xl font-bold mb-12 mt-[-60px] md:mt-[-100px]" id="banner_text">
-              <div className="flex items-center gap-30 md:gap-90">
-                <span className="text-white text-7xl md:text-9xl">We are</span>
+            <h1 className="flex  justify-between text-4xl md:text-6xl font-bold mb-12 mt-[-60px] md:mt-[-100px]" id="banner_text">
+              <div className="flex items-center gap-30 md:gap-50 ">
+                <span className="text-white text-7xl md:text-9xl ">We are</span>
                 {/* Logo placeholder - Engage Me Logo */}
                 <Image
                   src="/engage-me-logo.png"
