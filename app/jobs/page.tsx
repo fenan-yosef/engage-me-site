@@ -162,7 +162,7 @@ export default function JobsPage() {
                 </div>
 
                 <Link
-                  href="/contact"
+                  href="/apply"
                   className="w-full text-left px-4 py-2 text-white text-xs font-semibold tracking-wide flex items-center justify-between"
                   style={{ backgroundColor: job.color, borderTopLeftRadius: 16 }}
                   aria-label={`Apply for ${job.title}`}
