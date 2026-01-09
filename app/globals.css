@@ -172,6 +172,16 @@
   background: #3AFCAD;
 }
 
+/* Active nav link underline + brand color */
+.header .f-navbar-nav a[aria-current="page"] {
+  color: #3AFCAD;
+}
+
+.header .f-navbar-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+  background: #3AFCAD;
+}
+
 /* Phone number styling to match nav links */
 .header .header-phone {
   font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;

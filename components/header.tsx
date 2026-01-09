@@ -13,6 +13,8 @@ export default function Header() {
     if (path === "/") return pathname === "/"
     return pathname.startsWith(path)
   }
+
+  const navLinkClassName = "font-medium text-lg text-gray-700 hover:text-gray-900"
   return (
     <header className="header py-6 bg-white border-b border-gray-200">
       <nav className="f-navbar f-navbar-attached">
@@ -45,7 +47,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/"
-                    className={`font-medium text-lg ${isActive("/") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/") ? "page" : undefined}
                   >
                     Home
                   </Link>
@@ -53,7 +56,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/work"
-                    className={`font-medium text-lg ${isActive("/work") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/work") ? "page" : undefined}
                   >
                     Work
                   </Link>
@@ -61,7 +65,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/people"
-                    className={`font-medium text-lg ${isActive("/people") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+          			className={navLinkClassName}
+                    aria-current={isActive("/people") ? "page" : undefined}
                   >
                     People
                   </Link>
@@ -69,7 +74,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/insight"
-                    className={`font-medium text-lg ${isActive("/insight") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/insight") ? "page" : undefined}
                   >
                     Insight
                   </Link>
@@ -77,7 +83,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/jobs"
-                    className={`font-medium text-lg ${isActive("/jobs") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/jobs") ? "page" : undefined}
                   >
                     Jobs Board
                   </Link>
@@ -85,7 +92,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/contact"
-                    className={`font-medium text-lg ${isActive("/contact") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/contact") ? "page" : undefined}
                   >
                     Get In Touch
                   </Link>
@@ -94,13 +102,14 @@ export default function Header() {
 
               {/* Mobile Navigation Drawer */}
               <ul
-                className={`${menuOpen ? "flex" : "hidden"} flex-col absolute top-16 right-4 bg-white shadow-lg rounded-lg p-6 gap-4 z-50 lg:hidden`}
+                className={`${menuOpen ? "flex" : "hidden"} f-navbar-nav flex-col absolute top-16 right-4 bg-white shadow-lg rounded-lg p-6 gap-4 z-50 lg:hidden`}
                 style={{ minWidth: 180 }}
               >
                 <li>
                   <Link
                     href="/"
-                    className={`font-medium text-lg ${isActive("/") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     Home
@@ -109,7 +118,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/work"
-                    className={`font-medium text-lg ${isActive("/work") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/work") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     Work
@@ -118,7 +128,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/people"
-                    className={`font-medium text-lg ${isActive("/people") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/people") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     People
@@ -127,7 +138,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/insight"
-                    className={`font-medium text-lg ${isActive("/insight") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/insight") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     Insight
@@ -136,7 +148,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/jobs"
-                    className={`font-medium text-lg ${isActive("/jobs") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/jobs") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     Jobs Board
@@ -145,7 +158,8 @@ export default function Header() {
                 <li>
                   <Link
                     href="/contact"
-                    className={`font-medium text-lg ${isActive("/contact") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    className={navLinkClassName}
+                    aria-current={isActive("/contact") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
                     Get In Touch
