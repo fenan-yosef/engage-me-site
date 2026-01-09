@@ -34,11 +34,11 @@ export default function BringingBrandsToLife({
   }, [carouselImages.length])
 
   return (
-    <section className="section-featured bg-white py-20 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section className="section-featured bg-white py-20">
+      <div className="mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           {/* Left side - Text content */}
-          <div className="home-en-text flex flex-col justify-center">
+          <div className="pl-10 flex flex-col justify-left">
             <h2
               className="section-title text-5xl md:text-8xl font-bold mb-8"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -61,7 +61,7 @@ export default function BringingBrandsToLife({
           <div className="content_side_img relative flex items-start justify-end md:translate-x-16 md:-translate-y-8 w-full">
             <div className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl relative group">
               <div
-                className="carousel slide relative w-full overflow-hidden bg-gray-200 h-[28rem] md:h-[32rem] lg:h-[36rem] rounded-xl shadow-lg"
+                className="carousel slide relative w-full overflow-hidden bg-gray-200 h-[28rem] md:h-[32rem] lg:h-[36rem] shadow-lg"
                 id="demo"
                 data-interval="2500"
               >
