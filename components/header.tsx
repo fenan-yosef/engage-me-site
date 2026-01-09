@@ -4,9 +4,15 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname() || "/"
+  const isActive = (path: string) => {
+    if (path === "/") return pathname === "/"
+    return pathname.startsWith(path)
+  }
   return (
     <header className="header py-6 bg-white border-b border-gray-200">
       <nav className="f-navbar f-navbar-attached">
@@ -37,32 +43,50 @@ export default function Header() {
               {/* Desktop Navigation */}
               <ul className={`hidden lg:flex f-navbar-nav gap-8`}>
                 <li>
-                  <Link href="/" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
+                  <Link
+                    href="/"
+                    className={`font-medium text-lg ${isActive("/") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                  >
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link href="/work" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
+                  <Link
+                    href="/work"
+                    className={`font-medium text-lg ${isActive("/work") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                  >
                     Work
                   </Link>
                 </li>
                 <li>
-                  <Link href="/people" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
+                  <Link
+                    href="/people"
+                    className={`font-medium text-lg ${isActive("/people") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                  >
                     People
                   </Link>
                 </li>
                 <li>
-                  <Link href="/insight" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
+                  <Link
+                    href="/insight"
+                    className={`font-medium text-lg ${isActive("/insight") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                  >
                     Insight
                   </Link>
                 </li>
                 <li>
-                  <Link href="/jobs" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
+                  <Link
+                    href="/jobs"
+                    className={`font-medium text-lg ${isActive("/jobs") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                  >
                     Jobs Board
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-gray-700 hover:text-gray-900 font-medium text-lg">
+                  <Link
+                    href="/contact"
+                    className={`font-medium text-lg ${isActive("/contact") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                  >
                     Get In Touch
                   </Link>
                 </li>
@@ -70,36 +94,60 @@ export default function Header() {
 
               {/* Mobile Navigation Drawer */}
               <ul
-                className={`$${menuOpen ? "flex" : "hidden"} flex-col absolute top-16 right-4 bg-white shadow-lg rounded-lg p-6 gap-4 z-50 lg:hidden`}
+                className={`${menuOpen ? "flex" : "hidden"} flex-col absolute top-16 right-4 bg-white shadow-lg rounded-lg p-6 gap-4 z-50 lg:hidden`}
                 style={{ minWidth: 180 }}
               >
                 <li>
-                  <Link href="/" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    href="/"
+                    className={`font-medium text-lg ${isActive("/") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link href="/work" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    href="/work"
+                    className={`font-medium text-lg ${isActive("/work") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Work
                   </Link>
                 </li>
                 <li>
-                  <Link href="/people" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    href="/people"
+                    className={`font-medium text-lg ${isActive("/people") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
                     People
                   </Link>
                 </li>
                 <li>
-                  <Link href="/insight" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    href="/insight"
+                    className={`font-medium text-lg ${isActive("/insight") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Insight
                   </Link>
                 </li>
                 <li>
-                  <Link href="/jobs" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    href="/jobs"
+                    className={`font-medium text-lg ${isActive("/jobs") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Jobs Board
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-gray-700 hover:text-gray-900 font-medium text-lg" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    href="/contact"
+                    className={`font-medium text-lg ${isActive("/contact") ? "text-cyan-500" : "text-gray-700 hover:text-gray-900"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Get In Touch
                   </Link>
                 </li>
