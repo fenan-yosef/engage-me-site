@@ -9,20 +9,20 @@ export default function EngagingStaff() {
   }))
 
   return (
-    <section className="bg-white py-20 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-white py-20 pr-6">
+      <div className=" mx-auto">
         {/* Engaging Staff Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
           {/* Left side - Staff grid */}
           <div className="image-grid">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-px">
               {Array.from({ length: 9 }, (_, i) => (
                 <div
                   key={i}
                   className="relative w-full aspect-square bg-gray-300 overflow-hidden flex items-center justify-center"
                 >
                   <Image
-                    src={`/staff-member-.jpg?height=200&width=200&query=staff member ${i + 1}`}
+                    src={`/staff-${i + 1}.jpg?height=200&width=200&query=staff member ${i + 1}`}
                     alt={`Staff ${i + 1}`}
                     fill
                     className="w-full h-full object-cover"
@@ -34,9 +34,11 @@ export default function EngagingStaff() {
 
           {/* Right side - Text content */}
           <div className="comn_img_side_txt flex flex-col justify-center">
-            <h2 className="section-title text-5xl md:text-6xl font-bold mb-8 text-cyan-400" style={{ lineHeight: "1" }}>
-              <div>engaging</div>
-              <div>staff</div>
+            <h2
+              className="section-title text-5xl md:text-7xl font-bold mb-8"
+              style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+            >
+              <div>engaging staff</div>
             </h2>
 
             <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
@@ -58,7 +60,7 @@ export default function EngagingStaff() {
         <div className="mt-20 pt-20 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Text content - order changes on mobile */}
           <div className="comn_img_side_txt order-2 md:order-1 insigh_last">
-            <h3 className="text-3xl md:text-5xl font-bold mb-6 text-gray-800">INSIGHT</h3>
+            <h3 className="text-3xl md:text-5xl font-bold mb-6 text-gray-800">Driving Results</h3>
 
             <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
               With our bespoke reporting tool INSIGHT, clients can see results, feedback, pictures and videos throughout
@@ -76,7 +78,7 @@ export default function EngagingStaff() {
 
           {/* Image grid */}
           <div className="order-1 md:order-2 image-grid">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-px">
               {staffImages.map((item) => (
                 <div
                   key={item.id}
