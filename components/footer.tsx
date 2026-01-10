@@ -50,7 +50,7 @@ export default function Footer() {
               <i className="fa fa-instagram text-xl"></i>
             </Link>
             <Link
-              href="https://www.facebook.com/Engage-Me"
+              href="https://web.facebook.com/Engage.Me"
               target="_blank"
               className="text-gray-700 hover:text-gray-900"
               aria-label="Facebook"
