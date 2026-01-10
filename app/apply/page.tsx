@@ -49,13 +49,6 @@ const visaTypes: Option[] = [
   { label: "Residency", value: "residency" },
 ]
 
-const availability: CheckOption[] = [
-  { label: "Weekends (Saturday/Sunday)", value: "weekends" },
-  { label: "Weekdays (Monday to Friday)", value: "weekdays" },
-  { label: "Nights (6pm to 6am)", value: "nights" },
-  { label: "Day (6am to 6pm)", value: "day" },
-]
-
 const jobTypes: CheckOption[] = [
   { label: "Actor", value: "actor" },
   { label: "Bar/Wait Staff", value: "bar-wait-staff" },
@@ -286,9 +279,9 @@ export default function ApplyPage() {
                 {/* Dress Size (UK - Females only) */}
                 <label className="flex flex-col gap-1">
                   <span className="text-xs text-gray-600">Dress Size (UK) <span className="text-red-500">*</span> (Females only)</span>
-                  <select className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
-                    <option value="" disabled selected>Dress Size</option>
-                    <option value="male">I'm Male</option>
+                  <select defaultValue="" className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
+                    <option value="" disabled>Dress Size</option>
+                    <option value="male">I&apos;m Male</option>
                     {[6,8,10,12,14,16].map(size => (
                       <option key={size} value={size}>{`UK-${size}`}</option>
                     ))}
