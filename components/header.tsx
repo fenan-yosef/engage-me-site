@@ -50,7 +50,7 @@ export default function Header() {
                     className={navLinkClassName}
                     aria-current={isActive("/") ? "page" : undefined}
                   >
-                    Home
+                    Homes
                   </Link>
                 </li>
                 <li>
