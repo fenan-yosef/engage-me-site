@@ -1,14 +1,13 @@
 "use client"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
-import { pageview, GA_MEASUREMENT_ID } from "../lib/gtag"
+import { pageview } from "../lib/gtag"
 
 export default function AnalyticsClient() {
   const pathname = usePathname()
 
   useEffect(() => {
-    if (!window || !window.gtag) return
-    // send a page_view on route change
+    if (typeof window === "undefined" || !window.gtag) return
     pageview(window.location.pathname + window.location.search)
   }, [pathname])
 

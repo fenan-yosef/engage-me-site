@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
