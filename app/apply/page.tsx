@@ -519,23 +519,11 @@ export default function ApplyPage() {
             </div>
 
             {/* Social media */}
-            <div className="space-y-3">
-              <h3 className="text-base font-semibold text-gray-900">Social & Portfolio</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <label className="flex flex-col gap-1">
-                  <span className="text-xs text-gray-600">Instagram</span>
-                  <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" placeholder="@username" />
-                </label>
-                <label className="flex flex-col gap-1">
-                  <span className="text-xs text-gray-600">Facebook</span>
-                  <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" />
-                </label>
-                <label className="flex flex-col gap-1 sm:col-span-2">
-                  <span className="text-xs text-gray-600">Upload your profile picture (placeholder)</span>
-                  <input type="file" className="border border-gray-300 px-3 py-2" />
-                </label>
-              </div>
-            </div>
+            {/* <div className="space-y-3">
+              <h3 className="text-base font-semibold text-gray-900">Social & Portfolio</h3> */}
+              {/* Removed Instagram, Facebook, and Upload image fields as requested */}
+              {/* <div />
+            </div> */}
 
             {/* Q31: Additional skills */}
             <div className="space-y-3">
@@ -551,11 +539,11 @@ export default function ApplyPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="flex flex-col gap-1">
                   <span className="text-xs text-gray-600">Facebook</span>
-                  <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" placeholder="Facebook username" />
+                  <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" />
                 </label>
                 <label className="flex flex-col gap-1">
                   <span className="text-xs text-gray-600">Instagram</span>
-                  <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" placeholder="@instagram_username" />
+                  <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" />
                 </label>
               </div>
             </div>
