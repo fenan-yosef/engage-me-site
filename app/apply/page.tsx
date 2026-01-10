@@ -127,7 +127,7 @@ export default function ApplyPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
             {contacts.map((contact) => (
-              <div key={contact.name} className="flex flex-col items-center gap-3 text-center border border-gray-200 p-4 shadow-sm">
+              <div key={contact.phone} className="flex flex-col items-center gap-3 text-center border border-gray-200 p-4 shadow-sm">
                 <div className="relative w-full aspect-square bg-gray-100 overflow-hidden">
                   <Image src={contact.img} alt={contact.name} fill className="object-contain" sizes="100vw" />
                 </div>
