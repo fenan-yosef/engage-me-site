@@ -112,7 +112,7 @@ export default function Header() {
                     aria-current={isActive("/") ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                   >
-                    Home
+                    Homes
                   </Link>
                 </li>
                 <li>
