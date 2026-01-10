@@ -32,21 +32,6 @@ export default function Hero() {
                 />
               </div>
             </h1>
-          {/* Fixed Floating Buttons - positioned absolutely */}
-          {/* <div className="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col gap-5 z-50">
-            <a
-              href="#contact"
-              className="bg-cyan-400 text-black font-bold px-3 py-2 rounded-l-full hover:bg-cyan-500 transition whitespace-nowrap text-sm"
-            >
-              Brief Us
-            </a>
-            <a
-              href="/careers"
-              className="bg-cyan-400 text-black font-bold px-3 py-2 rounded-l-full hover:bg-cyan-500 transition whitespace-nowrap text-sm"
-            >
-              Join Us
-            </a>
-          </div> */}
         </div>
       </div>
     </section>
