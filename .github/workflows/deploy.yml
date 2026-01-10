@@ -21,4 +21,4 @@ jobs:
 
       - name: Run deploy script on server
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes onlinedimensions@95.179.253.19 'bash /home/onlinedimensions/public_html/engage-me.me/deploy.sh'
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes root@95.179.253.19 'bash /home/onlinedimensions/public_html/engage-me.me/deploy.sh'
