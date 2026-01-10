@@ -9,7 +9,7 @@ export default function FloatingButtons() {
       <div className="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col gap-7 z-50 pr-0">
         {/* Brief Us Button */}
         <Link
-          href="#contact"
+          href="/contact#jobs"
           className="bg-[#3AFCAD] text-white font-light px-10 py-7 rounded-l-full hover:bg-[#35E6B3] transition shadow-lg whitespace-nowrap text-2xl fix-btn-scroll"
         >
           Brief Us
@@ -17,7 +17,7 @@ export default function FloatingButtons() {
 
         {/* Join Us Button */}
         <Link
-          href="/contact#jobs"
+          href="/apply"
           className="bg-[#3AFCAD] text-white font-light px-10 py-7 rounded-l-full hover:bg-[#35E6B3] transition shadow-lg whitespace-nowrap text-5xl fix-btn-scroll"
         >
           Join Us
