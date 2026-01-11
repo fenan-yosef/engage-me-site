@@ -70,8 +70,8 @@ export default function ContactPage() {
                 <select className="w-full border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
                   <option>-- Select Enquiry Type --</option>
                   <option>Brief</option>
-                  <option>Partnership</option>
-                  <option>Careers</option>
+                  <option>Meeting Request</option>
+                  <option>General Inquiry</option>
                   <option>Other</option>
                 </select>
               </div>
