@@ -11,6 +11,7 @@ type ContactCard = {
   name: string
   role: string
   phone: string
+  phone2?: string
   img: string
 }
 
@@ -19,13 +20,13 @@ type Option = { label: string; value: string }
 type CheckOption = { label: string; value: string }
 
 const contacts: ContactCard[] = [
-  { name: "Clare Walsh", role: "Managing Partner", phone: "+971 50 375 7605", img: "/+971503757605.jpg" },
-  { name: "Lisa Hadeed", role: "Managing Partner", phone: "+971 55 672 4500", img: "/+971556724500.jpg" },
-  { name: "Katie Turner", role: "Business Director", phone: "+971 55 775 5080", img: "/+971557755080.jpg" },
-  { name: "Angelo Sejas", role: "Project Manager", phone: "+971 52 500 3840", img: "/+971525003840.jpg" },
-  { name: "Kareen Bared", role: "Business Support", phone: "+971 50 624 0688", img: "/+971506240688.jpg" },
-  { name: "Engage Me", role: "Booking Manager", phone: "+971 54 573 0414", img: "/+971545730414.jpg" },
-  { name: "Engage Me", role: "General Enquiries", phone: "+971 56 988 3530", img: "/+971569883530.jpg" },
+  { name: "Clare Walsh", role: "Managing Partner", phone: "+971 (0) 4 585 6845", phone2: "+971 58 596 7185", img: "/+971585967185.jpeg" },
+  { name: "Lisa Haddad", role: "Managing Partner", phone: "+971 (0) 4 585 6845", phone2: "+971 58 572 4508", img: "/+971585724508.jpeg" },
+  { name: "Katie Turner", role: "Business Director", phone: "+971 58 579 5090", img: "/+971585795090.jpeg" },
+  { name: "Angela Sales", role: "Project Manager", phone: "0585308640", img: "/0585308640.jpeg" },
+  { name: "Koleen Beredo", role: "Business Support Assistant", phone: "+971 50 424 9866", img: "/+971504249866.jpeg" },
+  // { name: "Engage Me", role: "Booking Manager", phone: "+971 54 573 0414", img: "/+971545730414.jpg" },
+  // { name: "Engage Me", role: "General Enquiries", phone: "+971 56 988 3530", img: "/+971569883530.jpg" },
 ]
 
 const genders: Option[] = [
@@ -149,23 +150,43 @@ export default function ApplyPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
             {contacts.map((contact) => (
-              <div key={contact.phone} className="flex flex-col items-center gap-3 text-center border border-gray-200 p-4 shadow-sm">
+              <div key={contact.phone + (contact.phone2 || "")}
+                className="flex flex-col items-center gap-3 text-center border border-gray-200 p-4 shadow-sm">
                 <div className="relative w-full aspect-square bg-gray-100 overflow-hidden">
                   <Image src={contact.img} alt={contact.name} fill className="object-contain" sizes="100vw" />
                 </div>
                 <div className="text-sm font-semibold text-gray-900 leading-tight">{contact.name}</div>
                 <div className="text-xs text-gray-600">{contact.role}</div>
-                <Link href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="text-xs text-[#fe57c4] font-semibold">
-                  {contact.phone}
-                </Link>
-                <Link
-                  href={`tel:${contact.phone.replace(/\s+/g, "")}`}
-                  className="mt-1 inline-flex items-center gap-2 px-3 py-1.5 bg-[#3AFCAD] text-white text-xs font-semibold rounded shadow hover:bg-[#2fd1a0] transition border border-[#2fd1a0] focus:outline-none focus:ring-2 focus:ring-[#fe57c4] focus:ring-offset-2"
-                  style={{ textDecoration: 'none' }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" className="h-4 w-4" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 5v10m5-5H5" /></svg>
-                  Save Contact
-                </Link>
+                <div className="flex flex-col gap-1 w-full">
+                  <Link href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="text-xs text-[#fe57c4] font-semibold">
+                    {contact.phone}
+                  </Link>
+                  {contact.phone2 && (
+                    <Link href={`tel:${contact.phone2.replace(/\s+/g, "")}`} className="text-xs text-[#fe57c4] font-semibold">
+                      {contact.phone2}
+                    </Link>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1 w-full">
+                  <Link
+                    href={`tel:${contact.phone.replace(/\s+/g, "")}`}
+                    className="mt-1 inline-flex items-center gap-2 px-3 py-1.5 bg-[#3AFCAD] text-white text-xs font-semibold rounded shadow hover:bg-[#2fd1a0] transition border border-[#2fd1a0] focus:outline-none focus:ring-2 focus:ring-[#fe57c4] focus:ring-offset-2"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" className="h-4 w-4" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 5v10m5-5H5" /></svg>
+                    Save Contact
+                  </Link>
+                  {contact.phone2 && (
+                    <Link
+                      href={`tel:${contact.phone2.replace(/\s+/g, "")}`}
+                      className="mt-1 inline-flex items-center gap-2 px-3 py-1.5 bg-[#3AFCAD] text-white text-xs font-semibold rounded shadow hover:bg-[#2fd1a0] transition border border-[#2fd1a0] focus:outline-none focus:ring-2 focus:ring-[#fe57c4] focus:ring-offset-2"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" className="h-4 w-4" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 5v10m5-5H5" /></svg>
+                      Save Contact 2
+                    </Link>
+                  )}
+                </div>
               </div>
             ))}
           </div>
