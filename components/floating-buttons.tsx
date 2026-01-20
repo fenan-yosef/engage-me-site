@@ -17,7 +17,7 @@ export default function FloatingButtons() {
 
         {/* Join Us Button */}
         <Link
-          href="https://engage-me.me/staffapplication/manage/signup"
+          href="https://engage-me.me/staffapplication/"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#3AFCAD] text-white font-light px-10 py-7 rounded-l-full hover:bg-[#35E6B3] transition shadow-lg whitespace-nowrap text-5xl fix-btn-scroll"

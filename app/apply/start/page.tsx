@@ -61,7 +61,7 @@ export default function ApplyStartPage() {
             </p>
 
             <Link
-              href="https://engage-me.me/staffapplication/manage/signup"
+              href="https://engage-me.me/staffapplication/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 self-start bg-[#3AFCAD] text-white text-sm font-semibold px-4 py-2 shadow-sm hover:bg-[#35e6b3] transition rounded-full"
