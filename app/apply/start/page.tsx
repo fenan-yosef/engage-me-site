@@ -6,12 +6,21 @@ import FloatingButtons from "@/components/floating-buttons"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, FormEvent } from "react"
+import PhoneInput, { isValidPhoneNumber, isPossiblePhoneNumber } from 'react-phone-number-input'
 
 export default function ApplyStartPage() {
   const [jobRef, setJobRef] = useState("MOD/FE")
+  
+  const [phoneValue, setPhoneValue] = useState<string | undefined>(undefined)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    // validate phone
+    if (phoneValue && !isValidPhoneNumber(phoneValue)) {
+      alert('Please enter a valid phone number.')
+      return
+    }
+    // Phone value is handled by PhoneInput and submitted via hidden input
     alert("Submitted. On production, submit to your backend.")
   }
 
@@ -52,7 +61,9 @@ export default function ApplyStartPage() {
             </p>
 
             <Link
-              href="/apply"
+              href="https://engage-me.me/manage/signup"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 self-start bg-[#3AFCAD] text-white text-sm font-semibold px-4 py-2 shadow-sm hover:bg-[#35e6b3] transition rounded-full"
             >
               APPLY HERE
@@ -66,27 +77,45 @@ export default function ApplyStartPage() {
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <label className="flex flex-col gap-1">
                 <span className="text-gray-700">Full Name</span>
-                <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" required />
+                <input name="name" className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" required />
               </label>
 
               <label className="flex flex-col gap-1">
                 <span className="text-gray-700">Staff Num.</span>
-                <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" />
+                <input name="staffnum" className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" />
               </label>
 
               <label className="flex flex-col gap-1">
                 <span className="text-gray-700">Email</span>
-                <input type="email" className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" required />
+                <input name="email" type="email" className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" required />
               </label>
 
               <label className="flex flex-col gap-1">
                 <span className="text-gray-700">Phone</span>
-                <input className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]" />
+                <div>
+                  <PhoneInput
+                    international
+                    defaultCountry="AE"
+                    value={phoneValue}
+                    onChange={(val: string | undefined) => {
+                      try {
+                        if (!val || isPossiblePhoneNumber(val)) setPhoneValue(val)
+                      } catch {
+                        const digits = (val || '').replace(/\D/g, '')
+                        if (!val || (digits.length >= 7 && digits.length <= 15)) setPhoneValue(val)
+                      }
+                    }}
+                    countrySelectProps={{ unicodeFlags: true }}
+                    className="w-full"
+                  />
+                  <input type="hidden" name="phone" value={phoneValue || ''} />
+                </div>
               </label>
 
               <label className="flex flex-col gap-1 sm:col-span-2">
                 <span className="text-gray-700">Job Ref.</span>
                 <input
+                  name="jobRef"
                   value={jobRef}
                   onChange={(e) => setJobRef(e.target.value)}
                   className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]"

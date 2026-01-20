@@ -131,7 +131,7 @@ export default function JobsPage() {
       {/* Full viewport hero image */}
       <div className="relative w-full h-[calc(100vh-5.5rem)] min-h-[400px] bg-gray-200 overflow-hidden">
         <Image
-          src="/group-pic.jpg"
+          src="/her-sec.jpg"
           alt="Engage Me jobs board"
           fill
           priority

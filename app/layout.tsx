@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
 import "./globals.css"
+import 'react-phone-number-input/style.css'
 import AnalyticsClient from "../components/analytics"
 
 const geist = Geist({ subsets: ["latin"] })

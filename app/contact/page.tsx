@@ -4,8 +4,22 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
 import Image from "next/image"
+import { useState } from "react"
+import PhoneInput, { isValidPhoneNumber, isPossiblePhoneNumber } from 'react-phone-number-input'
+
+ 
 
 export default function ContactPage() {
+  const [phoneValue, setPhoneValue] = useState<string | undefined>(undefined)
+  const isPhonePossible = (val?: string) => {
+    if (!val) return true
+    try {
+      return isPossiblePhoneNumber(val)
+    } catch {
+      const digits = (val.match(/\d/g) || []).length
+      return digits >= 7 && digits <= 15
+    }
+  }
   return (
     <main className="min-h-screen bg-white">
       <Header />
@@ -34,10 +48,23 @@ export default function ContactPage() {
               If you would like to arrange to meet or you have a brief for us, please complete the contact form and we will be in touch shortly.
             </p>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={(e) => {
+              e.preventDefault()
+              const form = e.currentTarget as HTMLFormElement
+              const phoneEl = form.querySelector('input[name="phone"]') as HTMLInputElement | null
+              if (phoneValue && !isValidPhoneNumber(phoneValue)) {
+                alert('Please enter a valid phone number')
+                return
+              }
+              if (phoneEl && phoneEl.dataset.dial && !phoneEl.value.trim().startsWith('+')) {
+                phoneEl.value = `${phoneEl.dataset.dial} ${phoneEl.value.trim()}`
+              }
+              form.submit()
+            }}>
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">Full Name</label>
                 <input
+                  name="name"
                   type="text"
                   placeholder="Enter Full Name..."
                   className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]"
@@ -48,6 +75,7 @@ export default function ContactPage() {
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">Email Address</label>
                 <input
+                  name="email"
                   type="email"
                   placeholder="Enter email"
                   className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]"
@@ -57,17 +85,24 @@ export default function ContactPage() {
 
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">Phone</label>
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]"
-                  required
-                />
+                <div>
+                  <PhoneInput
+                    international
+                    defaultCountry="AE"
+                    value={phoneValue}
+                    onChange={(val: string | undefined) => {
+                      if (!val || isPhonePossible(val)) setPhoneValue(val)
+                    }}
+                    countrySelectProps={{ unicodeFlags: true }}
+                    className="w-full"
+                  />
+                  <input type="hidden" name="phone" value={phoneValue || ''} />
+                </div>
               </div>
 
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">Enquiry Type</label>
-                <select className="w-full border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
+                <select name="enquiryType" className="w-full border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
                   <option>-- Select Enquiry Type --</option>
                   <option>Brief</option>
                   <option>Meeting Request</option>
@@ -79,6 +114,7 @@ export default function ContactPage() {
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">Enquiry Description</label>
                 <textarea
+                  name="description"
                   rows={4}
                   placeholder="Enquiry description here..."
                   className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]"
@@ -87,7 +123,7 @@ export default function ContactPage() {
 
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">How did you hear about us?</label>
-                <select className="w-full border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
+                <select name="heardAbout" className="w-full border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#3AFCAD]">
                   <option>-- Select --</option>
                   <option>Referral</option>
                   <option>Social Media</option>
