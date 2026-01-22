@@ -53,7 +53,7 @@ export default function AirportActivationsPage() {
             }
             .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
-            .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.125rem; line-height:1.4; }
+            .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.125rem; line-height:1.4; font-family: Arial; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
             .home_imggroup img { width:100%; object-fit:cover; display:block; }
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; }
