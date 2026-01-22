@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
-import Link from "next/link"
 import Image from "next/image"
 
 const CAROUSEL_IMAGES = [
@@ -32,7 +31,7 @@ export default function BrandActivationsPage() {
           const height: number = Math.max(400, winH - headerH + 70)
           banner.style.height = `${height}px`
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
@@ -47,7 +46,7 @@ export default function BrandActivationsPage() {
         const target = Math.max(520, winH - headerH - 120)
         const inner = box.querySelector('.inner-grid') as HTMLElement | null
         if (inner) inner.style.minHeight = `${target}px`
-      } catch (e) {
+      } catch {
         // ignore
       }
     }

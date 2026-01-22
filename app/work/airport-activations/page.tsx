@@ -21,7 +21,7 @@ export default function AirportActivationsPage() {
           const height: number = Math.max(400, winH - headerH + 70)
           banner.style.height = `${height}px`
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
