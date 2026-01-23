@@ -16,6 +16,9 @@ const WORK_ITEMS = [
   { title: "Hosts & hostesses", href: "/work/hosts-hostesses_work" },
   { title: "In-store promoters", href: "/work/in-store-promoters_work" },
   { title: "Lead generation", href: "/work/lead-generation_work" },
+  { title: "Registration staff", href: "/work/registration-staff_work" },
+  { title: "Retail support", href: "/work/retail-support_work" },
+  { title: "Roadshows", href: "/work/roadshows_work" },
   { title: "Mall activations", href: "/work/mall-activations_work" },
   { title: "Models", href: "/work/models_work" },
   { title: "Virtual promoters", href: "/work/virtual-promoters_work" }
