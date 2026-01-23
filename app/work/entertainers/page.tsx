@@ -115,8 +115,8 @@ export default function EntertainersPage() {
                 <div className="mt-6">
                   <Link
                     href="/work"
-                    className="f-btn-tertiary text-2xl font-semibold"
-                    style={{ borderTopLeftRadius: '3.5rem' }}
+                    className="f-btn-tertiary text-2xl font-semibold rounded-none"
+                    style={{ borderTopLeftRadius: '3.5rem', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, padding: '0.5rem 1.5rem' }}
                   >
                     All Work
                     <i className=" ml-2 fa fa-chevron-right" aria-hidden="true"></i>
