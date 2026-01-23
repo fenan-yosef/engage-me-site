@@ -23,6 +23,7 @@ const WORK_ITEMS = [
   { title: "Models", href: "/work/models_work" },
   { title: "Social media content", href: "/work/social-media-content_work" },
   { title: "Sporting events", href: "/work/sporting-events_work" },
+  { title: "Trade events", href: "/work/trade-events_work" },
   { title: "Themed promoters", href: "/work/themed-promoters_work" },
   { title: "Virtual promoters", href: "/work/virtual-promoters_work" }
 ]

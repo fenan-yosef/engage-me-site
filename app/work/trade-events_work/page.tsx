@@ -7,7 +7,7 @@ import FloatingButtons from "@/components/floating-buttons"
 import SimpleCarousel from "@/components/simple-carousel"
 import Link from "next/link"
 
-export default function VirtualPromotersWorkPage() {
+export default function TradeEventsWorkPage() {
   useEffect(() => {
     function setBannerHeight() {
       try {
@@ -34,8 +34,8 @@ export default function VirtualPromotersWorkPage() {
   const carouselImages = [
     {
       id: "1",
-      src: "https://web.archive.org/web/20250123181351im_/https://engage-me.me/public/image/customs/280920201601299385170.JPG",
-      alt: "virtual promoters image"
+      src: "https://web.archive.org/web/20250123160422im_/https://engage-me.me/public/image/customs/071020201602059478110.gif",
+      alt: "trade events image"
     }
   ]
 
@@ -46,8 +46,8 @@ export default function VirtualPromotersWorkPage() {
       <section className="work_post_banner">
         <img
           id="work_banner_image"
-          src="https://web.archive.org/web/20250123181351im_/https://engage-me.me/public/image/customs/280920201601299385170.JPG"
-          alt="virtual promoters banner"
+          src="https://web.archive.org/web/20250123160422im_/https://engage-me.me/public/image/customs/071020201602059478110.gif"
+          alt="trade events banner"
           style={{ width: "100%", objectFit: "cover" }}
         />
       </section>
@@ -75,25 +75,33 @@ export default function VirtualPromotersWorkPage() {
           `}</style>
 
           <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-0 items-stretch border border-gray-300 divide-y divide-x divide-gray-300 overflow-hidden">
-            <div className="p-6 home_imggroup flex items-center">
-              <SimpleCarousel images={carouselImages} height={500} />
-            </div>
-            
             <div className="p-6 comn_img_side_txt flex flex-col justify-center">
-              <h2 className="section-title font-bold ">VIRTUAL PROMOTERS</h2>
+              <h2 className="section-title font-bold ">TRADE EVENTS</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>
-                  Transitioning into the future, we are embracing technology through our virtual promoter offering.
+                  When it comes to impressing your customers, we know how important Business-to-Business (B2B) events are.
                 </p>
               </div>
             </div>
 
+            <div className="p-6 home_imggroup flex items-center">
+              <SimpleCarousel images={carouselImages} height={500} />
+            </div>
+
+            <div className="p-6 home_imggroup">
+              <img
+                src="https://web.archive.org/web/20250123160422im_/https://engage-me.me/public/image/customs/071020201602059478110.gif"
+                alt="trade events image"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+
             <div className="p-6 comn_img_side_txt flex flex-col justify-center">
               <div className="section-description f-text-xlarge text-gray-700">
-                <p>Our virtual promoters are operators who provide voice over and operate robots and virtual screen characters.</p>
+                <p>Our experienced staff can provide a smooth, fast and seamless registration process to provide you with valuable insight into attendees.</p>
 
-                <p>Charisma, a strong voice and wit are key characteristics our virtual promoters need to engage audiences from behind the scenes.</p>
+                <p>In addition to registration support we can provide; promoters, hosts, hostesses, models, actors and DJ&apos;s to bring to life the themes of the event.</p>
 
                 <div className="mt-6">
                   <Link
@@ -107,14 +115,6 @@ export default function VirtualPromotersWorkPage() {
                 </div>
               </div>
             </div>
-
-            <div className="p-6 home_imggroup">
-              <img
-                src="https://web.archive.org/web/20250123181351im_/https://engage-me.me/public/image/customs/280920201601299385170.JPG"
-                alt="virtual promoters image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -124,4 +124,3 @@ export default function VirtualPromotersWorkPage() {
     </main>
   )
 }
-
