@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
+import SimpleCarousel from "@/components/simple-carousel"
 import Link from "next/link"
 
 export default function HostsHostessesWorkPage() {
@@ -29,6 +30,14 @@ export default function HostsHostessesWorkPage() {
     window.addEventListener("resize", setBannerHeight)
     return () => window.removeEventListener("resize", setBannerHeight)
   }, [])
+
+  const carouselImages = [
+    {
+      id: "1",
+      src: "https://web.archive.org/web/20250917012856im_/https://engage-me.me/public/image/customs/280920201601290474600.JPG",
+      alt: "hosts and hostesses image"
+    }
+  ]
 
   return (
     <main className="min-h-screen bg-white">
@@ -66,8 +75,12 @@ export default function HostsHostessesWorkPage() {
           `}</style>
 
           <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-0 items-stretch border border-gray-300 divide-y divide-x divide-gray-300 overflow-hidden">
+            <div className="p-6 home_imggroup flex items-center">
+              <SimpleCarousel images={carouselImages} height={500} />
+            </div>
+
             <div className="p-6 comn_img_side_txt flex flex-col justify-center">
-              <h2 className="section-title lowercase font-bold">hosts &amp; hostesses</h2>
+              <h2 className="section-title font-bold ">HOSTS AND HOSTESSES</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>
@@ -76,22 +89,10 @@ export default function HostsHostessesWorkPage() {
               </div>
             </div>
 
-            <div className="p-6 home_imggroup">
-              <img
-                src="https://web.archive.org/web/20250917012856im_/https://engage-me.me/public/image/customs/280920201601290474600.JPG"
-                alt="hosts and hostesses image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </div>
-
             <div className="p-6 comn_img_side_txt flex flex-col justify-center">
               <div className="section-description f-text-xlarge text-gray-700">
-                <p>When we consider hosts and hostesses for an event, we ensure they are well experienced in; registration, stage presentations, Q&A support and general information retention.</p>
-              </div>
-            </div>
+                <p>When we consider hosts and hostesses for an event, we ensure they are well experienced in; registration, stage presentations, Q&amp;A support and general information retention.</p>
 
-            <div className="p-6 comn_img_side_txt flex flex-col justify-center">
-              <div className="section-description f-text-xlarge text-gray-700">
                 <p>We provide hosts and hostesses with a variety of standard uniform options from our inventory, free of charge and we provide detailed briefings on uniform and image to ensure uniformity.</p>
 
                 <div className="mt-6">
@@ -105,6 +106,14 @@ export default function HostsHostessesWorkPage() {
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <div className="p-6 home_imggroup">
+              <img
+                src="https://web.archive.org/web/20250917012856im_/https://engage-me.me/public/image/customs/280920201601290474600.JPG"
+                alt="hosts and hostesses image"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
             </div>
           </div>
         </div>
