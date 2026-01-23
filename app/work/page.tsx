@@ -21,6 +21,9 @@ const WORK_ITEMS = [
   { title: "Roadshows", href: "/work/roadshows_work" },
   { title: "Mall activations", href: "/work/mall-activations_work" },
   { title: "Models", href: "/work/models_work" },
+  { title: "Social media content", href: "/work/social-media-content_work" },
+  { title: "Sporting events", href: "/work/sporting-events_work" },
+  { title: "Themed promoters", href: "/work/themed-promoters_work" },
   { title: "Virtual promoters", href: "/work/virtual-promoters_work" }
 ]
 
