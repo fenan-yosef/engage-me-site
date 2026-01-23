@@ -31,10 +31,11 @@ export default function FloatingButtons() {
         href="https://wa.me/971458568645"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed right-6 bottom-6 bg-green-500 text-white p-7 rounded-full hover:bg-green-600 transition shadow-lg z-50 flex items-center justify-center"
+        className="fixed right-6 bottom-6 bg-green-500 text-white rounded-full hover:bg-green-600 transition shadow-lg z-50 flex items-center justify-center"
+        style={{ width: '64px', height: '64px' }}
         title="Chat with us on WhatsApp"
       >
-        <i className="fa fa-whatsapp text-5xl"></i>
+        <i className="fa fa-whatsapp" style={{ fontSize: '2.5rem' }}></i>
       </Link>
     </>
   )
