@@ -16,6 +16,20 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/ProfilePictures',
+        destination: '/staffapplication/ProfilePictures',
+        permanent: true,
+      },
+      {
+        source: '/ProfilePictures/:path*',
+        destination: '/staffapplication/ProfilePictures/:path*',
+        permanent: true,
+      }
+    ];
   }
 };
 
