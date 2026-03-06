@@ -34,14 +34,43 @@ export default function Header() {
 
             {/* Navigation and right elements */}
             <div className="f-navbar-flip flex items-center justify-end gap-6">
+              {/* Instagram Icon (Mobile + Desktop) */}
+              <ul className="flex lg:hidden gap-3 social-icons order-1">
+                <li className="bg-cyan-400">
+                  <Link
+                    href="https://www.instagram.com/engagemeuae/"
+                    target="_blank"
+                    className="flex items-center justify-center w-10 h-10"
+                  >
+                    <i className="fa fa-instagram text-white" aria-hidden="true"></i>
+                    <span className="sr-only">Follow EngageMe on Instagram</span>
+                  </Link>
+                </li>
+              </ul>
+
+              {/* Facebook Icon (Mobile + Desktop) */}
+              <ul className="flex lg:hidden gap-3 social-icons order-2">
+                <li className="bg-cyan-400">
+                  <Link
+                    href="https://web.facebook.com/people/Engage-Me/100063498161099/"
+                    target="_blank"
+                    className="flex items-center justify-center w-10 h-10"
+                  >
+                    <i className="fa fa-facebook text-white" aria-hidden="true"></i>
+                    <span className="sr-only">Follow EngageMe on Facebook</span>
+                  </Link>
+                </li>
+              </ul>
+
               {/* Hamburger for mobile */}
               <button
-                className="lg:hidden flex items-center px-3 py-2 border rounded text-cyan-500 border-cyan-400"
+                className="lg:hidden flex items-center px-3 py-2 border rounded text-cyan-500 border-cyan-400 order-3"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label="Toggle navigation menu"
               >
                 <i className="fa fa-bars text-2xl"></i>
               </button>
+
               {/* Desktop Navigation */}
               <ul className={`hidden lg:flex f-navbar-nav gap-8`}>
                 <li>
@@ -170,8 +199,8 @@ export default function Header() {
               {/* separator before social icons */}
               <span className="hidden lg:block mx-3 h-6 border-l border-gray-200" aria-hidden="true"></span>
 
-              {/* Social Icons - Cyan background */}
-              <ul className="flex gap-3 social-icons">
+              {/* Social Icons - Cyan background (Desktop Only) */}
+              <ul className="hidden lg:flex gap-3 social-icons">
                 <li className="bg-cyan-400">
                   <Link
                     href="https://www.instagram.com/engagemeuae/"
