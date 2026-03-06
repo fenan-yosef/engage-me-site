@@ -41,7 +41,7 @@ export default function Header() {
                     <Link
                       href="https://www.instagram.com/engagemeuae/"
                       target="_blank"
-                      className="flex items-center justify-center w-10 h-10"
+                      className="flex items-center justify-center w-[50px] h-[50px]"
                     >
                       <i className="fa fa-instagram text-white" aria-hidden="true"></i>
                       <span className="sr-only">Follow EngageMe on Instagram</span>
@@ -51,7 +51,7 @@ export default function Header() {
                     <Link
                       href="https://web.facebook.com/people/Engage-Me/100063498161099/"
                       target="_blank"
-                      className="flex items-center justify-center w-10 h-10"
+                      className="flex items-center justify-center w-[50px] h-[50px]"
                     >
                       <i className="fa fa-facebook text-white" aria-hidden="true"></i>
                       <span className="sr-only">Follow EngageMe on Facebook</span>
@@ -203,7 +203,7 @@ export default function Header() {
                   <Link
                     href="https://www.instagram.com/engagemeuae/"
                     target="_blank"
-                    className="flex items-center justify-center w-10 h-10"
+                    className="flex items-center justify-center w-[50px] h-[50px]"
                   >
                     <i className="fa fa-instagram text-white" aria-hidden="true"></i>
                     <span className="sr-only">Follow EngageMe on Instagram</span>
@@ -213,7 +213,7 @@ export default function Header() {
                   <Link
                     href="https://web.facebook.com/people/Engage-Me/100063498161099/"
                     target="_blank"
-                    className="flex items-center justify-center w-10 h-10"
+                    className="flex items-center justify-center w-[50px] h-[50px]"
                   >
                     <i className="fa fa-facebook text-white" aria-hidden="true"></i>
                     <span className="sr-only">Follow EngageMe on Facebook</span>

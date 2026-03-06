@@ -144,10 +144,10 @@
 
 /* Navigation styles */
 .header .f-navbar-nav a {
-  font-size: 16px; /* slightly smaller for lighter appearance */
-  /* maintain same sans stack */
+  font-size: 18px;
+  /* use same stack as body for consistency with archive site */
   font-family: var(--font-sans);
-  font-weight: 300; /* lighter weight to match archive look */
+  font-weight: 400;
   color: inherit;
   position: relative;
   padding-bottom: 6px;
@@ -186,8 +186,8 @@
 /* Phone number styling to match nav links */
 .header .header-phone {
   font-family: var(--font-sans);
-  font-weight: 300;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 18px;
 }
 
 .header .social-icons li i {
