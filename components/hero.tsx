@@ -19,17 +19,32 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="relative z-10">
             {/* Banner Text */}
-            <h1 className="flex  justify-between text-4xl md:text-6xl font-bold mb-12 mt-[-60px] md:mt-[-100px]" id="banner_text">
-              <div className="flex items-center gap-30 md:gap-50 ">
-                <span className="text-white text-7xl md:text-9xl ">We are</span>
-                {/* Logo placeholder - Engage Me Logo */}
-                <Image
-                  src="/engage-me-logo.png"
-                  alt="engage me"
-                  width={270}
-                  height={270}
-                  style={{ height: "180px", width: "auto", marginTop: '28px' }}
-                />
+            <h1
+              className="grid grid-cols-2 items-center mb-12 mt-[-100px] md:mt-[-135px]"
+              id="banner_text"
+              style={{ fontFamily: "'Run', sans-serif" }}
+            >
+              {/* Left Column: We are */}
+              <div className="flex justify-center md:justify-end md:pr-[18%]">
+                <span 
+                  className="text-white leading-none inline-block whitespace-nowrap" 
+                  style={{ fontSize: "13vw", fontWeight: "normal", letterSpacing: "-0.02em" }}
+                >
+                  We are
+                </span>
+              </div>
+
+              {/* Right Column: Logo */}
+              <div className="flex justify-center md:justify-start md:pl-[18%] pt-8 md:pt-4">
+                <div className="relative" style={{ height: "13vw", width: "100%", maxWidth: "450px" }}>
+                  <Image
+                    src="/engage-me-logo.png"
+                    alt="engage me"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </div>
             </h1>
         </div>
