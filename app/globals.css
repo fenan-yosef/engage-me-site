@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -147,8 +148,8 @@
 /* Navigation styles */
 .header .f-navbar-nav a {
   font-size: 20px;
-  /* use same stack as body for consistency with archive site */
-  font-family: var(--font-sans);
+  /* use Montserrat for navbar links */
+  font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   color: inherit;
   position: relative;
