@@ -164,7 +164,7 @@ export default function JobsPage() {
                 <Link
                   href="/apply/start"
                   className="w-full text-left px-4 py-2 text-white text-xs font-semibold tracking-wide flex items-center justify-between"
-                  style={{ backgroundColor: job.color, borderTopLeftRadius: 16, fontFamily: '"Barlow Condensed", sans-serif' }}
+                  style={{ backgroundColor: job.color, borderTopLeftRadius: 16, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif' }}
                   aria-label={`Apply for ${job.title}`}
                 >
                   <span>APPLY HERE</span>

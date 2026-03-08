@@ -52,6 +52,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 .dark {
@@ -312,7 +313,7 @@
   color: #fff;
   padding: 12px 18px;
   border-radius: 15px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--bs-font-sans-serif);
   font-weight: 600;
 }
 
@@ -351,9 +352,8 @@
   font-size: 1.5rem;
   padding: 12px 20px;
   letter-spacing: 0.2px;
-  font-family: "Barlow Condensed", sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: 300;
   /* light */
 }
 
@@ -481,7 +481,7 @@
   transition: all 0.2s ease;
   text-decoration: none;
   padding: 12px 24px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--bs-font-sans-serif);
 }
 
 .btn-brand-leaf:hover {
@@ -499,7 +499,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--bs-font-sans-serif);
 }
 
 .btn-engage:hover {
