@@ -4,10 +4,11 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 import PhoneInput, { isValidPhoneNumber, isPossiblePhoneNumber } from 'react-phone-number-input'
 
- 
+
 
 export default function ContactPage() {
   const [phoneValue, setPhoneValue] = useState<string | undefined>(undefined)
@@ -135,10 +136,17 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                className="mt-2 inline-flex items-center justify-center gap-2 bg-[#3AFCAD] text-white font-semibold px-5 py-3 text-sm shadow-sm hover:bg-[#35e6b3] transition"
+                className="btn-brand-leaf text-white w-fit mt-2"
+                style={{ border: 'none', cursor: 'pointer' }}
               >
-                SEND
-                <span aria-hidden="true">▶</span>
+                <span>SEND</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-3 h-3 translate-y-[1px]"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
               </button>
             </form>
           </div>
@@ -152,13 +160,19 @@ export default function ContactPage() {
               <p className="text-gray-700 text-base leading-relaxed">
                 If you are a freelancer and looking for work as a model, hostess, promoter, entertainer, photographer, videographer etc, click below to complete our online registration form to join our database.
               </p>
-              <a
+              <Link
                 href="/jobs"
-                className="inline-flex items-center gap-2 bg-[#3AFCAD] text-white text-xs font-semibold px-4 py-2 w-fit shadow-sm hover:bg-[#35e6b3] transition"
+                className="btn-brand-leaf text-white w-fit"
               >
-                APPLY HERE
-                <span aria-hidden="true">▶</span>
-              </a>
+                <span>APPLY HERE</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-3 h-3 translate-y-[1px]"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </Link>
             </div>
 
             <div className="flex flex-col gap-4">

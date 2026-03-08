@@ -10,7 +10,7 @@ import PhoneInput, { isValidPhoneNumber, isPossiblePhoneNumber } from 'react-pho
 
 export default function ApplyStartPage() {
   const [jobRef, setJobRef] = useState("MOD/FE")
-  
+
   const [phoneValue, setPhoneValue] = useState<string | undefined>(undefined)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -64,10 +64,16 @@ export default function ApplyStartPage() {
               href="https://engage-me.me/staffapplication/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 self-start bg-[#3AFCAD] text-white text-sm font-semibold px-4 py-2 shadow-sm hover:bg-[#35e6b3] transition rounded-full"
+              className="btn-brand-leaf text-white w-fit self-start"
             >
-              APPLY HERE
-              <span aria-hidden="true">▶</span>
+              <span>APPLY HERE</span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-3 h-3 translate-y-[1px]"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
             </Link>
 
             <p className="text-base leading-relaxed">
@@ -125,10 +131,17 @@ export default function ApplyStartPage() {
               <div className="sm:col-span-2 flex justify-end">
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 bg-[#3AFCAD] text-white font-semibold px-5 py-2 shadow-sm hover:bg-[#35e6b3] transition rounded-full"
+                  className="btn-brand-leaf text-white w-fit"
+                  style={{ border: 'none', cursor: 'pointer' }}
                 >
-                  SUBMIT
-                  <span aria-hidden="true">▶</span>
+                  <span>SUBMIT</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-3 h-3 translate-y-[1px]"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
                 </button>
               </div>
             </form>

@@ -106,11 +106,16 @@ export default function InStorePromotersWorkPage() {
                 <div className="mt-6">
                   <Link
                     href="/work"
-                    className="f-btn-tertiary text-2xl font-semibold rounded-none"
-                    style={{ borderTopLeftRadius: '2.5rem', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, padding: '0.5rem 1.5rem' }}
+                    className="btn-brand-leaf text-white w-fit"
                   >
-                    All Work
-                    <i className=" ml-2 fa fa-chevron-right" aria-hidden="true"></i>
+                    <span>All Work</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-3 h-3 translate-y-[1px]"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
                   </Link>
                 </div>
               </div>

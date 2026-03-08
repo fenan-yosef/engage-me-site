@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
@@ -220,9 +221,16 @@ export default function PeoplePage() {
                 just a couple of clicks away from joining our fun team.
               </p>
 
-              <a href="/jobs" className="browser_btn footer_btn text-white w-fit">
-                APPLY HERE →
-              </a>
+              <Link href="/jobs" className="btn-brand-leaf text-white w-fit">
+                <span>APPLY HERE</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-3 h-3 translate-y-[1px]"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </Link>
             </div>
 
             <div className="content_side_img relative flex items-center justify-center w-full">

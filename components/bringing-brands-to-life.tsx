@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useEffect } from "react"
 import Image, { type StaticImageData } from "next/image"
 
@@ -34,11 +35,11 @@ export default function BringingBrandsToLife({
   }, [carouselImages.length])
 
   return (
-    <section className="section-featured bg-white py-20">
+    <section className="section-featured bg-white py-0">
       <div className="mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
           {/* Left side - Text content */}
-          <div className="pl-10 flex flex-col justify-left">
+          <div className="flex flex-col justify-center px-10 py-10 md:py-12">
             <h2
               className="section-title text-5xl md:text-8xl font-bold mb-8"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -52,16 +53,26 @@ export default function BringingBrandsToLife({
               management. It&apos;s that simple.
             </p>
 
-            <a href="/work" className="subscribe_btn footer_btn text-white w-fit mb-8">
-              OUR WORK →
-            </a>
+            <Link
+              href="/work"
+              className="btn-brand-leaf text-white w-fit mb-8"
+            >
+              <span>OUR WORK</span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-3 h-3 translate-y-[1px]"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </Link>
           </div>
 
           {/* Right side - Carousel (empty space for user to add their carousel) */}
-          <div className="content_side_img relative flex items-start justify-end md:translate-x-16 md:-translate-y-8 w-full">
-            <div className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl relative group">
+          <div className="content_side_img relative flex w-full">
+            <div className="relative group w-full">
               <div
-                className="carousel slide relative w-full overflow-hidden bg-gray-200 h-[28rem] md:h-[32rem] lg:h-[36rem] shadow-lg"
+                className="carousel slide relative h-full min-h-[28rem] w-full overflow-hidden bg-gray-200 shadow-lg md:min-h-[42vw]"
                 id="demo"
                 data-interval="2500"
               >
