@@ -82,8 +82,8 @@ export default function EventStaffingPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -104,8 +104,8 @@ export default function EventStaffingPage() {
             }
           `}</style>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <div className="comn_img_side_txt flex flex-col justify-center">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-1">
               <h2 className="section-title font-bold ">event staffing</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
@@ -115,21 +115,19 @@ export default function EventStaffingPage() {
               </div>
             </div>
 
-            <div className="home_imggroup">
-              <SimpleCarousel images={carouselImages} height={500} />
+            <div className="home_imggroup flex items-stretch order-2 md:order-2">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-8">
-            <div className="home_imggroup">
+            <div className="home_imggroup order-4 md:order-3">
               <img
                 src="https://web.archive.org/web/20250917014420im_/https://engage-me.me/public/image/customs/280920201601288430600.jpg"
                 alt="event staffing image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
               />
             </div>
 
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
               <div className="section-description f-text-xlarge text-gray-700">
                 <p>From entrance staff, wrist banding, information desk, coordinators, managers, runners, cashiers, logistics staff, brand ambassadors, promoters, hosts and hostesses through to stand security, we can offer staff through every step of a visitor&apos;s event journey.</p>
 

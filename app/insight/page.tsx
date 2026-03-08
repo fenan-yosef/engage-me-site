@@ -11,10 +11,10 @@ export default function InsightPage() {
       <Header />
 
       {/* Insight intro */}
-      <section className="bg-white pt-10">
+      <section className="bg-white py-0">
         <div className="mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <div className="pl-10 flex flex-col justify-left">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="flex flex-col justify-center px-10 py-10 md:py-12 insight_in_1">
               <h1
                 className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -34,18 +34,16 @@ export default function InsightPage() {
               </p>
             </div>
 
-            <div className="content_side_img relative flex items-start justify-end md:translate-x-16 md:-translate-y-8 w-full">
-              <div className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl relative">
-                <div className="relative w-full overflow-hidden bg-gray-200 h-[22rem] sm:h-[26rem] md:h-[30rem] lg:h-[34rem] shadow-lg">
-                  <Image
-                    src="/driving-results.jpg"
-                    alt="Insight reporting"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="w-full h-full object-cover"
-                    priority
-                  />
-                </div>
+            <div className="content_side_img relative flex w-full insight_in_2">
+              <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw] overflow-hidden bg-gray-200">
+                <Image
+                  src="/driving-results.jpg"
+                  alt="Insight reporting"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="w-full h-full object-cover"
+                  priority
+                />
               </div>
             </div>
           </div>
@@ -53,11 +51,11 @@ export default function InsightPage() {
       </section>
 
       {/* Staff incentives */}
-      <section className="bg-white pb-20">
+      <section className="bg-white py-0">
         <div className="mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 items-center">
-            <div className="content_side_img relative flex items-center justify-center w-full">
-              <div className="relative w-full h-[22rem] sm:h-[26rem] md:h-[30rem] lg:h-[34rem] bg-gray-200 overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="content_side_img relative flex w-full insight_in_3 order-2 md:order-1">
+              <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw] bg-gray-200 overflow-hidden">
                 <Image
                   src="/carousel-image-1.jpg"
                   alt="Staff incentives"
@@ -68,7 +66,7 @@ export default function InsightPage() {
               </div>
             </div>
 
-            <div className="comn_img_side_txt flex flex-col justify-center insigh_last">
+            <div className="comn_img_side_txt flex flex-col justify-center px-10 py-10 md:py-12 insight_in_4 order-1 md:order-2">
               <h2
                 className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}

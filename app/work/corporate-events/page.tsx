@@ -72,8 +72,8 @@ export default function CorporateEventsPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -93,8 +93,8 @@ export default function CorporateEventsPage() {
             }
           `}</style>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <div className="comn_img_side_txt flex flex-col justify-center">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1">
               <h2 className="section-title text-3xl md:text-4xl font-bold lowercase ">corporate events</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
@@ -104,32 +104,35 @@ export default function CorporateEventsPage() {
               </div>
             </div>
 
-            <div className="home_imggroup">
-              <SimpleCarousel images={carouselImages} height={500} />
+            <div className="home_imggroup flex items-stretch order-2">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-8">
-            <div className="home_imggroup">
+            <div className="home_imggroup order-4 md:order-3">
               <img
                 src="https://web.archive.org/web/20250917013409im_/https://engage-me.me/public/image/customs/200220251740065095210.JPG"
                 alt="corporate event image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
               />
             </div>
 
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
               <div className="section-description f-text-xlarge text-gray-700">
                 <p>Our experienced staff are professional, courteous and full of smiles to make sure; gala dinners, family days and team building days, leave a lasting impression on your guests.</p>
 
                 <div className="mt-6">
                   <Link
                     href="/work"
-                    className="inline-block bg-[#3AFCAD] text-white px-6 py-3"
-                    style={{ borderTopLeftRadius: '2.5rem' }}
+                    className="btn-brand-leaf text-white w-fit"
                   >
-                    All Work
-                    <i className=" ml-2 fa fa-chevron-right" aria-hidden="true"></i>
+                    <span>All Work</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-5 h-5 translate-y-[1px]"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
                   </Link>
                 </div>
               </div>

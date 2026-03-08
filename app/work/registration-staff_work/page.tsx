@@ -74,8 +74,12 @@ export default function RegistrationStaffWorkPage() {
             }
           `}</style>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-0 items-stretch border border-gray-300 divide-y divide-x divide-gray-300 overflow-hidden">
-            <div className="p-6 comn_img_side_txt flex flex-col justify-center">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="home_imggroup flex items-stretch order-2 md:order-1">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
+            </div>
+
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2 className="section-title font-bold ">REGISTRATION STAFF</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
@@ -85,19 +89,7 @@ export default function RegistrationStaffWorkPage() {
               </div>
             </div>
 
-            <div className="p-6 home_imggroup flex items-center">
-              <SimpleCarousel images={carouselImages} height={500} />
-            </div>
-
-            <div className="p-6 home_imggroup">
-              <img
-                src="https://web.archive.org/web/20250917012813im_/https://engage-me.me/public/image/customs/200220251740050711190.JPG"
-                alt="registration staff image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </div>
-
-            <div className="p-6 comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
               <div className="section-description f-text-xlarge text-gray-700">
                 <p>All our registration staff are experienced, can implement ideas to enhance the process and work calmly under pressure.</p>
 
@@ -114,6 +106,14 @@ export default function RegistrationStaffWorkPage() {
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <div className="home_imggroup order-4 md:order-4">
+              <img
+                src="https://web.archive.org/web/20250917012813im_/https://engage-me.me/public/image/customs/200220251740050711190.JPG"
+                alt="registration staff image"
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
+              />
             </div>
           </div>
         </div>

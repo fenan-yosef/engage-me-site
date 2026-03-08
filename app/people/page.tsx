@@ -22,10 +22,10 @@ export default function PeoplePage() {
       <Header />
 
       {/* A to Z People */}
-      <section className="bg-white pt-10">
+      <section className="bg-white py-0">
         <div className="mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <div className="pl-10 flex flex-col justify-left people_in_1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="flex flex-col justify-center px-10 py-10 md:py-12 people_in_1">
               <h1
                 className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -40,9 +40,9 @@ export default function PeoplePage() {
               </p>
             </div>
 
-            <div className="content_side_img relative flex items-start justify-end md:translate-x-16 md:-translate-y-8 w-full people_in_2">
-              <div className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl relative">
-                <div className="carousel slide relative w-full overflow-hidden bg-gray-200 h-[22rem] sm:h-[26rem] md:h-[30rem] lg:h-[34rem] shadow-lg" id="a2zCarousel">
+            <div className="content_side_img relative flex w-full people_in_2">
+              <div className="relative w-full">
+                <div className="carousel slide relative h-full min-h-[22rem] w-full overflow-hidden bg-gray-200 shadow-lg md:min-h-[42vw]" id="a2zCarousel">
                   {/* Indicators */}
                   <ul className="carousel-indicators flex justify-center gap-2 absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
                     {Array.from({ length: 6 }).map((_, i) => (
@@ -108,15 +108,15 @@ export default function PeoplePage() {
       </section>
 
       {/* Meet the Founders */}
-      <section className="bg-white">
+      <section className="bg-white py-0">
         <div className="mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
             {/* Left - founders cards */}
-            <div className="bg-gray-200 people_in_3">
-              <div className="grid grid-rows-2">
+            <div className="bg-gray-200 people_in_3 h-full">
+              <div className="grid grid-rows-2 h-full">
                 {/* Founder 1 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2">
-                  <div className="relative min-h-[280px] sm:min-h-[320px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
+                  <div className="relative h-full">
                     <Image
                       src="/lisa.gif"
                       alt="Founder portrait"
@@ -145,7 +145,7 @@ export default function PeoplePage() {
                 </div>
 
                 {/* Founder 2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
                   <div className="flex flex-col justify-center p-8 order-2 sm:order-1">
                     <h3 className="text-2xl font-semibold text-gray-800 mb-2">clare walsh</h3>
                     <p className="text-gray-800 font-semibold leading-snug mb-6">
@@ -165,7 +165,7 @@ export default function PeoplePage() {
                       and uniform development.
                     </p>
                   </div>
-                  <div className="relative min-h-[280px] sm:min-h-[320px] order-1 sm:order-2">
+                  <div className="relative h-full order-1 sm:order-2">
                     <Image
                       src="/clare.gif"
                       alt="Founder portrait"
@@ -179,7 +179,7 @@ export default function PeoplePage() {
             </div>
 
             {/* Right - founders copy */}
-            <div className="comn_img_side_txt flex flex-col justify-center people_in_4">
+            <div className="comn_img_side_txt flex flex-col justify-center people_in_4 px-10 py-10 md:py-12">
               <h2
                 className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}

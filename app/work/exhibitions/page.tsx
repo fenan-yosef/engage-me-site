@@ -72,8 +72,8 @@ export default function ExhibitionsPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -94,12 +94,12 @@ export default function ExhibitionsPage() {
             }
           `}</style>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <div className="home_imggroup">
-              <SimpleCarousel images={carouselImages} height={500} />
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="home_imggroup flex items-stretch order-2 md:order-1">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
             </div>
 
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2 className="section-title font-bold ">exhibitions</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
@@ -108,17 +108,15 @@ export default function ExhibitionsPage() {
                 </p>
               </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-8">
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
               <div className="section-description f-text-xlarge text-gray-700">
                 <p>Exhibitions are more than just the event days. Our focus on training, uniform production and the small details are what sets us apart from our competitors.</p>
 
                 <p className="mt-4">Where a large team is required, our management team will be on hand to support on-the-ground. Ensuring knowledge, understanding and enthusiasm are at a top level throughout the exhibition.</p>
 
                 <div className="mt-6">
-                   <Link
+                  <Link
                     href="/work"
                     className="f-btn-tertiary text-2xl font-semibold rounded-none"
                     style={{ borderTopLeftRadius: '3.5rem', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, padding: '0.5rem 1.5rem' }}
@@ -130,11 +128,11 @@ export default function ExhibitionsPage() {
               </div>
             </div>
 
-            <div className="home_imggroup">
+            <div className="home_imggroup order-4 md:order-4">
               <img
                 src="https://web.archive.org/web/20250917022313im_/https://engage-me.me/public/image/customs/280920201601289294710.jpg"
                 alt="exhibitions image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
               />
             </div>
           </div>

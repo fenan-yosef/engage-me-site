@@ -43,8 +43,8 @@ export default function AirportActivationsPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -64,8 +64,8 @@ export default function AirportActivationsPage() {
             }
           `}</style>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <div className="comn_img_side_txt flex flex-col justify-center">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1">
               <h2 className="section-title text-3xl md:text-4xl font-bold lowercase ">airport activations</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
@@ -76,27 +76,27 @@ export default function AirportActivationsPage() {
               </div>
             </div>
 
-            <div className="home_imggroup">
-              <div className="carousel relative">
+            <div className="home_imggroup order-2">
+              <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
                 <img
                   src="https://web.archive.org/web/20250917024326im_/https://engage-me.me/public/image/customs/280920201601284189370.jpg"
                   alt="airport image"
-                  style={{ width: "100%", height: "500px", objectFit: "cover" }}
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-8">
-            <div className="home_imggroup">
-              <img
-                src="https://web.archive.org/web/20250917024326im_/https://engage-me.me/public/image/customs/280920201601284189790.jpg"
-                alt="airport image 2"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+            <div className="home_imggroup order-4 md:order-3">
+              <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
+                <img
+                  src="https://web.archive.org/web/20250917024326im_/https://engage-me.me/public/image/customs/280920201601284189790.jpg"
+                  alt="airport image 2"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
 
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
               <div className="section-description f-text-xlarge text-gray-700">
                 <p>24 hours staffing solutions are managed by organised scheduling, to provide round the clock engagement at DDF activation stands.</p>
 

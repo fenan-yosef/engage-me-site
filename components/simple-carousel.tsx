@@ -10,11 +10,12 @@ interface CarouselImage {
 
 interface SimpleCarouselProps {
   images: CarouselImage[]
-  height?: number
+  height?: number | string
   intervalMs?: number
+  className?: string
 }
 
-export default function SimpleCarousel({ images, height = 500, intervalMs = 2500 }: SimpleCarouselProps) {
+export default function SimpleCarousel({ images, height, intervalMs = 2500, className = "" }: SimpleCarouselProps) {
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function SimpleCarousel({ images, height = 500, intervalMs = 2500
   if (!images.length) return null
 
   return (
-    <div className="relative w-full overflow-hidden bg-gray-200" style={{ height }}>
+    <div className={`relative w-full overflow-hidden bg-gray-200 ${className}`} style={height ? { height } : {}}>
       {/* Slides */}
       <div
         className="flex h-full transition-transform duration-700 ease-in-out"

@@ -69,8 +69,8 @@ export default function BrandActivationsPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -85,50 +85,35 @@ export default function BrandActivationsPage() {
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; }
             .carousel-strip { display:grid; gap:0.75rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
             .carousel-strip img { height:220px; object-fit:cover; border-radius:0.5rem; }
-            /* full-bleed container to span viewport width */
-            .full-bleed { width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
-            .full-bleed .inner-grid { min-height: 60vh; }
-            @media (min-width:1024px) {
-              .full-bleed .inner-grid { min-height: 75vh; }
-            }
             @media (min-width:768px) {
               .section-title { font-size: 3.2rem; }
               .f-text-xlarge p { font-size: 1.125rem; }
             }
           `}</style>
 
-          {/* Box with 2x2 cross grid and outer border */}
-          <div id="borderedBox" className="mt-10 border border-gray-300 full-bleed">
-            <div className="grid grid-cols-2 grid-rows-2 inner-grid" style={{ minHeight: 440 }}>
-              <div className="p-6 border-r border-b relative bg-white">
-                {/* Small carousel (top-left) */}
-                <SmallCarousel images={CAROUSEL_IMAGES.slice(0, 3)} />
-              </div>
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="order-2 md:order-1 relative bg-white flex items-stretch">
+              <SmallCarousel images={CAROUSEL_IMAGES.slice(0, 3)} className="h-full min-h-[22rem] md:min-h-[42vw]" />
+            </div>
 
-              <div className="p-8 border-b flex items-center bg-white">
-                {/* Top-right: heading */}
-                <div>
-                  <h3 className="section-title text-4xl font-bold" style={{ color: '#3AFCAD' }}>brand activations</h3>
-                  <p className="mt-3 text-gray-700" style={{ maxWidth: 420 }}>Bringing brands to life through targeted, on-ground experiences — staff selection, training and activation management.</p>
-                </div>
-              </div>
-
-              <div className="p-8 border-r bg-white">
-                {/* Bottom-left: descriptive text */}
-                <div className="text-gray-700 f-text-xlarge">
-                  <p>We take time to understand your brand in order to carefully select and propose staff that we feel are the right fit to evoke your brand on a ground level.</p>
-                  <p className="mt-4">Pre-campaign training and brand immersion are standard; promoters, sampling staff and runners are briefed to deliver measurable results.</p>
-                </div>
-              </div>
-
-              <div className="p-6 bg-white flex items-center justify-center">
-                {/* Bottom-right: feature image */}
-                <img src={CAROUSEL_IMAGES[3]} alt="brand activation" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div className="px-10 py-10 md:py-12 flex items-center bg-white order-1 md:order-2">
+              <div>
+                <h3 className="section-title text-4xl font-bold" style={{ color: '#3AFCAD' }}>brand activations</h3>
+                <p className="mt-3 text-gray-700" style={{ maxWidth: 420 }}>Bringing brands to life through targeted, on-ground experiences — staff selection, training and activation management.</p>
               </div>
             </div>
+
+            <div className="px-10 py-10 md:py-12 bg-white order-3 md:order-3 flex flex-col justify-center">
+              <div className="text-gray-700 f-text-xlarge">
+                <p>We take time to understand your brand in order to carefully select and propose staff that we feel are the right fit to evoke your brand on a ground level.</p>
+                <p className="mt-4">Pre-campaign training and brand immersion are standard; promoters, sampling staff and runners are briefed to deliver measurable results.</p>
+              </div>
+            </div>
+
+            <div className="bg-white flex items-stretch order-4 md:order-4">
+              <img src={CAROUSEL_IMAGES[3]} alt="brand activation" className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]" />
+            </div>
           </div>
-
-
         </div>
       </section>
 
@@ -138,7 +123,7 @@ export default function BrandActivationsPage() {
   )
 }
 
-function SmallCarousel({ images }: { images: string[] }) {
+function SmallCarousel({ images, className = "" }: { images: string[]; className?: string }) {
   const [currentSlide, setCurrentSlide] = useState(0)
 
   useEffect(() => {
@@ -152,7 +137,7 @@ function SmallCarousel({ images }: { images: string[] }) {
   if (!images || images.length === 0) return null
 
   return (
-    <div className="carousel slide relative w-full overflow-hidden h-52" id="smallCarousel">
+    <div className={`carousel slide relative w-full overflow-hidden ${className}`} id="smallCarousel">
       {/* Indicators */}
       <ul className="carousel-indicators flex justify-center gap-2 absolute bottom-2 left-1/2 -translate-x-1/2 z-20">
         {images.map((_, index) => (

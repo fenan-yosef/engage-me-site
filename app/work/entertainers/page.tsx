@@ -67,8 +67,8 @@ export default function EntertainersPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -89,12 +89,12 @@ export default function EntertainersPage() {
             }
           `}</style>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <div className="home_imggroup">
-              <SimpleCarousel images={carouselImages} height={500} />
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
+            <div className="home_imggroup flex items-stretch order-2 md:order-1">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
             </div>
 
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2 className="section-title font-bold ">entertainers</h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
@@ -103,10 +103,8 @@ export default function EntertainersPage() {
                 </p>
               </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-8">
-            <div className="comn_img_side_txt flex flex-col justify-center">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
               <div className="section-description f-text-xlarge text-gray-700">
                 <p>We can support with, actors, dancers, mascots, characters, voice over artists, DJ&apos;s, you name it we can provide it.</p>
 
@@ -125,11 +123,11 @@ export default function EntertainersPage() {
               </div>
             </div>
 
-            <div className="home_imggroup">
+            <div className="home_imggroup order-4 md:order-4">
               <img
                 src="https://web.archive.org/web/20250917011934im_/https://engage-me.me/public/image/customs/280920201601287360860.jpg"
                 alt="entertainers image"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
               />
             </div>
           </div>
