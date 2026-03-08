@@ -143,7 +143,7 @@ export default function ContactPage() {
                 <svg
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="w-3 h-3 translate-y-[1px]"
+                  className="w-5 h-5 translate-y-[1px]"
                 >
                   <path d="M8 5v14l11-7z" />
                 </svg>
@@ -168,7 +168,7 @@ export default function ContactPage() {
                 <svg
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="w-3 h-3 translate-y-[1px]"
+                  className="w-5 h-5 translate-y-[1px]"
                 >
                   <path d="M8 5v14l11-7z" />
                 </svg>

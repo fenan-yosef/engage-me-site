@@ -137,6 +137,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-size: 1.1rem;
   }
 }
 
@@ -144,7 +145,7 @@
 
 /* Navigation styles */
 .header .f-navbar-nav a {
-  font-size: 18px;
+  font-size: 20px;
   /* use same stack as body for consistency with archive site */
   font-family: var(--font-sans);
   font-weight: 400;
@@ -257,7 +258,7 @@
 
 /* Paragraph sizing */
 .all_para_size {
-  font-size: 1.33rem;
+  font-size: 1.45rem;
 }
 
 /* Image content styling */
@@ -309,7 +310,7 @@
 /* Footer buttons */
 .footer_btn {
   color: #fff;
-  padding: 10px 13px;
+  padding: 12px 18px;
   border-radius: 15px;
   font-family: "Barlow Condensed", sans-serif;
   font-weight: 600;
@@ -347,8 +348,8 @@
 
 /* Floating button sizing */
 .fix-btn-scroll {
-  font-size: 1.25rem;
-  padding: 8px 12px;
+  font-size: 1.5rem;
+  padding: 12px 20px;
   letter-spacing: 0.2px;
   font-family: "Barlow Condensed", sans-serif;
   font-weight: 700;
@@ -471,15 +472,15 @@
   color: #fff;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 15px;
+  font-size: 18px;
   letter-spacing: 0.05em;
-  border-radius: 12px 2px 2px 2px;
+  border-radius: 28px 2px 2px 2px;
   transition: all 0.2s ease;
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 12px 24px;
   font-family: "Barlow Condensed", sans-serif;
 }
 

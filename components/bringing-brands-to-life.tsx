@@ -44,8 +44,7 @@ export default function BringingBrandsToLife({
               className="section-title text-5xl md:text-8xl font-bold mb-8"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
-              <div>bringing brands</div>
-              <div>to life</div>
+              <div>bringing brands to life</div>
             </h2>
 
             <p className="section-description all_para_size text-gray-600 text-base mb-8 leading-relaxed">
@@ -61,7 +60,7 @@ export default function BringingBrandsToLife({
               <svg
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-3 h-3 translate-y-[1px]"
+                className="w-5 h-5 translate-y-[1px]"
               >
                 <path d="M8 5v14l11-7z" />
               </svg>
