@@ -146,13 +146,12 @@
 .header .f-navbar-nav a {
   font-size: 18px;
   /* use same stack as body for consistency with archive site */
-  font-family: "Barlow Condensed", sans-serif;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-weight: 400;
   color: inherit;
   position: relative;
   padding-bottom: 6px;
   text-decoration: none;
-  text-transform: uppercase;
 }
 
 .header .f-navbar-nav a::after {

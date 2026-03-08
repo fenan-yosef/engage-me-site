@@ -9,7 +9,7 @@ export default function EngagingStaff() {
     <section className="bg-white py-0">
       <div className="mx-auto">
         {/* Engaging Staff Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch mb-20 md:min-h-[42vw]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
           {/* Left side - Staff grid */}
           <div className="image-grid h-full">
             <div className="grid h-full grid-cols-3 grid-rows-3 gap-px">
