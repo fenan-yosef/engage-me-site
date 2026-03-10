@@ -5,6 +5,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
 import Image from "next/image"
+import Link from "next/link"
 
 const CAROUSEL_IMAGES = [
   "https://web.archive.org/web/20250804161257im_/https://engage-me.me/public/image/customs/280920201601286244570.jpg",
@@ -86,8 +87,7 @@ export default function BrandActivationsPage() {
             .carousel-strip { display:grid; gap:0.75rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
             .carousel-strip img { height:220px; object-fit:cover; border-radius:0.5rem; }
             @media (min-width:768px) {
-              .section-title { font-size: 3.2rem; }
-              .f-text-xlarge p { font-size: 1.125rem; }
+              
             }
           `}</style>
 

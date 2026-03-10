@@ -99,8 +99,7 @@ export default function EventStaffingPage() {
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
             .carousel .carousel-control-prev, .carousel .carousel-control-next { position: absolute; top: 50%; transform: translateY(-50%); color:#3AFCAD; }
             @media (min-width:768px) {
-              .section-title { font-size: 5rem; }
-              .f-text-xlarge p { font-size: 1.5rem; }
+              
             }
           `}</style>
 

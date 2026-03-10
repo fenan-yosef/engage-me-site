@@ -89,8 +89,7 @@ export default function ExhibitionsPage() {
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
             .carousel .carousel-control-prev, .carousel .carousel-control-next { position: absolute; top: 50%; transform: translateY(-50%); color:#3AFCAD; }
             @media (min-width:768px) {
-              .section-title { font-size: 5rem; }
-              .f-text-xlarge p { font-size: 1.5rem; }
+              
             }
           `}</style>
 
@@ -101,7 +100,7 @@ export default function ExhibitionsPage() {
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2
-                className="section-title text-5xl md:text-8xl font-bold mb-8 items-center flex"
+                className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase flex"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
               >
                 exhibitions
