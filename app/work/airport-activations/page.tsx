@@ -64,7 +64,7 @@ export default function AirportActivationsPage() {
           `}</style>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1">
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2
                 className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -72,15 +72,15 @@ export default function AirportActivationsPage() {
                 airport activations
               </h2>
 
-              <div className="section-description mt-4">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <div className="section-description f-text-xlarge mt-4 text-gray-700">
+                <p>
                   As a Department of Economic Development (DED) licensed company, we can provide our staff with work
                   permits and airport passes, in order for our staff to work legally within Dubai Duty Free (DDF).
                 </p>
               </div>
             </div>
 
-            <div className="home_imggroup order-2">
+            <div className="home_imggroup order-2 md:order-1">
               <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
                 <img
                   src="https://web.archive.org/web/20250917024326im_/https://engage-me.me/public/image/customs/280920201601284189370.jpg"
@@ -90,23 +90,13 @@ export default function AirportActivationsPage() {
               </div>
             </div>
 
-            <div className="home_imggroup order-4 md:order-3">
-              <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
-                <img
-                  src="https://web.archive.org/web/20250917024326im_/https://engage-me.me/public/image/customs/280920201601284189790.jpg"
-                  alt="airport image 2"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
+              <div className="section-description f-text-xlarge text-gray-700">
+                <p>24 hours staffing solutions are managed by organised scheduling, to provide round the clock engagement at DDF activation stands.</p>
 
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">24 hours staffing solutions are managed by organised scheduling, to provide round the clock engagement at DDF activation stands.</p>
+                <p className="mt-4">We can provide; runners, promoters and temporary sales staff to cater for all your requirements in Dubai Duty Free.</p>
 
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We can provide; runners, promoters and temporary sales staff to cater for all your requirements in Dubai Duty Free.</p>
-
-                <div className="mt-8">
+                <div className="mt-6">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"
@@ -121,6 +111,16 @@ export default function AirportActivationsPage() {
                     </svg>
                   </Link>
                 </div>
+              </div>
+            </div>
+
+            <div className="home_imggroup order-4 md:order-4">
+              <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
+                <img
+                  src="https://web.archive.org/web/20250917024326im_/https://engage-me.me/public/image/customs/280920201601284189790.jpg"
+                  alt="airport image 2"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

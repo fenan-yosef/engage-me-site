@@ -52,8 +52,8 @@ export default function SportingEventsWorkPage() {
         />
       </section>
 
-      <section className="bg-white">
-        <div className="mx-auto">
+      <section className="py-10 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -61,7 +61,7 @@ export default function SportingEventsWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -69,7 +69,7 @@ export default function SportingEventsWorkPage() {
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
             .carousel .carousel-control-prev, .carousel .carousel-control-next { position: absolute; top: 50%; transform: translateY(-50%); color:#3AFCAD; }
             @media (min-width:768px) {
-              .section-title { }
+              .section-title { font-size: 5rem; }
               .f-text-xlarge p { font-size: 1.5rem; }
             }
           `}</style>
@@ -87,20 +87,20 @@ export default function SportingEventsWorkPage() {
                 sporting events
               </h2>
 
-              <div className="section-description mt-4">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <div className="section-description f-text-xlarge mt-4 text-gray-700">
+                <p>
                   With over 10 year&apos;s experience providing event staff for one of the UAE&apos;s largest sporting events, Emirates Airlines Dubai Rugby 7s, we know how to facilitate large scale events with 150+ staff.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Our sporting event staff can be provided for pre event activations, the main event or after parties, for a seamless staff offering.</p>
+              <div className="section-description f-text-xlarge text-gray-700">
+                <p>Our sporting event staff can be provided for pre event activations, the main event or after parties, for a seamless staff offering.</p>
 
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We can provide; activation promoters, seating ushers, wrist band staff, ticketing staff, information booth staff, bag drop staff and VIP hosts and hostesses, all managed on-the-ground by our senior management team. With full briefing and training, we ensure a high standard of staff to represent your brand and event.</p>
+                <p>We can provide; activation promoters, seating ushers, wrist band staff, ticketing staff, information booth staff, bag drop staff and VIP hosts and hostesses, all managed on-the-ground by our senior management team. With full briefing and training, we ensure a high standard of staff to represent your brand and event.</p>
 
-                <div className="mt-8">
+                <div className="mt-6">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

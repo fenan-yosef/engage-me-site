@@ -32,7 +32,7 @@ export default function EngagingStaff() {
           {/* Right side - Text content */}
           <div className="comn_img_side_txt flex flex-col justify-center px-10 py-10 md:py-12">
             <h2
-              className="section-title text-5xl md:text-8xl font-bold mb-8"
+              className="section-title text-5xl md:text-7xl font-bold mb-8 pr-6"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
               <div>engaging staff</div>
@@ -64,12 +64,12 @@ export default function EngagingStaff() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
           {/* Text content - order changes on mobile */}
           <div className="comn_img_side_txt order-2 md:order-1 insigh_last flex flex-col justify-center px-10 py-10 md:py-12">
-            <h2
-              className="section-title text-5xl md:text-8xl font-bold mb-8"
+            <h3
+              className="section-title text-5xl md:text-7xl font-bold mb-6"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
               Driving Results
-            </h2>
+            </h3>
 
             <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
               With our bespoke reporting tool INSIGHT, clients can see results, feedback, pictures and videos throughout

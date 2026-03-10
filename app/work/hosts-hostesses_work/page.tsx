@@ -52,8 +52,8 @@ export default function HostsHostessesWorkPage() {
         />
       </section>
 
-      <section className="bg-white">
-        <div className="mx-auto">
+      <section className="py-10 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -61,7 +61,7 @@ export default function HostsHostessesWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -86,20 +86,20 @@ export default function HostsHostessesWorkPage() {
                 hosts and hostesses
               </h2>
 
-              <div className="section-description mt-4">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <div className="section-description f-text-xlarge mt-4 text-gray-700">
+                <p>
                   Hosts and hostesses are vital to the success of any event. A warm welcome smile, a fast and efficient registration and a well-informed person to guide you, always ensure a happy guest.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">When we consider hosts and hostesses for an event, we ensure they are well experienced in; registration, stage presentations, Q&amp;A support and general information retention.</p>
+              <div className="section-description f-text-xlarge text-gray-700">
+                <p>When we consider hosts and hostesses for an event, we ensure they are well experienced in; registration, stage presentations, Q&amp;A support and general information retention.</p>
 
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We provide hosts and hostesses with a variety of standard uniform options from our inventory, free of charge and we provide detailed briefings on uniform and image to ensure uniformity.</p>
+                <p>We provide hosts and hostesses with a variety of standard uniform options from our inventory, free of charge and we provide detailed briefings on uniform and image to ensure uniformity.</p>
 
-                <div className="mt-8">
+                <div className="mt-6">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

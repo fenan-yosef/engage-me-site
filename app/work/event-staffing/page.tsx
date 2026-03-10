@@ -91,7 +91,7 @@ export default function EventStaffingPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -104,7 +104,11 @@ export default function EventStaffingPage() {
           `}</style>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-1">
+            <div className="home_imggroup flex items-stretch order-2 md:order-1">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
+            </div>
+
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2
                 className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -112,30 +116,18 @@ export default function EventStaffingPage() {
                 event staffing
               </h2>
 
-              <div className="section-description mt-4">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <div className="section-description f-text-xlarge mt-4 text-gray-700">
+                <p>
                   We&apos;ve got event staffing covered with the broad range of staff on our database, in order to provide a one-step solution.
                 </p>
               </div>
             </div>
 
-            <div className="home_imggroup flex items-stretch order-2 md:order-2">
-              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
-            </div>
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
+              <div className="section-description f-text-xlarge text-gray-700">
+                <p>From entrance staff, wrist banding, information desk, coordinators, managers, runners, cashiers, logistics staff, brand ambassadors, promoters, hosts and hostesses through to stand security, we can offer staff through every step of a visitor&apos;s event journey.</p>
 
-            <div className="home_imggroup order-4 md:order-3">
-              <img
-                src="https://web.archive.org/web/20250917014420im_/https://engage-me.me/public/image/customs/280920201601288430600.jpg"
-                alt="event staffing image"
-                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
-              />
-            </div>
-
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">From entrance staff, wrist banding, information desk, coordinators, managers, runners, cashiers, logistics staff, brand ambassadors, promoters, hosts and hostesses through to stand security, we can offer staff through every step of a visitor&apos;s event journey.</p>
-
-                <div className="mt-8">
+                <div className="mt-6">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"
@@ -151,6 +143,14 @@ export default function EventStaffingPage() {
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <div className="home_imggroup order-4 md:order-4">
+              <img
+                src="https://web.archive.org/web/20250917014420im_/https://engage-me.me/public/image/customs/280920201601288430600.jpg"
+                alt="event staffing image"
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
+              />
             </div>
           </div>
         </div>

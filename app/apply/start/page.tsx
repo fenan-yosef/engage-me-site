@@ -44,12 +44,12 @@ export default function ApplyStartPage() {
 
           {/* Content right */}
           <div className="flex flex-col gap-5 text-gray-800">
-            <h2
-              className="section-title text-5xl md:text-8xl font-bold mb-8"
-              style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+            <h1
+              className="text-5xl sm:text-6xl font-bold leading-tight"
+              style={{ color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
               apply
-            </h2>
+            </h1>
 
             <p className="text-base leading-relaxed">
               Before you apply for this job you must ensure you are registered with us and know your staff number. Your staff number is on the Welcome Email you received from

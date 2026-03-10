@@ -52,8 +52,8 @@ export default function SocialMediaContentWorkPage() {
         />
       </section>
 
-      <section className="bg-white">
-        <div className="mx-auto">
+      <section className="py-10 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -61,7 +61,7 @@ export default function SocialMediaContentWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -73,12 +73,12 @@ export default function SocialMediaContentWorkPage() {
             }
           `}</style>
 
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
-            <div className="home_imggroup flex items-stretch order-2 md:order-1">
-              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
+          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-0 items-stretch border border-gray-300 divide-y divide-x divide-gray-300 overflow-hidden">
+            <div className="p-6 home_imggroup flex items-center">
+              <SimpleCarousel images={carouselImages} height={500} />
             </div>
 
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
+            <div className="p-6 comn_img_side_txt flex flex-col justify-center">
               <h2
                 className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -86,18 +86,18 @@ export default function SocialMediaContentWorkPage() {
                 social media content
               </h2>
 
-              <div className="section-description mt-4">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <div className="section-description f-text-xlarge mt-4 text-gray-700">
+                <p>
                   We know that social media is at the forefront of every brands marketing strategy and we can support you to create memorable content.
                 </p>
               </div>
             </div>
 
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Whether you require; actors, models, talent or regular promoters, to create images or videos for content or PR, we can provide the right people you are looking for, at cost effective rates.</p>
+            <div className="p-6 comn_img_side_txt flex flex-col justify-center">
+              <div className="section-description f-text-xlarge text-gray-700">
+                <p>Whether you require; actors, models, talent or regular promoters, to create images or videos for content or PR, we can provide the right people you are looking for, at cost effective rates.</p>
 
-                <div className="mt-8">
+                <div className="mt-6">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"
@@ -115,11 +115,11 @@ export default function SocialMediaContentWorkPage() {
               </div>
             </div>
 
-            <div className="home_imggroup order-4 md:order-4">
+            <div className="p-6 home_imggroup">
               <img
                 src="https://web.archive.org/web/20250917015832im_/https://engage-me.me/public/image/customs/280920201601296993410.png"
                 alt="social media content image"
-                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
           </div>

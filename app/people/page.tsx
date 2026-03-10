@@ -26,14 +26,14 @@ export default function PeoplePage() {
         <div className="mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
             <div className="flex flex-col justify-center px-10 py-10 md:py-12 people_in_1">
-              <h2
-                className="section-title text-5xl md:text-8xl font-bold mb-8"
+              <h1
+                className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
               >
                 <div>a to z people</div>
-              </h2>
+              </h1>
 
-              <p className="all_para_size text-gray-600 mb-8 leading-relaxed max-w-xl">
+              <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
                 With over 5,000 staff on our database, we can provide any type of temporary staffing solution required by
                 client&apos;s, from; models, hostesses, promoters, actors, dancers, F&amp;B staff, waiters, bar staff,
                 ushers, entertainers.
@@ -181,14 +181,14 @@ export default function PeoplePage() {
             {/* Right - founders copy */}
             <div className="comn_img_side_txt flex flex-col justify-center people_in_4 px-10 py-10 md:py-12">
               <h2
-                className="section-title text-5xl md:text-8xl font-bold mb-8"
+                className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
               >
                 <div>meet the</div>
                 <div>founders</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
                 Established in the UAE in 2014, our founders not only have vast experience within the region but also
                 internationally.
               </p>
@@ -208,14 +208,14 @@ export default function PeoplePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="pl-10 flex flex-col justify-left">
               <h2
-                className="section-title text-5xl md:text-8xl font-bold mb-8"
+                className="section-title text-5xl md:text-8xl font-regular mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
               >
                 <div>want to join our</div>
                 <div>team</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 mb-8 leading-relaxed max-w-xl">
+              <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
                 If you are freelancer and looking for work as a model, hostess, promoter, entertainer, photographer,
                 videographer etc, click below to complete our online registration form to join our database. You are
                 just a couple of clicks away from joining our fun team.

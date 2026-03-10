@@ -61,7 +61,7 @@ export default function MallActivationsWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -74,7 +74,11 @@ export default function MallActivationsWorkPage() {
           `}</style>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1">
+            <div className="home_imggroup flex items-stretch order-2 md:order-1">
+              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
+            </div>
+
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
               <h2
                 className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
@@ -82,30 +86,18 @@ export default function MallActivationsWorkPage() {
                 mall activations
               </h2>
 
-              <div className="section-description mt-4">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
+              <div className="section-description f-text-xlarge mt-4 text-gray-700">
+                <p>
                   With over 10 year&apos;s experience in mall activations in the region, we can provide key insights into scheduling staff for mall activations to maximize impact during peak timings.
                 </p>
               </div>
             </div>
 
-            <div className="home_imggroup flex items-stretch order-2">
-              <SimpleCarousel images={carouselImages} className="h-full min-h-[22rem] md:min-h-[42vw]" />
-            </div>
+            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
+              <div className="section-description f-text-xlarge text-gray-700">
+                <p>Our knowledge of mall rules and procedures brings valuable insight into logistics, security, how to attract people to the stand and ultimately engage with the brand.</p>
 
-            <div className="home_imggroup order-4 md:order-3">
-              <img
-                src="https://web.archive.org/web/20250917023557im_/https://engage-me.me/public/image/customs/280920201601291839240.jpg"
-                alt="mall activations image"
-                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
-              />
-            </div>
-
-            <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description">
-                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Our knowledge of mall rules and procedures brings valuable insight into logistics, security, how to attract people to the stand and ultimately engage with the brand.</p>
-
-                <div className="mt-8">
+                <div className="mt-6">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"
@@ -121,6 +113,14 @@ export default function MallActivationsWorkPage() {
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <div className="home_imggroup order-4 md:order-4">
+              <img
+                src="https://web.archive.org/web/20250917023557im_/https://engage-me.me/public/image/customs/280920201601291839240.jpg"
+                alt="mall activations image"
+                className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
+              />
             </div>
           </div>
         </div>
