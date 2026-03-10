@@ -98,7 +98,12 @@ export default function BrandActivationsPage() {
 
             <div className="px-10 py-10 md:py-12 flex items-center bg-white order-1 md:order-2">
               <div>
-                <h3 className="section-title text-4xl font-bold" style={{ color: '#3AFCAD' }}>brand activations</h3>
+                <h2
+                  className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
+                  style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+                >
+                  brand activations
+                </h2>
                 <p className="mt-3 text-gray-700" style={{ maxWidth: 420 }}>Bringing brands to life through targeted, on-ground experiences — staff selection, training and activation management.</p>
               </div>
             </div>
@@ -107,6 +112,21 @@ export default function BrandActivationsPage() {
               <div className="text-gray-700 f-text-xlarge">
                 <p>We take time to understand your brand in order to carefully select and propose staff that we feel are the right fit to evoke your brand on a ground level.</p>
                 <p className="mt-4">Pre-campaign training and brand immersion are standard; promoters, sampling staff and runners are briefed to deliver measurable results.</p>
+                <div className="mt-6">
+                  <Link
+                    href="/work"
+                    className="btn-brand-leaf text-white w-fit"
+                  >
+                    <span>All Work</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-5 h-5 translate-y-[1px]"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             </div>
 

@@ -78,9 +78,14 @@ export default function SocialMediaContentWorkPage() {
             <div className="p-6 home_imggroup flex items-center">
               <SimpleCarousel images={carouselImages} height={500} />
             </div>
-            
+
             <div className="p-6 comn_img_side_txt flex flex-col justify-center">
-              <h2 className="section-title font-bold ">SOCIAL MEDIA CONTENT</h2>
+              <h2
+                className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
+                style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+              >
+                social media content
+              </h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>
@@ -96,11 +101,16 @@ export default function SocialMediaContentWorkPage() {
                 <div className="mt-6">
                   <Link
                     href="/work"
-                    className="f-btn-tertiary text-2xl font-semibold rounded-none"
-                    style={{ borderTopLeftRadius: '3.5rem', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, padding: '0.5rem 1.5rem' }}
+                    className="btn-brand-leaf text-white w-fit"
                   >
-                    All Work
-                    <i className=" ml-2 fa fa-chevron-right" aria-hidden="true"></i>
+                    <span>All Work</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-5 h-5 translate-y-[1px]"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
                   </Link>
                 </div>
               </div>

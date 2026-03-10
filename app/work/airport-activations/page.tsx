@@ -66,7 +66,12 @@ export default function AirportActivationsPage() {
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1">
-              <h2 className="section-title text-3xl md:text-4xl font-bold lowercase ">airport activations</h2>
+              <h2
+                className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
+                style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+              >
+                airport activations
+              </h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>

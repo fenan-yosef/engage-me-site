@@ -15,12 +15,12 @@ export default function InsightPage() {
         <div className="mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch md:min-h-[42vw]">
             <div className="flex flex-col justify-center px-10 py-10 md:py-12 insight_in_1">
-              <h1
-                className="section-title text-5xl md:text-8xl font-regular mb-8"
+              <h2
+                className="section-title text-5xl md:text-8xl font-bold mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
               >
                 <div>insight</div>
-              </h1>
+              </h2>
 
               <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
                 Welcome to INSIGHT our bespoke reporting tool developed with your KPI&apos;s at the forefront of every
@@ -68,7 +68,7 @@ export default function InsightPage() {
 
             <div className="comn_img_side_txt flex flex-col justify-center px-10 py-10 md:py-12 insight_in_4 order-1 md:order-2">
               <h2
-                className="section-title text-5xl md:text-8xl font-regular mb-8"
+                className="section-title text-5xl md:text-8xl font-bold mb-8"
                 style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
               >
                 <div>staff incentives</div>

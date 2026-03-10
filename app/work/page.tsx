@@ -43,8 +43,11 @@ export default function WorkPage() {
             }
           `}</style>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            <span className="text-cyan-400">Our</span> Work
+          <h1
+            className="section-title text-5xl md:text-8xl font-bold mb-8"
+            style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+          >
+            our work
           </h1>
           <p className="text-gray-300 text-lg mb-8">A selection of the projects and staffing services we deliver.</p>
 

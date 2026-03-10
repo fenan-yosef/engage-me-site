@@ -80,7 +80,12 @@ export default function InStorePromotersWorkPage() {
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
-              <h2 className="section-title font-bold ">IN-STORE PROMOTERS</h2>
+              <h2
+                className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
+                style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+              >
+                in-store promoters
+              </h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>

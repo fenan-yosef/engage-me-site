@@ -95,7 +95,12 @@ export default function EntertainersPage() {
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
-              <h2 className="section-title font-bold ">entertainers</h2>
+              <h2
+                className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
+                style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
+              >
+                entertainers
+              </h2>
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>
@@ -113,11 +118,16 @@ export default function EntertainersPage() {
                 <div className="mt-6">
                   <Link
                     href="/work"
-                    className="f-btn-tertiary text-2xl font-semibold rounded-none"
-                    style={{ borderTopLeftRadius: '3.5rem', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, padding: '0.5rem 1.5rem' }}
+                    className="btn-brand-leaf text-white w-fit"
                   >
-                    All Work
-                    <i className=" ml-2 fa fa-chevron-right" aria-hidden="true"></i>
+                    <span>All Work</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-5 h-5 translate-y-[1px]"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
                   </Link>
                 </div>
               </div>

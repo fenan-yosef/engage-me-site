@@ -42,7 +42,7 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 md:divide-x md:divide-gray-200 gap-12">
           {/* Brief Us form */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-5xl md:text-6xl font-bold leading-tight" style={{ color: "#3AFCAD" }}>
+            <h2 className="section-title text-5xl md:text-8xl font-bold mb-8" style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
               brief us
             </h2>
             <p className="text-gray-700 text-base leading-relaxed">
@@ -154,7 +154,7 @@ export default function ContactPage() {
           {/* Join Us / Contact info */}
           <div className="flex flex-col gap-6 md:pl-10">
             <div className="flex flex-col gap-3">
-              <h2 className="text-5xl md:text-6xl font-bold leading-tight" style={{ color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
+              <h2 className="section-title text-5xl md:text-8xl font-bold mb-8" style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
                 join us
               </h2>
               <p className="text-gray-700 text-base leading-relaxed">
@@ -177,16 +177,16 @@ export default function ContactPage() {
 
             <div className="flex flex-col gap-4">
               <div>
-                <h3 className="text-4xl md:text-8xl font-bold leading-tight" style={{ color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
+                <h2 className="section-title text-5xl md:text-8xl font-bold mb-8" style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
                   email us:
-                </h3>
+                </h2>
                 <p className="text-gray-800 text-lg mt-1">hello@engage-me.me</p>
               </div>
 
               <div>
-                <h3 className="text-4xl md:text-8xl font-bold leading-tight" style={{ color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
+                <h2 className="section-title text-5xl md:text-8xl font-bold mb-8" style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}>
                   call us:
-                </h3>
+                </h2>
                 <p className="text-gray-800 text-lg mt-1">+971 4 585 6845</p>
               </div>
             </div>
