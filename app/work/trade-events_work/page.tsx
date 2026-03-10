@@ -52,8 +52,8 @@ export default function TradeEventsWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {

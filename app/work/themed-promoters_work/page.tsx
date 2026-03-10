@@ -52,8 +52,8 @@ export default function ThemedPromotersWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -88,16 +88,16 @@ export default function ThemedPromotersWorkPage() {
 
               <div className="section-description f-text-xlarge mt-4 text-gray-700">
                 <p>
-                  Sometimes the brief requires someone with that little bit extra. Whether it&apos;s performing a role, becoming a character, dressing the part or dancing amongst a crowd, our themed promoters are what you are looking for.
+                  Specializing in themed events, we know that promoters who stay in character throughout the event, create a magical environment for guests.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
               <div className="section-description f-text-xlarge text-gray-700">
-                <p>We take the time to get to know our database, this allows us to identify hidden talents and skills that can then be matched to a client brief.</p>
+                <p>We work with some of the best costume designers in the UAE to create bespoke costumes that are practical and fit for use, while also meeting and exceeding aesthetics.</p>
 
-                <p>In addition to providing themed promoters, hosts and hostesses, we can also support with costume design, sourcing and production, to really bring the theme to life.</p>
+                <p>We provide full hair and make up support for every themed event, to ensure uniformity and a professional finish for every person.</p>
 
                 <div className="mt-6">
                   <Link
@@ -119,7 +119,7 @@ export default function ThemedPromotersWorkPage() {
 
             <div className="home_imggroup order-4 md:order-4">
               <img
-                src="https://web.archive.org/web/20250917014823im_/https://engage-me.me/public/image/customs/280920201601298984880.JPG"
+                src="https://web.archive.org/web/20250917014605im_/https://engage-me.me/public/image/customs/280920201601290351180.jpg"
                 alt="themed promoters image"
                 className="w-full h-full object-cover min-h-[22rem] md:min-h-[42vw]"
               />

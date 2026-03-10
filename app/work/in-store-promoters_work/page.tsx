@@ -52,7 +52,7 @@ export default function InStorePromotersWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
+      <section className="bg-white">
         <div className="w-full">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
