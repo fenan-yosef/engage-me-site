@@ -61,7 +61,7 @@ export default function RetailSupportWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }

@@ -61,7 +61,7 @@ export default function SportingEventsWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -69,7 +69,7 @@ export default function SportingEventsWorkPage() {
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
             .carousel .carousel-control-prev, .carousel .carousel-control-next { position: absolute; top: 50%; transform: translateY(-50%); color:#3AFCAD; }
             @media (min-width:768px) {
-              .section-title { font-size: 5rem; }
+              .section-title { }
               .f-text-xlarge p { font-size: 1.5rem; }
             }
           `}</style>

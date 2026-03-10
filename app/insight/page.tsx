@@ -22,12 +22,12 @@ export default function InsightPage() {
                 <div>insight</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
+              <p className="all_para_size text-gray-600 mb-8 leading-relaxed max-w-xl">
                 Welcome to INSIGHT our bespoke reporting tool developed with your KPI&apos;s at the forefront of every
                 project.
               </p>
 
-              <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
+              <p className="all_para_size text-gray-600 mb-8 leading-relaxed max-w-xl">
                 No one is closer to your consumer than our staff on-the-ground. Their feedback provides insights that
                 can add value to your campaign and allow us to make changes throughout to ensure we meet your key
                 objectives.
@@ -74,7 +74,7 @@ export default function InsightPage() {
                 <div>staff incentives</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
+              <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                 A key tactic that we recommend to clients, for target driven campaigns, is incentives. We are
                 experienced to develop programs that will motivate and encourage staff to hit targets.
               </p>

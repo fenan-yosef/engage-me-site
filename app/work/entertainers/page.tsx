@@ -76,7 +76,7 @@ export default function EntertainersPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -101,20 +101,20 @@ export default function EntertainersPage() {
                 entertainers
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   In addition to providing staffing for events and activations we also provide entertainers to bring theatre and music to your campaign.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>We can support with, actors, dancers, mascots, characters, voice over artists, DJ&apos;s, you name it we can provide it.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We can support with, actors, dancers, mascots, characters, voice over artists, DJ&apos;s, you name it we can provide it.</p>
 
-                <p className="mt-4">We also work with a variety of; choreographers, stylists, costume designers and make-up artists, to provide a complete solution to your entertainment needs.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We also work with a variety of; choreographers, stylists, costume designers and make-up artists, to provide a complete solution to your entertainment needs.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

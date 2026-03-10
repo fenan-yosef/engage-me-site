@@ -61,7 +61,7 @@ export default function MallActivationsWorkPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -82,8 +82,8 @@ export default function MallActivationsWorkPage() {
                 mall activations
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   With over 10 year&apos;s experience in mall activations in the region, we can provide key insights into scheduling staff for mall activations to maximize impact during peak timings.
                 </p>
               </div>
@@ -102,10 +102,10 @@ export default function MallActivationsWorkPage() {
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>Our knowledge of mall rules and procedures brings valuable insight into logistics, security, how to attract people to the stand and ultimately engage with the brand.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Our knowledge of mall rules and procedures brings valuable insight into logistics, security, how to attract people to the stand and ultimately engage with the brand.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

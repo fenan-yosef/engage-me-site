@@ -99,20 +99,20 @@ export default function BrandActivationsPage() {
             <div className="px-10 py-10 md:py-12 flex items-center bg-white order-1 md:order-2">
               <div>
                 <h2
-                  className="section-title text-5xl md:text-8xl font-bold mb-8 lowercase"
+                  className="section-title text-5xl md:text-8xl font-bold mb-8"
                   style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
                 >
                   brand activations
                 </h2>
-                <p className="mt-3 text-gray-700" style={{ maxWidth: 420 }}>Bringing brands to life through targeted, on-ground experiences — staff selection, training and activation management.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed max-w-xl">Bringing brands to life through targeted, on-ground experiences — staff selection, training and activation management.</p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 bg-white order-3 md:order-3 flex flex-col justify-center">
-              <div className="text-gray-700 f-text-xlarge">
-                <p>We take time to understand your brand in order to carefully select and propose staff that we feel are the right fit to evoke your brand on a ground level.</p>
-                <p className="mt-4">Pre-campaign training and brand immersion are standard; promoters, sampling staff and runners are briefed to deliver measurable results.</p>
-                <div className="mt-6">
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We take time to understand your brand in order to carefully select and propose staff that we feel are the right fit to evoke your brand on a ground level.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Pre-campaign training and brand immersion are standard; promoters, sampling staff and runners are briefed to deliver measurable results.</p>
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

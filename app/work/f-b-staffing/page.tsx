@@ -76,7 +76,7 @@ export default function FBStaffingPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 3rem; letter-spacing: 0.1em; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -97,8 +97,8 @@ export default function FBStaffingPage() {
                 f&amp;b staffing
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   Not only can we provide front of house hostesses at Food and Beverage (F&amp;B) venues and events, we can also provide; bartenders, bar staff, mixologists, runners and cashiers.
                 </p>
               </div>
@@ -117,10 +117,10 @@ export default function FBStaffingPage() {
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>Seasonal F&amp;B staff required to support venues in peak months and timings can be provided with work permits and occupational health cards to ensure health, safety and compliance are at the forefront of our offering.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Seasonal F&amp;B staff required to support venues in peak months and timings can be provided with work permits and occupational health cards to ensure health, safety and compliance are at the forefront of our offering.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

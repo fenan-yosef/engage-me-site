@@ -33,7 +33,7 @@ export default function PeoplePage() {
                 <div>a to z people</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
+              <p className="all_para_size text-gray-600 mb-8 leading-relaxed max-w-xl">
                 With over 5,000 staff on our database, we can provide any type of temporary staffing solution required by
                 client&apos;s, from; models, hostesses, promoters, actors, dancers, F&amp;B staff, waiters, bar staff,
                 ushers, entertainers.
@@ -188,7 +188,7 @@ export default function PeoplePage() {
                 <div>founders</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 text-base mb-6 leading-relaxed">
+              <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                 Established in the UAE in 2014, our founders not only have vast experience within the region but also
                 internationally.
               </p>
@@ -215,7 +215,7 @@ export default function PeoplePage() {
                 <div>team</div>
               </h2>
 
-              <p className="all_para_size text-gray-600 text-base mb-8 leading-relaxed max-w-xl">
+              <p className="all_para_size text-gray-600 mb-8 leading-relaxed max-w-xl">
                 If you are freelancer and looking for work as a model, hostess, promoter, entertainer, photographer,
                 videographer etc, click below to complete our online registration form to join our database. You are
                 just a couple of clicks away from joining our fun team.

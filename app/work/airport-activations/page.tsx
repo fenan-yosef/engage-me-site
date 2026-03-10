@@ -72,8 +72,8 @@ export default function AirportActivationsPage() {
                 airport activations
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   As a Department of Economic Development (DED) licensed company, we can provide our staff with work
                   permits and airport passes, in order for our staff to work legally within Dubai Duty Free (DDF).
                 </p>
@@ -101,12 +101,12 @@ export default function AirportActivationsPage() {
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>24 hours staffing solutions are managed by organised scheduling, to provide round the clock engagement at DDF activation stands.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">24 hours staffing solutions are managed by organised scheduling, to provide round the clock engagement at DDF activation stands.</p>
 
-                <p className="mt-4">We can provide; runners, promoters and temporary sales staff to cater for all your requirements in Dubai Duty Free.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We can provide; runners, promoters and temporary sales staff to cater for all your requirements in Dubai Duty Free.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

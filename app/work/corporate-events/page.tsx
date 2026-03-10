@@ -80,7 +80,7 @@ export default function CorporateEventsPage() {
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; font-size: 2.5rem; }
+            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
             .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.25rem; line-height:1.5; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
@@ -101,8 +101,8 @@ export default function CorporateEventsPage() {
                 corporate events
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   Whether your corporate event requires fun and energetic promoters or elegant hosts and hostesses we have the right staff for all your needs.
                 </p>
               </div>
@@ -121,10 +121,10 @@ export default function CorporateEventsPage() {
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-4">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>Our experienced staff are professional, courteous and full of smiles to make sure; gala dinners, family days and team building days, leave a lasting impression on your guests.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Our experienced staff are professional, courteous and full of smiles to make sure; gala dinners, family days and team building days, leave a lasting impression on your guests.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"
