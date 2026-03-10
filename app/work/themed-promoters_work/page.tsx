@@ -52,8 +52,8 @@ export default function ThemedPromotersWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -86,20 +86,20 @@ export default function ThemedPromotersWorkPage() {
                 themed promoters
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   Sometimes the brief requires someone with that little bit extra. Whether it&apos;s performing a role, becoming a character, dressing the part or dancing amongst a crowd, our themed promoters are what you are looking for.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>We take the time to get to know our database, this allows us to identify hidden talents and skills that can then be matched to a client brief.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We take the time to get to know our database, this allows us to identify hidden talents and skills that can then be matched to a client brief.</p>
 
-                <p>In addition to providing themed promoters, hosts and hostesses, we can also support with costume design, sourcing and production, to really bring the theme to life.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">In addition to providing themed promoters, hosts and hostesses, we can also support with costume design, sourcing and production, to really bring the theme to life.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

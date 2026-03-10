@@ -52,8 +52,8 @@ export default function RegistrationStaffWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -86,20 +86,20 @@ export default function RegistrationStaffWorkPage() {
                 registration staff
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   When it comes to registration staff we know that speed, organization and efficiency are important as the first point of contact for your guests and it sets the tone for the event.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>All our registration staff are experienced, can implement ideas to enhance the process and work calmly under pressure.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">All our registration staff are experienced, can implement ideas to enhance the process and work calmly under pressure.</p>
 
-                <p>The most important point when it comes to registration staff, and is stressed during our briefing session, is to always provide a warm welcome and a big smile for every guest.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">The most important point when it comes to registration staff, and is stressed during our briefing session, is to always provide a warm welcome and a big smile for every guest.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

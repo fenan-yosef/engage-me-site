@@ -52,8 +52,8 @@ export default function LeadGenerationWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -86,18 +86,18 @@ export default function LeadGenerationWorkPage() {
                 lead generation
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>If your key objective is to generate leads then you&apos;ve come to the right place. We thrive on target driven campaigns.</p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">If your key objective is to generate leads then you&apos;ve come to the right place. We thrive on target driven campaigns.</p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>With a broad spectrum of staff on our database with different nationalities and languages we can provide the right staff to target your specific audience.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">With a broad spectrum of staff on our database with different nationalities and languages we can provide the right staff to target your specific audience.</p>
 
-                <p>Our experienced on ground team are able to capture quality data leads or register customers on the spot on iPads or tablets. We always include a staff incentive recommendation to any lead generation campaigns to ensure your Key Performance Indicators (KPI&apos;s) are achieved.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Our experienced on ground team are able to capture quality data leads or register customers on the spot on iPads or tablets. We always include a staff incentive recommendation to any lead generation campaigns to ensure your Key Performance Indicators (KPI&apos;s) are achieved.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

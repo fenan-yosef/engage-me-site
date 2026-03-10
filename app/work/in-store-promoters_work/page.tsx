@@ -52,7 +52,7 @@ export default function InStorePromotersWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
+      <section className="bg-white">
         <div className="w-full">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
@@ -86,20 +86,20 @@ export default function InStorePromotersWorkPage() {
                 in-store promoters
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   Our in-store promoters can attract store visitors to; trial products, participate in activations, communicate product information, post to social media and ultimately purchase products.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>We can provide work permits and occupational health cards when and where required.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">We can provide work permits and occupational health cards when and where required.</p>
 
-                <p>Every in-store promoter is provided with clear targets to ensure Return on Investments (ROI).</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Every in-store promoter is provided with clear targets to ensure Return on Investments (ROI).</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"

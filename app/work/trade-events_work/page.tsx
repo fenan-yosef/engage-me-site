@@ -52,8 +52,8 @@ export default function TradeEventsWorkPage() {
         />
       </section>
 
-      <section className="py-10 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white">
+        <div className="mx-auto">
           <style>{`
             @import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:600');
             @font-face {
@@ -86,20 +86,20 @@ export default function TradeEventsWorkPage() {
                 trade events
               </h2>
 
-              <div className="section-description f-text-xlarge mt-4 text-gray-700">
-                <p>
+              <div className="section-description mt-4">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">
                   When it comes to impressing your customers, we know how important Business-to-Business (B2B) events are.
                 </p>
               </div>
             </div>
 
             <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-3 md:order-3">
-              <div className="section-description f-text-xlarge text-gray-700">
-                <p>Our experienced staff can provide a smooth, fast and seamless registration process to provide you with valuable insight into attendees.</p>
+              <div className="section-description">
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">Our experienced staff can provide a smooth, fast and seamless registration process to provide you with valuable insight into attendees.</p>
 
-                <p>In addition to registration support we can provide; promoters, hosts, hostesses, models, actors and DJ&apos;s to bring to life the themes of the event.</p>
+                <p className="all_para_size text-gray-600 mb-6 leading-relaxed">In addition to registration support we can provide; promoters, hosts, hostesses, models, actors and DJ&apos;s to bring to life the themes of the event.</p>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Link
                     href="/work"
                     className="btn-brand-leaf text-white w-fit"
