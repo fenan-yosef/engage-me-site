@@ -32,7 +32,7 @@ export default function EngagingStaff() {
           {/* Right side - Text content */}
           <div className="comn_img_side_txt flex flex-col justify-center px-10 py-10 md:py-12">
             <h2
-              className="section-title text-5xl md:text-7xl font-bold mb-8 pr-6"
+              className="section-title text-5xl md:text-8xl font-bold mb-8 pr-6"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
               <div>engaging staff</div>
@@ -65,7 +65,7 @@ export default function EngagingStaff() {
           {/* Text content - order changes on mobile */}
           <div className="comn_img_side_txt order-2 md:order-1 insigh_last flex flex-col justify-center px-10 py-10 md:py-12">
             <h3
-              className="section-title text-5xl md:text-7xl font-bold mb-6"
+              className="section-title text-5xl md:text-8xl font-bold mb-6"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
               Driving Results
