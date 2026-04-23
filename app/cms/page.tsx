@@ -37,7 +37,7 @@ export default function CMSDashboard() {
   return (
     <div className="py-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold">CMS Dashboard</h2>
+        <h2 className="text-2xl font-semibold">Dashboard</h2>
         <div>
           <span className="mr-4">{user?.email}</span>
           <button

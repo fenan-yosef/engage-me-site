@@ -10,7 +10,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
             <img src="/logo.png" alt="engage me" style={{ height: 40 }} />
           </Link>
           <h1 className="text-xl font-semibold" style={{ color: "var(--cyan)" }}>
-            Engage Me — CMS
+            Engage Me CMS
           </h1>
         </div>
       </header>
