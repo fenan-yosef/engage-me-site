@@ -1,11 +1,11 @@
-"use client"
-
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
 import Link from "next/link"
+import { getPage } from "@/lib/cms-db"
+import { extractWorkContent, type WorkItem } from "@/lib/cms/work-content"
 
-const WORK_ITEMS = [
+const WORK_ITEMS: WorkItem[] = [
   { title: "Airport activations", href: "/work/airport-activations_work" },
   { title: "Brand activations", href: "/work/brand-activations_work" },
   { title: "Corporate events", href: "/work/corporate-events_work" },
@@ -28,7 +28,10 @@ const WORK_ITEMS = [
   { title: "Virtual promoters", href: "/work/virtual-promoters_work" }
 ]
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const page = await getPage("work").catch(() => null)
+  const content = extractWorkContent(page, WORK_ITEMS)
+
   return (
     <main className="min-h-screen bg-white">
       <Header />
@@ -47,12 +50,12 @@ export default function WorkPage() {
             className="section-title text-5xl md:text-8xl font-bold mb-8"
             style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
           >
-            our work
+            {content.heading}
           </h1>
-          <p className="text-gray-300 text-lg mb-8">A selection of the projects and staffing services we deliver.</p>
+          <p className="text-gray-300 text-lg mb-8">{content.intro}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-12">
-            {WORK_ITEMS.map((item) => (
+            {content.items.map((item) => (
               <div key={item.href}>
                 <Link href={item.href} className="block text-white no-underline">
                   <span className="block text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>

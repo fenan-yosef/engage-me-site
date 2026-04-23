@@ -5,6 +5,8 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import type { HomeContent } from "../../../../lib/cms/home-content"
 import { buildHomePageData, extractHomeContent } from "../../../../lib/cms/home-content"
+import type { WorkContent } from "../../../../lib/cms/work-content"
+import { buildWorkPageData, extractWorkContent } from "../../../../lib/cms/work-content"
 
 type ImageURL = string
 
@@ -82,6 +84,10 @@ export default function PageEditor() {
 
   if (slug === "home") {
     return <HomeEditor media={media} setMedia={setMedia} />
+  }
+
+  if (slug === "work") {
+    return <WorkEditor />
   }
 
   async function save() {
@@ -455,6 +461,114 @@ function HomeEditor({ media, setMedia }: { media: ImageURL[]; setMedia: (v: Imag
           onPick={onPickFromLibrary}
         />
       ) : null}
+    </div>
+  )
+}
+
+function WorkEditor() {
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState<string | null>(null)
+  const [content, setContent] = useState<WorkContent>(() =>
+    extractWorkContent(null, [
+      { title: "Airport activations", href: "/work/airport-activations_work" },
+      { title: "Brand activations", href: "/work/brand-activations_work" },
+      { title: "Corporate events", href: "/work/corporate-events_work" },
+      { title: "Entertainers", href: "/work/entertainers_work" },
+      { title: "Event staffing", href: "/work/event-staffing_work" },
+      { title: "Exhibitions", href: "/work/exhibitions_work" },
+      { title: "F & B staffing", href: "/work/f-b-staffing_work" },
+      { title: "Hosts & hostesses", href: "/work/hosts-hostesses_work" },
+      { title: "In-store promoters", href: "/work/in-store-promoters_work" },
+      { title: "Lead generation", href: "/work/lead-generation_work" },
+      { title: "Registration staff", href: "/work/registration-staff_work" },
+      { title: "Retail support", href: "/work/retail-support_work" },
+      { title: "Roadshows", href: "/work/roadshows_work" },
+      { title: "Mall activations", href: "/work/mall-activations_work" },
+      { title: "Models", href: "/work/models_work" },
+      { title: "Social media content", href: "/work/social-media-content_work" },
+      { title: "Sporting events", href: "/work/sporting-events_work" },
+      { title: "Trade events", href: "/work/trade-events_work" },
+      { title: "Themed promoters", href: "/work/themed-promoters_work" },
+      { title: "Virtual promoters", href: "/work/virtual-promoters_work" },
+    ])
+  )
+
+  useEffect(() => {
+    setLoading(true)
+    ;(async () => {
+      try {
+        const pageResp = await fetch(`/api/cms/pages/work`)
+        const page = pageResp.status === 404 ? null : await pageResp.json().catch(() => null)
+        setContent((prev) => extractWorkContent(page, prev.items))
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  async function save() {
+    setMessage(null)
+    const payload = buildWorkPageData(content)
+    const res = await fetch(`/api/cms/pages/work`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (res.ok) setMessage("Saved")
+    else setMessage(body?.error || "Save failed")
+  }
+
+  if (loading) return <div>Loading…</div>
+
+  return (
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Edit: work</h2>
+        <div className="flex items-center gap-2">
+          <Link href="/cms" className="btn-engage">
+            Back
+          </Link>
+        </div>
+      </div>
+
+      <div className="space-y-8">
+        <Section title="Header">
+          <TextRow label="Heading" value={content.heading} onChange={(v) => setContent((p) => ({ ...p, heading: v }))} />
+          <TextareaRow label="Intro" value={content.intro} onChange={(v) => setContent((p) => ({ ...p, intro: v }))} />
+        </Section>
+
+        <Section title="Work items">
+          <div className="text-sm text-gray-600">Edit only the labels shown on the /work page. Links are fixed by the site.</div>
+          <div className="space-y-3">
+            {content.items.map((it, idx) => (
+              <div key={idx} className="border rounded p-3">
+                <div>
+                  <label className="block mb-2">Title {idx + 1}</label>
+                  <input
+                    className="w-full border p-2"
+                    value={it.title}
+                    onChange={(e) =>
+                      setContent((p) => {
+                        const items = [...p.items]
+                        items[idx] = { ...items[idx], title: e.target.value }
+                        return { ...p, items }
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <div className="flex gap-3 items-center">
+          <button className="btn-engage" onClick={save}>
+            Save
+          </button>
+          {message && <div className="text-sm text-gray-700">{message}</div>}
+        </div>
+      </div>
     </div>
   )
 }
