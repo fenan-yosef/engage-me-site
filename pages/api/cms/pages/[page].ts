@@ -29,7 +29,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 
-  if (req.method === "PUT") {
+  if (req.method === "PUT" || req.method === "POST") {
     const session = await getIronSession<SessionData>(req, res, sessionOptions)
     if (!session.user) return res.status(401).json({ error: "Unauthorized" })
 

@@ -232,7 +232,7 @@ export default function PageEditor() {
   async function save() {
     setMessage(null)
     const res = await fetch(`/api/cms/pages/${slug}`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
@@ -476,7 +476,7 @@ function HomeEditor({
     setMessage(null)
     const payload = buildHomePageData(content)
     const res = await fetch(`/api/cms/pages/home`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
@@ -655,7 +655,7 @@ function WorkEditor() {
     setMessage(null)
     const payload = buildWorkPageData(content)
     const res = await fetch(`/api/cms/pages/work`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
@@ -770,7 +770,7 @@ function InsightEditor() {
     setMessage(null)
     const payload = buildInsightPageData(content)
     const res = await fetch(`/api/cms/pages/insight`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
@@ -903,7 +903,7 @@ function PeopleEditor() {
     setMessage(null)
     const payload = buildPeoplePageData(content)
     const res = await fetch(`/api/cms/pages/people`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
@@ -1085,7 +1085,7 @@ function JobsEditor() {
     setMessage(null)
     const payload = buildJobsPageData(content)
     const res = await fetch(`/api/cms/pages/jobs`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
@@ -1283,7 +1283,7 @@ function ContactEditor() {
     setMessage(null)
     const payload = buildContactPageData(content)
     const res = await fetch(`/api/cms/pages/contact`, {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
