@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type ReactNode } from "react"
+import { useEffect, useState, type Dispatch, type ReactNode, type SetStateAction } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import type { HomeContent } from "../../../../lib/cms/home-content"
@@ -421,7 +421,13 @@ export default function PageEditor() {
   )
 }
 
-function HomeEditor({ media, setMedia }: { media: ImageURL[]; setMedia: (v: ImageURL[]) => void }) {
+function HomeEditor({
+  media,
+  setMedia,
+}: {
+  media: ImageURL[]
+  setMedia: Dispatch<SetStateAction<ImageURL[]>>
+}) {
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState<string | null>(null)
   const [content, setContent] = useState<HomeContent>(() => extractHomeContent(null))

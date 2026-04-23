@@ -1,4 +1,4 @@
-import type mysql from "mysql2/promise"
+import { type ResultSetHeader, type RowDataPacket } from "mysql2/promise"
 import { getDbPool } from "./db"
 
 export type CmsBlockType = "heading" | "text" | "image" | "gallery"
@@ -13,6 +13,33 @@ export type CmsPageData = {
   title?: string
   images?: string[]
   blocks?: CmsBlock[]
+}
+
+interface CmsPageRow extends RowDataPacket {
+  id: number
+  title: string | null
+}
+
+interface CmsImageRow extends RowDataPacket {
+  url: string
+}
+
+interface CmsBlockRow extends RowDataPacket {
+  id: number
+  type: CmsBlockType
+  block_key: string | null
+  text: string | null
+  image_url: string | null
+  image_alt: string | null
+}
+
+interface CmsGalleryRow extends RowDataPacket {
+  block_id: number
+  url: string
+}
+
+interface CmsIdRow extends RowDataPacket {
+  id: number
 }
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -56,20 +83,13 @@ export async function getPage(slugRaw: string): Promise<CmsPageData | null> {
   const slug = coerceSlug(slugRaw)
   const pool = getDbPool()
 
-  const [[page]] = await pool.query<Array<{ id: number; title: string | null }>>(
-    "SELECT id, title FROM cms_pages WHERE slug = ? LIMIT 1",
-    [slug]
-  )
+  const [pageRows] = await pool.query<CmsPageRow[]>("SELECT id, title FROM cms_pages WHERE slug = ? LIMIT 1", [slug])
+  const page = pageRows[0]
   if (!page) return null
 
-  const [pageImagesRows] = await pool.query<Array<{ url: string }>>(
-    "SELECT url FROM cms_page_images WHERE page_id = ? ORDER BY sort_order ASC, id ASC",
-    [page.id]
-  )
+  const [pageImagesRows] = await pool.query<CmsImageRow[]>("SELECT url FROM cms_page_images WHERE page_id = ? ORDER BY sort_order ASC, id ASC", [page.id])
 
-  const [blockRows] = await pool.query<
-    Array<{ id: number; type: CmsBlockType; block_key: string | null; text: string | null; image_url: string | null; image_alt: string | null }>
-  >(
+  const [blockRows] = await pool.query<CmsBlockRow[]>(
     "SELECT id, type, block_key, text, image_url, image_alt FROM cms_blocks WHERE page_id = ? ORDER BY sort_order ASC, id ASC",
     [page.id]
   )
@@ -77,7 +97,7 @@ export async function getPage(slugRaw: string): Promise<CmsPageData | null> {
   const blockIds = blockRows.filter((b) => b.type === "gallery").map((b) => b.id)
   let galleriesByBlockId = new Map<number, string[]>()
   if (blockIds.length) {
-    const [galleryRows] = await pool.query<Array<{ block_id: number; url: string }>>(
+    const [galleryRows] = await pool.query<CmsGalleryRow[]>(
       `SELECT block_id, url FROM cms_block_gallery_images WHERE block_id IN (${blockIds.map(() => "?").join(",")}) ORDER BY sort_order ASC, id ASC`,
       blockIds
     )
@@ -116,10 +136,10 @@ export async function savePage(slugRaw: string, data: CmsPageData): Promise<void
   try {
     await conn.beginTransaction()
 
-    const [existingRows] = await conn.query<Array<{ id: number }>>("SELECT id FROM cms_pages WHERE slug = ? LIMIT 1", [slug])
+    const [existingRows] = await conn.query<CmsIdRow[]>("SELECT id FROM cms_pages WHERE slug = ? LIMIT 1", [slug])
     let pageId = existingRows[0]?.id
     if (!pageId) {
-      const [ins] = await conn.query<mysql.ResultSetHeader>("INSERT INTO cms_pages (slug, title) VALUES (?, ?)", [slug, title])
+      const [ins] = await conn.query<ResultSetHeader>("INSERT INTO cms_pages (slug, title) VALUES (?, ?)", [slug, title])
       pageId = ins.insertId
     } else {
       await conn.query("UPDATE cms_pages SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?", [title, pageId])
@@ -132,7 +152,7 @@ export async function savePage(slugRaw: string, data: CmsPageData): Promise<void
     }
 
     // Replace blocks (and gallery children)
-    const [oldBlocks] = await conn.query<Array<{ id: number }>>("SELECT id FROM cms_blocks WHERE page_id = ?", [pageId])
+    const [oldBlocks] = await conn.query<CmsIdRow[]>("SELECT id FROM cms_blocks WHERE page_id = ?", [pageId])
     const oldIds = oldBlocks.map((b) => b.id)
     if (oldIds.length) {
       await conn.query(
@@ -170,7 +190,7 @@ export async function savePage(slugRaw: string, data: CmsPageData): Promise<void
       }
 
       if (parsed.type === "gallery") {
-        const [ins] = await conn.query<mysql.ResultSetHeader>(
+        const [ins] = await conn.query<ResultSetHeader>(
           "INSERT INTO cms_blocks (page_id, sort_order, type, block_key) VALUES (?, ?, ?, ?)",
           [pageId, i, "gallery", parsed.key]
         )
