@@ -1,0 +1,6 @@
+{
+  "title": "Jobs Board",
+  "sections": [
+    { "id": "1", "heading": "Open Roles", "content": "List active positions and how to apply." }
+  ]
+}

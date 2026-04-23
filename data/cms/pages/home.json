@@ -1,0 +1,15 @@
+{
+  "title": "Welcome to Engage Me",
+  "hero": {
+    "heading": "We are",
+    "logo": "/engage-me-logo.png"
+  },
+  "sections": [
+    {
+      "id": "1",
+      "heading": "bringing brands to life",
+      "content": "Our mission is to drive results for our clients by pairing the right staff with effective on-ground management."
+    }
+  ],
+  "images": ["/her-sec.jpg"]
+}
