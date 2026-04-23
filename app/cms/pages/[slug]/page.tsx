@@ -9,6 +9,8 @@ import type { WorkContent } from "../../../../lib/cms/work-content"
 import { buildWorkPageData, extractWorkContent } from "../../../../lib/cms/work-content"
 import type { InsightContent } from "../../../../lib/cms/insight-content"
 import { buildInsightPageData, extractInsightContent } from "../../../../lib/cms/insight-content"
+import type { PeopleContent } from "../../../../lib/cms/people-content"
+import { buildPeoplePageData, extractPeopleContent } from "../../../../lib/cms/people-content"
 
 type ImageURL = string
 
@@ -94,6 +96,10 @@ export default function PageEditor() {
 
   if (slug === "insight") {
     return <InsightEditor />
+  }
+
+  if (slug === "people") {
+    return <PeopleEditor />
   }
 
   async function save() {
@@ -712,6 +718,188 @@ function setInsightImage(prev: InsightContent, field: "intro.imageUrl" | "incent
   return { ...prev, incentives: { ...prev.incentives, imageUrl: url } }
 }
 
+function PeopleEditor() {
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState<string | null>(null)
+  const [content, setContent] = useState<PeopleContent>(() => extractPeopleContent(null))
+  const [media, setMedia] = useState<ImageURL[]>([])
+  const [picker, setPicker] = useState<null | { field: string; title: string }>(null)
+  const [mediaQuery, setMediaQuery] = useState("")
+
+  useEffect(() => {
+    setLoading(true)
+    ;(async () => {
+      try {
+        const pageResp = await fetch(`/api/cms/pages/people`)
+        const page = pageResp.status === 404 ? null : await pageResp.json().catch(() => null)
+        setContent(extractPeopleContent(page))
+        const imgs = await fetch(`/api/cms/list-uploads`).then((r) => r.json()).catch(() => [])
+        setMedia(Array.isArray(imgs) ? imgs : [])
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  async function uploadFile(file: File) {
+    const form = new FormData()
+    form.append("file", file)
+    const res = await fetch("/api/cms/upload", { method: "POST", body: form })
+    const body = await res.json().catch(() => ({}))
+    return body?.url as string | undefined
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const url = await uploadFile(file)
+    if (!url) return
+    setMedia((m) => [url, ...m])
+    if (!picker) return
+    setContent((prev) => setPeopleImage(prev, picker.field, url))
+    setPicker(null)
+  }
+
+  function onPickFromLibrary(url: string) {
+    if (!picker) return
+    setContent((prev) => setPeopleImage(prev, picker.field, url))
+    setPicker(null)
+  }
+
+  async function save() {
+    setMessage(null)
+    const payload = buildPeoplePageData(content)
+    const res = await fetch(`/api/cms/pages/people`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (res.ok) setMessage("Saved")
+    else setMessage(body?.error || "Save failed")
+  }
+
+  const filteredMedia = mediaQuery.trim()
+    ? media.filter((m) => m.toLowerCase().includes(mediaQuery.trim().toLowerCase()))
+    : media
+
+  if (loading) return <div>Loading…</div>
+
+  return (
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Edit: people</h2>
+        <div className="flex items-center gap-2">
+          <Link href="/cms" className="btn-engage">
+            Back
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-8">
+          <Section title="A to Z People">
+            <TextRow label="Heading" value={content.a2z.heading} onChange={(v) => setContent((p) => ({ ...p, a2z: { ...p.a2z, heading: v } }))} />
+            <TextareaRow label="Body" value={content.a2z.body} onChange={(v) => setContent((p) => ({ ...p, a2z: { ...p.a2z, body: v } }))} />
+            <GalleryRow label="Carousel images (6)" urls={content.a2z.carouselUrls} activeIndexKey="people.a2z" onChangeClick={(idx) => setPicker({ field: `a2z.carousel[${idx}]`, title: `A to Z slide ${idx + 1}` })} />
+          </Section>
+
+          <Section title="Founders cards">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="border rounded p-4 space-y-3">
+                <div className="font-medium">Founder 1</div>
+                <ImageRow label="Image" value={content.founders.f1.imageUrl} onChangeClick={() => setPicker({ field: "founders.f1.imageUrl", title: "Founder 1 image" })} />
+                <TextRow label="Name" value={content.founders.f1.name} onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, f1: { ...p.founders.f1, name: v } } }))} />
+                <TextareaRow
+                  label="Role (use new lines)"
+                  value={content.founders.f1.roleLines}
+                  onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, f1: { ...p.founders.f1, roleLines: v } } }))}
+                />
+                <TextareaRow
+                  label="Bio (use new lines)"
+                  value={content.founders.f1.bioLines}
+                  onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, f1: { ...p.founders.f1, bioLines: v } } }))}
+                />
+              </div>
+              <div className="border rounded p-4 space-y-3">
+                <div className="font-medium">Founder 2</div>
+                <ImageRow label="Image" value={content.founders.f2.imageUrl} onChangeClick={() => setPicker({ field: "founders.f2.imageUrl", title: "Founder 2 image" })} />
+                <TextRow label="Name" value={content.founders.f2.name} onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, f2: { ...p.founders.f2, name: v } } }))} />
+                <TextareaRow
+                  label="Role (use new lines)"
+                  value={content.founders.f2.roleLines}
+                  onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, f2: { ...p.founders.f2, roleLines: v } } }))}
+                />
+                <TextareaRow
+                  label="Bio (use new lines)"
+                  value={content.founders.f2.bioLines}
+                  onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, f2: { ...p.founders.f2, bioLines: v } } }))}
+                />
+              </div>
+            </div>
+          </Section>
+
+          <Section title="Founders section text">
+            <TextareaRow
+              label="Heading (2 lines)"
+              value={content.founders.headingLines}
+              onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, headingLines: v } }))}
+            />
+            <TextareaRow label="Paragraph 1" value={content.founders.p1} onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, p1: v } }))} />
+            <TextareaRow label="Paragraph 2" value={content.founders.p2} onChange={(v) => setContent((p) => ({ ...p, founders: { ...p.founders, p2: v } }))} />
+          </Section>
+
+          <Section title="Join our team">
+            <TextareaRow label="Heading (2 lines)" value={content.join.headingLines} onChange={(v) => setContent((p) => ({ ...p, join: { ...p.join, headingLines: v } }))} />
+            <TextareaRow label="Body" value={content.join.body} onChange={(v) => setContent((p) => ({ ...p, join: { ...p.join, body: v } }))} />
+            <TextRow label="Button label" value={content.join.buttonLabel} onChange={(v) => setContent((p) => ({ ...p, join: { ...p.join, buttonLabel: v } }))} />
+            <ImageRow label="Right image" value={content.join.imageUrl} onChangeClick={() => setPicker({ field: "join.imageUrl", title: "Join section image" })} />
+          </Section>
+
+          <div className="flex gap-3 items-center">
+            <button className="btn-engage" onClick={save}>
+              Save
+            </button>
+            {message && <div className="text-sm text-gray-700">{message}</div>}
+          </div>
+        </div>
+
+        <aside className="border p-4 rounded">
+          <h3 className="font-medium mb-2">Media library</h3>
+          <div className="mb-3 text-sm text-gray-600">This is your server files in `public/uploads`.</div>
+          <input className="w-full border p-2 mb-3" placeholder="Search images…" value={mediaQuery} onChange={(e) => setMediaQuery(e.target.value)} />
+          <div className="text-xs text-gray-600 mb-3">Click “Change” on an image first, then pick an image.</div>
+          <div className="grid grid-cols-3 gap-2 max-h-96 overflow-auto">
+            {filteredMedia.map((m) => (
+              <button key={m} onClick={() => (picker ? onPickFromLibrary(m) : null)} className="border p-0" title={picker ? "Click to use this image" : "Open a Change popup first"}>
+                <img src={m} alt="" className="w-full h-20 object-cover" />
+              </button>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+    </div>
+  )
+}
+
+function setPeopleImage(prev: PeopleContent, field: string, url: string): PeopleContent {
+  if (field === "founders.f1.imageUrl") return { ...prev, founders: { ...prev.founders, f1: { ...prev.founders.f1, imageUrl: url } } }
+  if (field === "founders.f2.imageUrl") return { ...prev, founders: { ...prev.founders, f2: { ...prev.founders.f2, imageUrl: url } } }
+  if (field === "join.imageUrl") return { ...prev, join: { ...prev.join, imageUrl: url } }
+
+  if (field.startsWith("a2z.carousel[")) {
+    const idx = Number(field.slice("a2z.carousel[".length, -1))
+    if (!Number.isFinite(idx)) return prev
+    const urls = [...prev.a2z.carouselUrls]
+    urls[idx] = url
+    return { ...prev, a2z: { ...prev.a2z, carouselUrls: urls } }
+  }
+
+  return prev
+}
+
 function setImageField(prev: HomeContent, field: string, url: string): HomeContent {
   if (field === "hero.bgUrl") return { ...prev, hero: { ...prev.hero, bgUrl: url } }
   if (field === "hero.logoUrl") return { ...prev, hero: { ...prev.hero, logoUrl: url } }
@@ -801,7 +989,7 @@ function GalleryRow({
 }: {
   label: string
   urls: string[]
-  activeIndexKey: "bringing.carousel" | "engaging.staffGrid"
+  activeIndexKey: "bringing.carousel" | "engaging.staffGrid" | "people.a2z"
   onChangeClick: (idx: number) => void
 }) {
   return (
