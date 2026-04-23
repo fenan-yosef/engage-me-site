@@ -7,6 +7,8 @@ import type { HomeContent } from "../../../../lib/cms/home-content"
 import { buildHomePageData, extractHomeContent } from "../../../../lib/cms/home-content"
 import type { WorkContent } from "../../../../lib/cms/work-content"
 import { buildWorkPageData, extractWorkContent } from "../../../../lib/cms/work-content"
+import type { InsightContent } from "../../../../lib/cms/insight-content"
+import { buildInsightPageData, extractInsightContent } from "../../../../lib/cms/insight-content"
 
 type ImageURL = string
 
@@ -88,6 +90,10 @@ export default function PageEditor() {
 
   if (slug === "work") {
     return <WorkEditor />
+  }
+
+  if (slug === "insight") {
+    return <InsightEditor />
   }
 
   async function save() {
@@ -571,6 +577,139 @@ function WorkEditor() {
       </div>
     </div>
   )
+}
+
+function InsightEditor() {
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState<string | null>(null)
+  const [content, setContent] = useState<InsightContent>(() => extractInsightContent(null))
+  const [media, setMedia] = useState<ImageURL[]>([])
+  const [picker, setPicker] = useState<null | { field: "intro.imageUrl" | "incentives.imageUrl"; title: string }>(null)
+  const [mediaQuery, setMediaQuery] = useState("")
+
+  useEffect(() => {
+    setLoading(true)
+    ;(async () => {
+      try {
+        const pageResp = await fetch(`/api/cms/pages/insight`)
+        const page = pageResp.status === 404 ? null : await pageResp.json().catch(() => null)
+        setContent(extractInsightContent(page))
+        const imgs = await fetch(`/api/cms/list-uploads`).then((r) => r.json()).catch(() => [])
+        setMedia(Array.isArray(imgs) ? imgs : [])
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  async function uploadFile(file: File) {
+    const form = new FormData()
+    form.append("file", file)
+    const res = await fetch("/api/cms/upload", { method: "POST", body: form })
+    const body = await res.json().catch(() => ({}))
+    return body?.url as string | undefined
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const url = await uploadFile(file)
+    if (!url) return
+    setMedia((m) => [url, ...m])
+    if (!picker) return
+    setContent((prev) => setInsightImage(prev, picker.field, url))
+    setPicker(null)
+  }
+
+  function onPickFromLibrary(url: string) {
+    if (!picker) return
+    setContent((prev) => setInsightImage(prev, picker.field, url))
+    setPicker(null)
+  }
+
+  async function save() {
+    setMessage(null)
+    const payload = buildInsightPageData(content)
+    const res = await fetch(`/api/cms/pages/insight`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (res.ok) setMessage("Saved")
+    else setMessage(body?.error || "Save failed")
+  }
+
+  const filteredMedia = mediaQuery.trim()
+    ? media.filter((m) => m.toLowerCase().includes(mediaQuery.trim().toLowerCase()))
+    : media
+
+  if (loading) return <div>Loading…</div>
+
+  return (
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Edit: insight</h2>
+        <div className="flex items-center gap-2">
+          <Link href="/cms" className="btn-engage">
+            Back
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-8">
+          <Section title="Intro">
+            <TextRow label="Heading" value={content.intro.heading} onChange={(v) => setContent((p) => ({ ...p, intro: { ...p.intro, heading: v } }))} />
+            <TextareaRow label="Paragraph 1" value={content.intro.p1} onChange={(v) => setContent((p) => ({ ...p, intro: { ...p.intro, p1: v } }))} />
+            <TextareaRow label="Paragraph 2" value={content.intro.p2} onChange={(v) => setContent((p) => ({ ...p, intro: { ...p.intro, p2: v } }))} />
+            <ImageRow label="Right image" value={content.intro.imageUrl} onChangeClick={() => setPicker({ field: "intro.imageUrl", title: "Intro right image" })} />
+          </Section>
+
+          <Section title="Staff incentives">
+            <TextRow
+              label="Heading"
+              value={content.incentives.heading}
+              onChange={(v) => setContent((p) => ({ ...p, incentives: { ...p.incentives, heading: v } }))}
+            />
+            <TextareaRow label="Paragraph 1" value={content.incentives.p1} onChange={(v) => setContent((p) => ({ ...p, incentives: { ...p.incentives, p1: v } }))} />
+            <TextareaRow label="Paragraph 2" value={content.incentives.p2} onChange={(v) => setContent((p) => ({ ...p, incentives: { ...p.incentives, p2: v } }))} />
+            <ImageRow label="Left image" value={content.incentives.imageUrl} onChangeClick={() => setPicker({ field: "incentives.imageUrl", title: "Staff incentives left image" })} />
+          </Section>
+
+          <div className="flex gap-3 items-center">
+            <button className="btn-engage" onClick={save}>
+              Save
+            </button>
+            {message && <div className="text-sm text-gray-700">{message}</div>}
+          </div>
+        </div>
+
+        <aside className="border p-4 rounded">
+          <h3 className="font-medium mb-2">Media library</h3>
+          <div className="mb-3 text-sm text-gray-600">This is your server files in `public/uploads`.</div>
+          <input className="w-full border p-2 mb-3" placeholder="Search images…" value={mediaQuery} onChange={(e) => setMediaQuery(e.target.value)} />
+          <div className="text-xs text-gray-600 mb-3">Click “Change” on an image first, then pick an image.</div>
+          <div className="grid grid-cols-3 gap-2 max-h-96 overflow-auto">
+            {filteredMedia.map((m) => (
+              <button key={m} onClick={() => (picker ? onPickFromLibrary(m) : null)} className="border p-0" title={picker ? "Click to use this image" : "Open a Change popup first"}>
+                <img src={m} alt="" className="w-full h-20 object-cover" />
+              </button>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      {picker ? (
+        <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} />
+      ) : null}
+    </div>
+  )
+}
+
+function setInsightImage(prev: InsightContent, field: "intro.imageUrl" | "incentives.imageUrl", url: string): InsightContent {
+  if (field === "intro.imageUrl") return { ...prev, intro: { ...prev.intro, imageUrl: url } }
+  return { ...prev, incentives: { ...prev.incentives, imageUrl: url } }
 }
 
 function setImageField(prev: HomeContent, field: string, url: string): HomeContent {
