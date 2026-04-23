@@ -2,12 +2,20 @@
 
 import Image from "next/image"
 
-export default function Hero() {
+export default function Hero({
+  bgImageUrl = "/her-sec.jpg",
+  leftText = "We are",
+  logoUrl = "/engage-me-logo.png",
+}: {
+  bgImageUrl?: string
+  leftText?: string
+  logoUrl?: string
+}) {
   return (
       <section
         className="hero relative bg-cover bg-center overflow-hidden py-20 md:py-32"
         style={{
-          backgroundImage: "url('/her-sec.jpg')",
+          backgroundImage: `url('${bgImageUrl}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -30,7 +38,7 @@ export default function Hero() {
                   className="text-white leading-none inline-block whitespace-nowrap" 
                   style={{ fontSize: "13vw", fontWeight: "normal", letterSpacing: "-0.02em" }}
                 >
-                  We are
+                  {leftText}
                 </span>
               </div>
 
@@ -38,7 +46,7 @@ export default function Hero() {
               <div className="flex justify-center md:justify-start md:pl-[18%] pt-8 md:pt-4">
                 <div className="relative" style={{ height: "13vw", width: "100%", maxWidth: "450px" }}>
                   <Image
-                    src="/engage-me-logo.png"
+                    src={logoUrl}
                     alt="engage me"
                     fill
                     className="object-contain"

@@ -1,60 +1,44 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getIronSession } from "iron-session"
 import { sessionOptions, type SessionData } from "../../../../lib/session"
-import fs from "fs"
-import path from "path"
+import { getPage, savePage } from "../../../../lib/cms-db"
 
-type AuditEntry = {
-  id: number
-  page: string
-  user: string | null
-  timestamp: string
+function formatCmsDbError(e: unknown) {
+  const msg = e instanceof Error ? e.message : "Database error"
+  if (msg.includes("Unknown column") && msg.includes("block_key")) {
+    return (
+      msg +
+      " — Your DB schema is missing `cms_blocks.block_key`. Run: ALTER TABLE cms_blocks ADD COLUMN block_key VARCHAR(64) NULL; CREATE UNIQUE INDEX uniq_cms_blocks_page_key ON cms_blocks (page_id, block_key);"
+    )
+  }
+  return msg
 }
-
-const dataRoot = path.join(process.cwd(), "data", "cms")
-const pagesDir = path.join(dataRoot, "pages")
-const backupsDir = path.join(dataRoot, "backups")
-const auditFile = path.join(dataRoot, "audit.json")
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { page } = req.query
   const pageName = Array.isArray(page) ? page[0] : String(page || "")
   if (!pageName) return res.status(400).json({ error: "Missing page" })
 
-  const filePath = path.join(pagesDir, `${pageName}.json`)
-
   if (req.method === "GET") {
-    if (!fs.existsSync(filePath)) return res.status(404).json({ error: "Page not found" })
-    const data = JSON.parse(fs.readFileSync(filePath, "utf8"))
-    return res.status(200).json(data)
+    try {
+      const data = await getPage(pageName)
+      if (!data) return res.status(404).json({ error: "Page not found" })
+      return res.status(200).json(data)
+    } catch (e: unknown) {
+      return res.status(500).json({ error: formatCmsDbError(e) })
+    }
   }
 
   if (req.method === "PUT") {
     const session = await getIronSession<SessionData>(req, res, sessionOptions)
     if (!session.user) return res.status(401).json({ error: "Unauthorized" })
 
-    const body = req.body
-    fs.mkdirSync(pagesDir, { recursive: true })
-    fs.mkdirSync(backupsDir, { recursive: true })
-
-    if (fs.existsSync(filePath)) {
-      const existing = fs.readFileSync(filePath, "utf8")
-      fs.writeFileSync(path.join(backupsDir, `${pageName}-${Date.now()}.json`), existing)
-    }
-
-    fs.writeFileSync(filePath, JSON.stringify(body, null, 2))
-
-    // append audit
-    let audits: AuditEntry[] = []
     try {
-      if (fs.existsSync(auditFile)) audits = JSON.parse(fs.readFileSync(auditFile, "utf8"))
-    } catch {
-      audits = []
+      await savePage(pageName, req.body || {})
+      return res.status(200).json({ ok: true })
+    } catch (e: unknown) {
+      return res.status(500).json({ error: formatCmsDbError(e) })
     }
-    audits.push({ id: Date.now(), page: pageName, user: session.user?.email || null, timestamp: new Date().toISOString() })
-    fs.writeFileSync(auditFile, JSON.stringify(audits, null, 2))
-
-    return res.status(200).json({ ok: true })
   }
 
   return res.status(405).json({ error: "Method not allowed" })

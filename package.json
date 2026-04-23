@@ -13,6 +13,7 @@
     "country-flag-icons": "^1.6.4",
     "formidable": "^3.5.4",
     "iron-session": "^8.0.4",
+    "mysql2": "^3.22.2",
     "next": "^15.5.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

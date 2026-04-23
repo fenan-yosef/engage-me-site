@@ -16,6 +16,9 @@ interface CarouselImage {
 
 interface BringingBrandsToLifeProps {
   carouselImages?: CarouselImage[]
+  heading?: string
+  body?: string
+  buttonLabel?: string
 }
 
 export default function BringingBrandsToLife({
@@ -24,6 +27,9 @@ export default function BringingBrandsToLife({
     { id: "2", src: carouselImage2, alt: "Carousel 2" },
     { id: "3", src: carouselImage3, alt: "Carousel 3" },
   ],
+  heading = "bringing brands to life",
+  body = "Our mission is to drive results for our clients by pairing the right staff with effective on-ground management. It's that simple.",
+  buttonLabel = "OUR WORK",
 }: BringingBrandsToLifeProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -44,19 +50,18 @@ export default function BringingBrandsToLife({
               className="section-title text-5xl md:text-8xl font-bold mb-8"
               style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
             >
-              <div>bringing brands to life</div>
+              <div>{heading}</div>
             </h2>
 
             <p className="section-description all_para_size text-gray-600 text-base mb-8 leading-relaxed">
-              Our mission is to drive results for our clients by pairing the right staff with effective on-ground
-              management. It&apos;s that simple.
+              {body}
             </p>
 
             <Link
               href="/work"
               className="btn-brand-leaf text-white w-fit mb-8"
             >
-              <span>OUR WORK</span>
+              <span>{buttonLabel}</span>
               <svg
                 viewBox="0 0 24 24"
                 fill="currentColor"
