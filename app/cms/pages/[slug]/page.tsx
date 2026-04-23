@@ -13,6 +13,8 @@ import type { PeopleContent } from "../../../../lib/cms/people-content"
 import { buildPeoplePageData, extractPeopleContent } from "../../../../lib/cms/people-content"
 import type { JobsContent } from "../../../../lib/cms/jobs-content"
 import { buildJobsPageData, extractJobsContent } from "../../../../lib/cms/jobs-content"
+import type { ContactContent } from "../../../../lib/cms/contact-content"
+import { buildContactPageData, extractContactContent } from "../../../../lib/cms/contact-content"
 
 type ImageURL = string
 
@@ -221,6 +223,10 @@ export default function PageEditor() {
 
   if (slug === "jobs") {
     return <JobsEditor />
+  }
+
+  if (slug === "contact") {
+    return <ContactEditor />
   }
 
   async function save() {
@@ -1189,6 +1195,136 @@ function JobsEditor() {
                 </div>
               ))}
             </div>
+          </Section>
+
+          <div className="flex gap-3 items-center">
+            <button className="btn-engage" onClick={save}>
+              Save
+            </button>
+            {message && <div className="text-sm text-gray-700">{message}</div>}
+          </div>
+        </div>
+
+        <aside className="border p-4 rounded">
+          <h3 className="font-medium mb-2">Media library</h3>
+          <div className="mb-3 text-sm text-gray-600">This is your server files in `public/uploads`.</div>
+          <input className="w-full border p-2 mb-3" placeholder="Search images…" value={mediaQuery} onChange={(e) => setMediaQuery(e.target.value)} />
+          <div className="text-xs text-gray-600 mb-3">Click “Change” on the hero image first, then pick an image.</div>
+          <div className="grid grid-cols-3 gap-2 max-h-96 overflow-auto">
+            {filteredMedia.map((m) => (
+              <button key={m} onClick={() => (picker ? onPickFromLibrary(m) : null)} className="border p-0" title={picker ? "Click to use this image" : "Open a Change popup first"}>
+                <img src={m} alt="" className="w-full h-20 object-cover" />
+              </button>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+    </div>
+  )
+}
+
+function ContactEditor() {
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState<string | null>(null)
+  const [content, setContent] = useState<ContactContent>(() => extractContactContent(null))
+  const [media, setMedia] = useState<ImageURL[]>([])
+  const [picker, setPicker] = useState<null | { field: "heroImageUrl"; title: string }>(null)
+  const [mediaQuery, setMediaQuery] = useState("")
+
+  useEffect(() => {
+    setLoading(true)
+    ;(async () => {
+      try {
+        const pageResp = await fetch(`/api/cms/pages/contact`)
+        const page = pageResp.status === 404 ? null : await pageResp.json().catch(() => null)
+        setContent(extractContactContent(page))
+        const imgs = await fetch(`/api/cms/list-uploads`).then((r) => r.json()).catch(() => [])
+        setMedia(Array.isArray(imgs) ? imgs : [])
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  async function uploadFile(file: File) {
+    const form = new FormData()
+    form.append("file", file)
+    const res = await fetch("/api/cms/upload", { method: "POST", body: form })
+    const body = await res.json().catch(() => ({}))
+    return body?.url as string | undefined
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const url = await uploadFile(file)
+    if (!url) return
+    setMedia((m) => [url, ...m])
+    if (!picker) return
+    setContent((prev) => ({ ...prev, heroImageUrl: url }))
+    setPicker(null)
+  }
+
+  function onPickFromLibrary(url: string) {
+    if (!picker) return
+    setContent((prev) => ({ ...prev, heroImageUrl: url }))
+    setPicker(null)
+  }
+
+  async function save() {
+    setMessage(null)
+    const payload = buildContactPageData(content)
+    const res = await fetch(`/api/cms/pages/contact`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (res.ok) setMessage("Saved")
+    else setMessage(body?.error || "Save failed")
+  }
+
+  const filteredMedia = mediaQuery.trim()
+    ? media.filter((m) => m.toLowerCase().includes(mediaQuery.trim().toLowerCase()))
+    : media
+
+  if (loading) return <div>Loading…</div>
+
+  return (
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Edit: contact</h2>
+        <div className="flex items-center gap-2">
+          <Link href="/cms" className="btn-engage">
+            Back
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-8">
+          <Section title="Hero">
+            <ImageRow label="Hero image" value={content.heroImageUrl} onChangeClick={() => setPicker({ field: "heroImageUrl", title: "Contact hero image" })} />
+          </Section>
+
+          <Section title="Brief us">
+            <TextRow label="Heading" value={content.briefHeading} onChange={(v) => setContent((p) => ({ ...p, briefHeading: v }))} />
+            <TextareaRow label="Body" value={content.briefBody} onChange={(v) => setContent((p) => ({ ...p, briefBody: v }))} />
+          </Section>
+
+          <Section title="Join us">
+            <TextRow label="Heading" value={content.joinHeading} onChange={(v) => setContent((p) => ({ ...p, joinHeading: v }))} />
+            <TextareaRow label="Body" value={content.joinBody} onChange={(v) => setContent((p) => ({ ...p, joinBody: v }))} />
+            <TextRow label="Button label" value={content.joinButtonLabel} onChange={(v) => setContent((p) => ({ ...p, joinButtonLabel: v }))} />
+          </Section>
+
+          <Section title="Contact info">
+            <TextRow label="Email heading" value={content.emailHeading} onChange={(v) => setContent((p) => ({ ...p, emailHeading: v }))} />
+            <TextRow label="Email value" value={content.emailValue} onChange={(v) => setContent((p) => ({ ...p, emailValue: v }))} />
+            <TextRow label="Call heading" value={content.callHeading} onChange={(v) => setContent((p) => ({ ...p, callHeading: v }))} />
+            <TextRow label="Call value" value={content.callValue} onChange={(v) => setContent((p) => ({ ...p, callValue: v }))} />
           </Section>
 
           <div className="flex gap-3 items-center">
