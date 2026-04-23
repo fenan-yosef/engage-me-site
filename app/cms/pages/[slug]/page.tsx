@@ -11,6 +11,8 @@ import type { InsightContent } from "../../../../lib/cms/insight-content"
 import { buildInsightPageData, extractInsightContent } from "../../../../lib/cms/insight-content"
 import type { PeopleContent } from "../../../../lib/cms/people-content"
 import { buildPeoplePageData, extractPeopleContent } from "../../../../lib/cms/people-content"
+import type { JobsContent } from "../../../../lib/cms/jobs-content"
+import { buildJobsPageData, extractJobsContent } from "../../../../lib/cms/jobs-content"
 
 type ImageURL = string
 
@@ -27,6 +29,121 @@ type CmsPageData = {
   images?: ImageURL[]
   blocks?: Block[]
   [key: string]: unknown
+}
+
+const JOBS_FALLBACK: JobsContent = {
+  heroImageUrl: "/her-sec.jpg",
+  applyButtonLabel: "APPLY HERE",
+  jobs: [
+    {
+      title: "me/gp",
+      color: "#ff57c4",
+      fields: [
+        { label: "Job Ref", value: "OC/MON" },
+        { label: "Requirement", value: "Male or Female" },
+        { label: "Role", value: "Stage Manager" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "30th August" },
+        { label: "Timing", value: "9.00am to 5.00pm" },
+      ],
+    },
+    {
+      title: "hostess",
+      color: "#ff70ff",
+      fields: [
+        { label: "Job Ref", value: "R7/Hostess" },
+        { label: "Requirement", value: "Bubbly Western Female" },
+        { label: "Role", value: "hostess" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "28th - 30th Nov" },
+        { label: "Timing", value: "10am to 10pm" },
+      ],
+    },
+    {
+      title: "mc",
+      color: "#5ffeff",
+      fields: [
+        { label: "Job Ref", value: "MC/JHU" },
+        { label: "Requirement", value: "Male & Female MC" },
+        { label: "Role", value: "MC" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "20th July" },
+        { label: "Timing", value: "11am to 5pm" },
+      ],
+    },
+    {
+      title: "models",
+      color: "#33fbad",
+      fields: [
+        { label: "Job Ref", value: "MOD/FE" },
+        { label: "Requirement", value: "Male" },
+        { label: "Role", value: "model" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "15th Aug" },
+        { label: "Timing", value: "TBC" },
+      ],
+    },
+    {
+      title: "supervisor",
+      color: "#fe215a",
+      fields: [
+        { label: "Job Ref", value: "R7/SUP" },
+        { label: "Requirement", value: "Experienced Supervisors" },
+        { label: "Role", value: "Supervisor" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "28th - 30th Nov" },
+        { label: "Timing", value: "7am to 9pm" },
+      ],
+    },
+    {
+      title: "make up artist",
+      color: "#fe5b7e",
+      fields: [
+        { label: "Job Ref", value: "EXP/MUA" },
+        { label: "Requirement", value: "Experienced MUA" },
+        { label: "Role", value: "make up artist" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "25th Sep" },
+        { label: "Timing", value: "TBC" },
+      ],
+    },
+    {
+      title: "admin",
+      color: "#9efb16",
+      fields: [
+        { label: "Job Ref", value: "EXP/ADM" },
+        { label: "Requirement", value: "Experienced Admin support" },
+        { label: "Role", value: "admin support" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "Aug to Dec" },
+        { label: "Timing", value: "9am to 6pm" },
+      ],
+    },
+    {
+      title: "promoters",
+      color: "#9efb16",
+      fields: [
+        { label: "Job Ref", value: "EXP/PR" },
+        { label: "Requirement", value: "Asians" },
+        { label: "Role", value: "Instore Promoter" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "26th - 31st August" },
+        { label: "Timing", value: "4pm to 8pm" },
+      ],
+    },
+    {
+      title: "bar/wait staff",
+      color: "#ff58c4",
+      fields: [
+        { label: "Job Ref", value: "EXP/BWS" },
+        { label: "Requirement", value: "Experienced wait staff / bar/wait staff" },
+        { label: "Role", value: "bar/wait staff" },
+        { label: "Location", value: "Dubai" },
+        { label: "Date(s)", value: "August to September - Weekends only" },
+        { label: "Timing", value: "6.00pm to 1.00am" },
+      ],
+    },
+  ],
 }
 
 function makeId() {
@@ -100,6 +217,10 @@ export default function PageEditor() {
 
   if (slug === "people") {
     return <PeopleEditor />
+  }
+
+  if (slug === "jobs") {
+    return <JobsEditor />
   }
 
   async function save() {
@@ -898,6 +1019,204 @@ function setPeopleImage(prev: PeopleContent, field: string, url: string): People
   }
 
   return prev
+}
+
+function JobsEditor() {
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState<string | null>(null)
+  const [content, setContent] = useState<JobsContent>(() => JOBS_FALLBACK)
+  const [media, setMedia] = useState<ImageURL[]>([])
+  const [picker, setPicker] = useState<null | { field: "heroImageUrl"; title: string }>(null)
+  const [mediaQuery, setMediaQuery] = useState("")
+
+  useEffect(() => {
+    setLoading(true)
+    ;(async () => {
+      try {
+        const pageResp = await fetch(`/api/cms/pages/jobs`)
+        const page = pageResp.status === 404 ? null : await pageResp.json().catch(() => null)
+        setContent(extractJobsContent(page, JOBS_FALLBACK))
+        const imgs = await fetch(`/api/cms/list-uploads`).then((r) => r.json()).catch(() => [])
+        setMedia(Array.isArray(imgs) ? imgs : [])
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  async function uploadFile(file: File) {
+    const form = new FormData()
+    form.append("file", file)
+    const res = await fetch("/api/cms/upload", { method: "POST", body: form })
+    const body = await res.json().catch(() => ({}))
+    return body?.url as string | undefined
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const url = await uploadFile(file)
+    if (!url) return
+    setMedia((m) => [url, ...m])
+    if (!picker) return
+    setContent((prev) => ({ ...prev, heroImageUrl: url }))
+    setPicker(null)
+  }
+
+  function onPickFromLibrary(url: string) {
+    if (!picker) return
+    setContent((prev) => ({ ...prev, heroImageUrl: url }))
+    setPicker(null)
+  }
+
+  async function save() {
+    setMessage(null)
+    const payload = buildJobsPageData(content)
+    const res = await fetch(`/api/cms/pages/jobs`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (res.ok) setMessage("Saved")
+    else setMessage(body?.error || "Save failed")
+  }
+
+  const filteredMedia = mediaQuery.trim()
+    ? media.filter((m) => m.toLowerCase().includes(mediaQuery.trim().toLowerCase()))
+    : media
+
+  if (loading) return <div>Loading…</div>
+
+  return (
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Edit: jobs</h2>
+        <div className="flex items-center gap-2">
+          <Link href="/cms" className="btn-engage">
+            Back
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-8">
+          <Section title="Hero">
+            <ImageRow label="Hero image" value={content.heroImageUrl} onChangeClick={() => setPicker({ field: "heroImageUrl", title: "Jobs hero image" })} />
+          </Section>
+
+          <Section title="Apply button">
+            <TextRow label="Button label" value={content.applyButtonLabel} onChange={(v) => setContent((p) => ({ ...p, applyButtonLabel: v }))} />
+            <div className="text-xs text-gray-600">Apply link is fixed to `/apply/start`.</div>
+          </Section>
+
+          <Section title="Jobs list">
+            <div className="text-sm text-gray-600">Edit the job cards shown on /jobs.</div>
+            <div className="space-y-4">
+              {content.jobs.map((job, jobIdx) => (
+                <div key={jobIdx} className="border rounded p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block mb-2">Title</label>
+                      <input
+                        className="w-full border p-2"
+                        value={job.title}
+                        onChange={(e) =>
+                          setContent((p) => {
+                            const jobs = [...p.jobs]
+                            jobs[jobIdx] = { ...jobs[jobIdx], title: e.target.value }
+                            return { ...p, jobs }
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2">Color</label>
+                      <input
+                        className="w-full border p-2"
+                        value={job.color}
+                        onChange={(e) =>
+                          setContent((p) => {
+                            const jobs = [...p.jobs]
+                            jobs[jobIdx] = { ...jobs[jobIdx], color: e.target.value }
+                            return { ...p, jobs }
+                          })
+                        }
+                        placeholder="#ff57c4"
+                      />
+                      <div className="text-xs text-gray-600 mt-1">Use a hex color like `#ff57c4`.</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    {job.fields.map((f, fieldIdx) => (
+                      <div key={fieldIdx} className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div>
+                          <label className="block mb-2">Label {fieldIdx + 1}</label>
+                          <input
+                            className="w-full border p-2"
+                            value={f.label}
+                            onChange={(e) =>
+                              setContent((p) => {
+                                const jobs = [...p.jobs]
+                                const fields = [...jobs[jobIdx].fields]
+                                fields[fieldIdx] = { ...fields[fieldIdx], label: e.target.value }
+                                jobs[jobIdx] = { ...jobs[jobIdx], fields }
+                                return { ...p, jobs }
+                              })
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="block mb-2">Value {fieldIdx + 1}</label>
+                          <input
+                            className="w-full border p-2"
+                            value={f.value}
+                            onChange={(e) =>
+                              setContent((p) => {
+                                const jobs = [...p.jobs]
+                                const fields = [...jobs[jobIdx].fields]
+                                fields[fieldIdx] = { ...fields[fieldIdx], value: e.target.value }
+                                jobs[jobIdx] = { ...jobs[jobIdx], fields }
+                                return { ...p, jobs }
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <div className="flex gap-3 items-center">
+            <button className="btn-engage" onClick={save}>
+              Save
+            </button>
+            {message && <div className="text-sm text-gray-700">{message}</div>}
+          </div>
+        </div>
+
+        <aside className="border p-4 rounded">
+          <h3 className="font-medium mb-2">Media library</h3>
+          <div className="mb-3 text-sm text-gray-600">This is your server files in `public/uploads`.</div>
+          <input className="w-full border p-2 mb-3" placeholder="Search images…" value={mediaQuery} onChange={(e) => setMediaQuery(e.target.value)} />
+          <div className="text-xs text-gray-600 mb-3">Click “Change” on the hero image first, then pick an image.</div>
+          <div className="grid grid-cols-3 gap-2 max-h-96 overflow-auto">
+            {filteredMedia.map((m) => (
+              <button key={m} onClick={() => (picker ? onPickFromLibrary(m) : null)} className="border p-0" title={picker ? "Click to use this image" : "Open a Change popup first"}>
+                <img src={m} alt="" className="w-full h-20 object-cover" />
+              </button>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+    </div>
+  )
 }
 
 function setImageField(prev: HomeContent, field: string, url: string): HomeContent {

@@ -1,10 +1,10 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
+import { getPage } from "@/lib/cms-db"
+import { extractJobsContent, type JobsContent } from "@/lib/cms/jobs-content"
 
 type Job = {
   title: string
@@ -12,7 +12,10 @@ type Job = {
   fields: Array<{ label: string; value: string }>
 }
 
-const jobs: Job[] = [
+const FALLBACK: JobsContent = {
+  heroImageUrl: "/her-sec.jpg",
+  applyButtonLabel: "APPLY HERE",
+  jobs: [
   {
     title: "me/gp",
     color: "#ff57c4",
@@ -122,8 +125,12 @@ const jobs: Job[] = [
     ],
   },
 ]
+}
 
-export default function JobsPage() {
+export default async function JobsPage() {
+  const page = await getPage("jobs").catch(() => null)
+  const content = extractJobsContent(page, FALLBACK)
+
   return (
     <main className="min-h-screen bg-white">
       <Header />
@@ -131,7 +138,7 @@ export default function JobsPage() {
       {/* Full viewport hero image */}
       <div className="relative w-full h-[calc(100vh-5.5rem)] min-h-[400px] bg-gray-200 overflow-hidden">
         <Image
-          src="/her-sec.jpg"
+          src={content.heroImageUrl}
           alt="Engage Me jobs board"
           fill
           priority
@@ -144,7 +151,7 @@ export default function JobsPage() {
         <div className="max-w-7xl mx-auto px-6">
           {/* Jobs grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-0">
-            {jobs.map((job) => (
+            {content.jobs.map((job: Job) => (
               <div key={job.title} className="border border-gray-200 bg-white">
                 <div className="p-4">
                   <h3 className="text-sm font-semibold mb-3" style={{ color: job.color }}>
@@ -167,7 +174,7 @@ export default function JobsPage() {
                   style={{ backgroundColor: job.color, borderTopLeftRadius: 16, fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif' }}
                   aria-label={`Apply for ${job.title}`}
                 >
-                  <span>APPLY HERE</span>
+                  <span>{content.applyButtonLabel}</span>
                   <span aria-hidden="true">▶</span>
                 </Link>
               </div>
