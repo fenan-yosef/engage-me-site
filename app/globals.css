@@ -535,6 +535,10 @@
   transform: translateY(30vh);
 }
 
+.engageME-adminLogin-logo {
+  text-align: center;
+}
+
 .engageME-adminLogin-logo img {
   width: 140px;
   height: auto;
@@ -551,7 +555,7 @@
   border-radius: 4px;
   padding: 20px;
   background: #fd59c1;
-  max-width: 420px;
+  width: 364px;
 }
 
 .engageME-adminLogin-text-parent form {
@@ -586,16 +590,11 @@
   border-bottom-left-radius: 4px;
 }
 
-.engageME-adminLogin-text-parent .engageME-adminLogin-inp span .login-icon-svg {
+.engageME-adminLogin-text-parent .engageME-adminLogin-inp span img {
   width: 22px;
   height: 22px;
   position: relative;
   top: 6px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .engageME-adminLogin-text-parent .engageME-adminLogin-text-cont {
@@ -638,7 +637,7 @@
   }
 
   .engageME-adminLogin-text-parent {
-    max-width: 100%;
+    width: 100%;
   }
 }
 

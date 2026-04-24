@@ -30,7 +30,7 @@ export default function LoginPage() {
       <div className="container">
         <div className="engageME-adminLogin">
           <div className="engageME-adminLogin-logo">
-            <img src="/logo.png" alt="Engage Me" />
+            <img src="/engage-me-icons-19.png" alt="Engage Me" />
           </div>
 
           <div className="engageME-adminLogin-text">Welcome to Engage Me CMS</div>
@@ -41,10 +41,7 @@ export default function LoginPage() {
 
               <div className="engageME-adminLogin-inp">
                 <span aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="login-icon-svg">
-                    <path d="M20 21a8 8 0 0 0-16 0" />
-                    <circle cx="12" cy="8" r="4" />
-                  </svg>
+                  <img src="/engage-me-icons-13.png" alt="" />
                 </span>
                 <input
                   type="email"
@@ -59,10 +56,7 @@ export default function LoginPage() {
 
               <div className="engageME-adminLogin-inp">
                 <span aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="login-icon-svg">
-                    <rect x="4" y="11" width="16" height="9" rx="2" />
-                    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-                  </svg>
+                  <img src="/engage-me-icons-09.png" alt="" />
                 </span>
                 <input
                   type="password"
