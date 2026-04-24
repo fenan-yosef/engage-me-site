@@ -33,6 +33,10 @@ type CmsPageData = {
   [key: string]: unknown
 }
 
+type GalleryPickerState = {
+  blockIndex: number
+}
+
 function SaveNotice({ message }: { message: string }) {
   const isSuccess = message.toLowerCase().startsWith("saved")
   const toneClasses = isSuccess
@@ -196,6 +200,7 @@ export default function PageEditor() {
   const [data, setData] = useState<CmsPageData>({ title: "", images: [], blocks: [] })
   const [message, setMessage] = useState<string | null>(null)
   const [media, setMedia] = useState<ImageURL[]>([])
+  const [galleryPicker, setGalleryPicker] = useState<GalleryPickerState | null>(null)
 
   useEffect(() => {
     if (!slug) return
@@ -315,11 +320,44 @@ export default function PageEditor() {
     })
   }
 
+  function updateGalleryBlock(blockIndex: number, updater: (urls: string[]) => string[]) {
+    setData((prev) => {
+      const blocks = [...(prev.blocks || [])]
+      const block = blocks[blockIndex]
+      if (!block || block.type !== "gallery") return prev
+      const urls = Array.isArray(block.urls) ? block.urls.filter((u): u is string => typeof u === "string" && u.trim().length > 0) : []
+      blocks[blockIndex] = { ...block, urls: updater(urls) }
+      return { ...prev, blocks }
+    })
+  }
+
+  function addGalleryImage(blockIndex: number, url: string) {
+    const normalized = url.startsWith("/") ? url : `/${url}`
+    updateGalleryBlock(blockIndex, (urls) => (urls.includes(normalized) ? urls : [...urls, normalized]))
+  }
+
+  function removeGalleryImage(blockIndex: number, urlIndex: number) {
+    updateGalleryBlock(blockIndex, (urls) => urls.filter((_, idx) => idx !== urlIndex))
+  }
+
   function insertImageAsBlock(url: string) {
     const id = makeId()
     const b: ImageBlock = { id, type: "image", url }
     setData((prev) => ({ ...prev, blocks: [...(prev.blocks || []), b] }))
   }
+
+  async function uploadGalleryImage(file: File) {
+    const url = await uploadFile(file)
+    if (!url) return
+    setMedia((m) => [url, ...m])
+    if (galleryPicker) addGalleryImage(galleryPicker.blockIndex, url)
+  }
+
+  const galleryUploadMedia = media.filter((m) => m.startsWith("/uploads/"))
+  const activeGalleryBlock =
+    galleryPicker && Array.isArray(data.blocks)
+      ? (data.blocks[galleryPicker.blockIndex] as GalleryBlock | undefined)
+      : undefined
 
   if (!slug) return <div>Missing page slug</div>
   if (loading) return <div>Loading…</div>
@@ -399,12 +437,25 @@ export default function PageEditor() {
                       <div>
                         <div className="flex flex-wrap gap-2">
                           {((b as GalleryBlock).urls || []).map((u, k) => (
-                            <div key={k} className="relative">
+                            <div key={`${u}-${k}`} className="relative">
                               <img src={u} alt="" className="w-28 h-20 object-cover border" />
+                              <button
+                                type="button"
+                                className="absolute -top-2 -right-2 rounded-full bg-rose-600 px-2 py-0.5 text-xs text-white shadow"
+                                onClick={() => removeGalleryImage(i, k)}
+                                aria-label={`Remove image ${k + 1}`}
+                              >
+                                ×
+                              </button>
                             </div>
                           ))}
                         </div>
-                        <div className="text-sm text-gray-600 mt-2">Use the media library to add images to this gallery.</div>
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <button type="button" className="btn-engage" onClick={() => setGalleryPicker({ blockIndex: i })}>
+                            Add photo from uploads
+                          </button>
+                          <div className="text-sm text-gray-600">Only uploaded photos are shown here.</div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -432,6 +483,17 @@ export default function PageEditor() {
           </div>
         </aside>
       </div>
+
+      {galleryPicker ? (
+        <GalleryPickerModal
+          title="Gallery uploads"
+          media={galleryUploadMedia}
+          onClose={() => setGalleryPicker(null)}
+          onUpload={uploadGalleryImage}
+          onPick={(url) => addGalleryImage(galleryPicker.blockIndex, url)}
+          selectedUrls={activeGalleryBlock?.urls || []}
+        />
+      ) : null}
     </div>
   )
 }
@@ -448,6 +510,8 @@ function HomeEditor({
   const [content, setContent] = useState<HomeContent>(() => extractHomeContent(null))
   const [picker, setPicker] = useState<null | { field: string; title: string }>(null)
   const [mediaQuery, setMediaQuery] = useState("")
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [deleteSelection, setDeleteSelection] = useState<string[]>([])
 
   useEffect(() => {
     setLoading(true)
@@ -481,6 +545,15 @@ function HomeEditor({
     if (picker?.field) setContent((prev) => setImageField(prev, picker.field, url))
   }
 
+  async function handleUploadToLibrary(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const url = await uploadFile(file)
+    if (!url) return
+    setMedia((m) => [url, ...m])
+    e.currentTarget.value = ""
+  }
+
   function onPickFromLibrary(url: string) {
     if (!picker?.field) return
     setContent((prev) => setImageField(prev, picker.field, url))
@@ -505,6 +578,52 @@ function HomeEditor({
   const filteredMedia = mediaQuery.trim()
     ? media.filter((m) => m.toLowerCase().includes(mediaQuery.trim().toLowerCase()))
     : media
+  const libraryMedia = filteredMedia
+  const deletableMediaCount = libraryMedia.filter((m) => isDeletableMedia(m, content)).length
+
+  function openDeleteModal() {
+    setDeleteSelection([])
+    setDeleteModalOpen(true)
+  }
+
+  async function confirmDeleteSelected() {
+    const targets = deleteSelection.filter((url) => isDeletableMedia(url, content))
+    if (!targets.length) {
+      setMessage("Select at least one uploaded image that is not used on the home page.")
+      return
+    }
+
+    const results = await Promise.allSettled(
+      targets.map(async (target) => {
+        const res = await fetch("/api/cms/delete-upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ target }),
+        })
+        const body = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(body?.error || "Delete failed")
+        return target
+      })
+    )
+
+    const deleted = results
+      .filter((result): result is PromiseFulfilledResult<string> => result.status === "fulfilled")
+      .map((result) => result.value)
+    const failed = results.filter((result): result is PromiseRejectedResult => result.status === "rejected")
+
+    if (deleted.length) {
+      setMedia((m) => m.filter((item) => !deleted.includes(item)))
+    }
+
+    if (failed.length) {
+      setMessage(`Deleted ${deleted.length} image(s), but ${failed.length} failed.`)
+      return
+    }
+
+    setDeleteSelection([])
+    setDeleteModalOpen(false)
+    setMessage(deleted.length === 1 ? "Deleted 1 image from uploads" : `Deleted ${deleted.length} images from uploads`)
+  }
 
   return (
     <div className="py-6">
@@ -592,7 +711,16 @@ function HomeEditor({
 
         <aside className="border p-4 rounded">
           <h3 className="font-medium mb-2">Media library</h3>
-          <div className="mb-3 text-sm text-gray-600">This is your server files in `public/uploads`.</div>
+          <div className="mb-3 text-sm text-gray-600">This shows every image currently available to the CMS.</div>
+          <div className="mb-3 flex flex-wrap gap-2">
+            <label className="btn-engage cursor-pointer inline-flex">
+              Upload photo
+              <input className="hidden" type="file" accept="image/*" onChange={handleUploadToLibrary} />
+            </label>
+            <button type="button" className="border px-3 py-2" onClick={openDeleteModal}>
+              Delete images
+            </button>
+          </div>
           <input
             className="w-full border p-2 mb-3"
             placeholder="Search images…"
@@ -600,11 +728,18 @@ function HomeEditor({
             onChange={(e) => setMediaQuery(e.target.value)}
           />
           <div className="text-xs text-gray-600 mb-3">
-            To replace an image: click <span className="font-medium">Change</span> on any image slot, then pick from here (or upload in the popup).
+            Click an image after opening a <span className="font-medium">Change</span> popup. Use{" "}
+            <span className="font-medium">Delete images</span> to bulk remove uploaded files.
           </div>
           <div className="grid grid-cols-3 gap-2 max-h-96 overflow-auto">
-            {filteredMedia.map((m) => (
-              <button key={m} onClick={() => picker ? onPickFromLibrary(m) : null} className="border p-0" title={picker ? "Click to use this image" : "Open a Change popup first"}>
+            {libraryMedia.map((m) => (
+              <button
+                key={m}
+                onClick={() => (picker ? onPickFromLibrary(m) : null)}
+                className="border p-0"
+                title={picker ? "Click to use this image" : "Open a Change popup first"}
+                type="button"
+              >
                 <img src={m} alt="" className="w-full h-20 object-cover" />
               </button>
             ))}
@@ -621,8 +756,47 @@ function HomeEditor({
           onPick={onPickFromLibrary}
         />
       ) : null}
+
+      {deleteModalOpen ? (
+        <MediaDeleteModal
+          title="Media library"
+          media={libraryMedia}
+          selectedUrls={deleteSelection}
+          hasDeletableMedia={deletableMediaCount > 0}
+          canDelete={(url) => isDeletableMedia(url, content)}
+          onToggle={(url) => {
+            if (!isDeletableMedia(url, content)) return
+            setDeleteSelection((current) =>
+              current.includes(url) ? current.filter((item) => item !== url) : [...current, url]
+            )
+          }}
+          onClose={() => {
+            setDeleteModalOpen(false)
+            setDeleteSelection([])
+          }}
+          onDelete={confirmDeleteSelected}
+        />
+      ) : null}
     </div>
   )
+}
+
+function isUploadMedia(url: string) {
+  return url.startsWith("/uploads/")
+}
+
+function isMediaUsedOnHome(url: string, content: HomeContent) {
+  return (
+    url === content.hero.bgUrl ||
+    url === content.hero.logoUrl ||
+    url === content.insight.imageUrl ||
+    content.bringing.carouselUrls.includes(url) ||
+    content.engaging.staffGridUrls.includes(url)
+  )
+}
+
+function isDeletableMedia(url: string, content: HomeContent) {
+  return isUploadMedia(url) && !isMediaUsedOnHome(url, content)
 }
 
 function WorkEditor() {
@@ -1534,6 +1708,166 @@ function ImagePickerModal({
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function GalleryPickerModal({
+  title,
+  onClose,
+  onUpload,
+  media,
+  onPick,
+  selectedUrls,
+}: {
+  title: string
+  onClose: () => void
+  onUpload: (file: File) => Promise<void>
+  media: ImageURL[]
+  onPick: (url: string) => void
+  selectedUrls: string[]
+}) {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+      <div className="bg-white w-full max-w-5xl rounded shadow-lg border">
+        <div className="flex items-center justify-between p-4 border-b">
+          <div className="font-medium">Gallery uploads: {title}</div>
+          <button className="border px-3 py-1 text-sm" onClick={onClose} type="button">
+            Close
+          </button>
+        </div>
+
+        <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="border rounded p-4">
+            <div className="font-medium mb-2">Upload a photo</div>
+            <label className="btn-engage cursor-pointer inline-block">
+              Upload file
+              <input
+                className="hidden"
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  await onUpload(file)
+                  e.currentTarget.value = ""
+                }}
+              />
+            </label>
+            <div className="text-xs text-gray-600 mt-2">Only uploaded images can be added to the gallery. Files stay in `public/uploads`.</div>
+          </div>
+
+          <div className="border rounded p-4">
+            <div className="font-medium mb-2">Choose from uploads</div>
+            {media.length ? (
+              <div className="grid grid-cols-3 gap-2 max-h-80 overflow-auto">
+                {media.map((m) => {
+                  const active = selectedUrls.includes(m)
+                  return (
+                    <button
+                      key={m}
+                      onClick={() => onPick(m)}
+                      className={`border p-0 relative ${active ? "ring-2 ring-[#3AFCAD]" : ""}`}
+                      type="button"
+                      aria-pressed={active}
+                    >
+                      <img src={m} alt="" className="w-full h-20 object-cover" />
+                      <span className="absolute bottom-1 right-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white">
+                        {active ? "Added" : "Add"}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-600">No uploaded photos found yet.</div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MediaDeleteModal({
+  title,
+  media,
+  selectedUrls,
+  hasDeletableMedia,
+  canDelete,
+  onToggle,
+  onClose,
+  onDelete,
+}: {
+  title: string
+  media: ImageURL[]
+  selectedUrls: string[]
+  hasDeletableMedia: boolean
+  canDelete: (url: string) => boolean
+  onToggle: (url: string) => void
+  onClose: () => void
+  onDelete: () => void
+}) {
+  const selectedCount = selectedUrls.filter(canDelete).length
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+      <div className="bg-white w-full max-w-5xl rounded shadow-lg border max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between p-4 border-b">
+          <div>
+            <div className="font-medium">Delete media: {title}</div>
+            <div className="text-xs text-gray-600 mt-1">Select one or more uploaded images to remove from the library.</div>
+          </div>
+          <button className="border px-3 py-1 text-sm" onClick={onClose} type="button">
+            Cancel
+          </button>
+        </div>
+
+        <div className="p-4 overflow-auto">
+          {!hasDeletableMedia ? (
+            <div className="mb-4 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+              No deletable uploads are available right now. Images already used on the home page stay locked here.
+            </div>
+          ) : null}
+          {media.length ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {media.map((m) => {
+                const deletable = canDelete(m)
+                const active = selectedUrls.includes(m)
+                const reason = !isUploadMedia(m) ? "Not uploaded" : !deletable ? "Used on home page" : ""
+                return (
+                  <label
+                    key={m}
+                    className={`border rounded p-2 flex flex-col gap-2 ${deletable ? "cursor-pointer" : "opacity-60"}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <input type="checkbox" checked={active} onChange={() => onToggle(m)} disabled={!deletable} />
+                      <span className="text-xs font-medium">{active ? "Selected" : "Select"}</span>
+                    </div>
+                    <img src={m} alt="" className="w-full h-28 object-cover border" />
+                    <div className="text-[10px] text-gray-600 break-all">{m}</div>
+                    {reason ? <div className="text-[10px] text-amber-700">{reason}</div> : null}
+                  </label>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="text-sm text-gray-600">No images found.</div>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between gap-3 p-4 border-t">
+          <div className="text-sm text-gray-600">{selectedCount ? `${selectedCount} image(s) selected` : "No images selected yet"}</div>
+          <div className="flex items-center gap-2">
+            <button className="border px-3 py-2" onClick={onClose} type="button">
+              Cancel
+            </button>
+            <button className="btn-engage" onClick={onDelete} type="button" disabled={!selectedCount}>
+              Delete selected
+            </button>
           </div>
         </div>
       </div>
