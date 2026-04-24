@@ -6,6 +6,8 @@ import FloatingButtons from "@/components/floating-buttons"
 import { getPage } from "@/lib/cms-db"
 import { extractJobsContent, type JobsContent } from "@/lib/cms/jobs-content"
 
+export const dynamic = "force-dynamic"
+
 type Job = {
   title: string
   color: string

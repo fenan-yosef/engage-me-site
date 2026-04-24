@@ -7,6 +7,8 @@ import FloatingButtons from "@/components/floating-buttons"
 import { getPage } from "@/lib/cms-db"
 import { extractHomeContent } from "@/lib/cms/home-content"
 
+export const dynamic = "force-dynamic"
+
 export default async function Home() {
   const page = await getPage("home").catch(() => null)
   const content = extractHomeContent(page)

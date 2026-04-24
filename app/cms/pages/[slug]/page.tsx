@@ -33,6 +33,21 @@ type CmsPageData = {
   [key: string]: unknown
 }
 
+function SaveNotice({ message }: { message: string }) {
+  const isSuccess = message.toLowerCase().startsWith("saved")
+  const toneClasses = isSuccess
+    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+    : "border-rose-200 bg-rose-50 text-rose-700"
+  const dotClasses = isSuccess ? "bg-emerald-500" : "bg-rose-500"
+
+  return (
+    <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium ${toneClasses}`} role="status" aria-live="polite">
+      <span className={`h-2.5 w-2.5 rounded-full ${dotClasses}`} aria-hidden="true" />
+      <span>{message}</span>
+    </div>
+  )
+}
+
 const JOBS_FALLBACK: JobsContent = {
   heroImageUrl: "/her-sec.jpg",
   applyButtonLabel: "APPLY HERE",
@@ -237,7 +252,7 @@ export default function PageEditor() {
       body: JSON.stringify(data),
     })
     const body = await res.json().catch(() => ({}))
-    if (res.ok) setMessage("Saved")
+    if (res.ok) setMessage("Saved successfully")
     else setMessage(body?.error || "Save failed")
   }
 
@@ -401,7 +416,7 @@ export default function PageEditor() {
           <div className="flex gap-3">
             <button className="btn-engage" onClick={save}>Save</button>
             <button className="border px-3 py-2" onClick={() => setData({ title: "", images: [], blocks: [] })}>Reset</button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
+            {message && <SaveNotice message={message} />}
           </div>
         </div>
 
@@ -571,7 +586,7 @@ function HomeEditor({
             <button className="btn-engage" onClick={save}>
               Save
             </button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
+            {message && <SaveNotice message={message} />}
           </div>
         </div>
 
@@ -820,7 +835,7 @@ function InsightEditor() {
             <button className="btn-engage" onClick={save}>
               Save
             </button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
+            {message && <SaveNotice message={message} />}
           </div>
         </div>
 
@@ -993,7 +1008,7 @@ function PeopleEditor() {
             <button className="btn-engage" onClick={save}>
               Save
             </button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
+            {message && <SaveNotice message={message} />}
           </div>
         </div>
 
@@ -1207,7 +1222,7 @@ function JobsEditor() {
             <button className="btn-engage" onClick={save}>
               Save
             </button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
+            {message && <SaveNotice message={message} />}
           </div>
         </div>
 
@@ -1337,7 +1352,7 @@ function ContactEditor() {
             <button className="btn-engage" onClick={save}>
               Save
             </button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
+            {message && <SaveNotice message={message} />}
           </div>
         </div>
 

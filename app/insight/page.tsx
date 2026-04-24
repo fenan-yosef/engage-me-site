@@ -5,6 +5,8 @@ import Image from "next/image"
 import { getPage } from "@/lib/cms-db"
 import { extractInsightContent } from "@/lib/cms/insight-content"
 
+export const dynamic = "force-dynamic"
+
 export default async function InsightPage() {
   const page = await getPage("insight").catch(() => null)
   const content = extractInsightContent(page)

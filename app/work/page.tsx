@@ -5,6 +5,8 @@ import Link from "next/link"
 import { getPage } from "@/lib/cms-db"
 import { extractWorkContent, type WorkItem } from "@/lib/cms/work-content"
 
+export const dynamic = "force-dynamic"
+
 const WORK_ITEMS: WorkItem[] = [
   { title: "Airport activations", href: "/work/airport-activations_work" },
   { title: "Brand activations", href: "/work/brand-activations_work" },
