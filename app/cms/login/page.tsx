@@ -33,11 +33,11 @@ export default function LoginPage() {
             <img src="/engage-me-icons-19.png" alt="Engage Me" />
           </div>
 
-          <div className="engageME-adminLogin-text">Welcome to Engage Me CMS</div>
+          <div className="engageME-adminLogin-text">Welcome to Engage Me Insight</div>
 
           <div className="engageME-adminLogin-text-parent">
             <form onSubmit={onSubmit}>
-              <div className="engageME-adminLogin-text-cont">Manager Login</div>
+              <div className="engageME-adminLogin-text-cont">CMS Login</div>
 
               <div className="engageME-adminLogin-inp">
                 <span aria-hidden="true">

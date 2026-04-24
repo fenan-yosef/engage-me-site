@@ -531,17 +531,22 @@
 }
 
 .engageME-adminLogin {
+  width: 364px;
+  margin: 0 auto;
   text-align: center;
   transform: translateY(30vh);
 }
 
 .engageME-adminLogin-logo {
-  text-align: center;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .engageME-adminLogin-logo img {
   width: 140px;
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .engageME-adminLogin-text {
