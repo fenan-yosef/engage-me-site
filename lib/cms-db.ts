@@ -210,3 +210,101 @@ export async function savePage(slugRaw: string, data: CmsPageData): Promise<void
     conn.release()
   }
 }
+
+export type CmsWorkItem = {
+  slug: string
+  title: string
+  bannerUrl: string | null
+  description: string | null
+  contentImages: string[] | null
+}
+
+interface CmsWorkItemRow extends RowDataPacket {
+  id: number
+  slug: string
+  title: string
+  banner_url: string | null
+  description: string | null
+  content_images: string | null
+}
+
+function parseContentImages(val: unknown): (string | null)[] | null {
+  if (!val) return null
+  if (Array.isArray(val)) return val.map((v) => typeof v === "string" ? v : null)
+  if (typeof val === "string") {
+    try {
+      const parsed = JSON.parse(val)
+      if (Array.isArray(parsed)) {
+        return parsed.map((v) => typeof v === "string" ? v : null)
+      }
+      return null
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+export async function getWorkItem(slugRaw: string): Promise<CmsWorkItem | null> {
+  const slug = coerceSlug(slugRaw)
+  const pool = getDbPool()
+  const [rows] = await pool.query<CmsWorkItemRow[]>("SELECT * FROM cms_work_items WHERE slug = ? LIMIT 1", [slug])
+  const row = rows[0]
+  if (!row) return null
+  return {
+    slug: row.slug,
+    title: row.title,
+    bannerUrl: row.banner_url,
+    description: row.description,
+    contentImages: parseContentImages(row.content_images),
+  }
+}
+
+export async function getAllWorkItems(): Promise<CmsWorkItem[]> {
+  const pool = getDbPool()
+  const [rows] = await pool.query<CmsWorkItemRow[]>("SELECT * FROM cms_work_items ORDER BY title ASC")
+  return rows.map((row) => ({
+    slug: row.slug,
+    title: row.title,
+    bannerUrl: row.banner_url,
+    description: row.description,
+    contentImages: parseContentImages(row.content_images),
+  }))
+}
+
+export async function saveWorkItem(item: CmsWorkItem): Promise<void> {
+  const slug = coerceSlug(item.slug)
+  const pool = getDbPool()
+  const contentImages = item.contentImages ? JSON.stringify(item.contentImages) : null
+
+  const conn = await pool.getConnection()
+  try {
+    await conn.beginTransaction()
+
+    const [existingRows] = await conn.query<CmsIdRow[]>("SELECT id FROM cms_work_items WHERE slug = ? LIMIT 1", [slug])
+    if (existingRows[0]?.id) {
+      await conn.query(
+        "UPDATE cms_work_items SET title = ?, banner_url = ?, description = ?, content_images = ?, updated_at = CURRENT_TIMESTAMP WHERE slug = ?",
+        [item.title, item.bannerUrl, item.description, contentImages, slug]
+      )
+    } else {
+      await conn.query(
+        "INSERT INTO cms_work_items (slug, title, banner_url, description, content_images) VALUES (?, ?, ?, ?, ?)",
+        [slug, item.title, item.bannerUrl, item.description, contentImages]
+      )
+    }
+
+    await conn.commit()
+  } catch (err) {
+    await conn.rollback()
+    throw err
+  } finally {
+    conn.release()
+  }
+}
+
+export async function deleteWorkItem(slugRaw: string): Promise<void> {
+  const slug = coerceSlug(slugRaw)
+  const pool = getDbPool()
+  await pool.query("DELETE FROM cms_work_items WHERE slug = ?", [slug])
+}

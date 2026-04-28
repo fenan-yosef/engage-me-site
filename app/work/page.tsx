@@ -2,37 +2,45 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import FloatingButtons from "@/components/floating-buttons"
 import Link from "next/link"
-import { getPage } from "@/lib/cms-db"
+import { getPage, getAllWorkItems } from "@/lib/cms-db"
 import { extractWorkContent, type WorkItem } from "@/lib/cms/work-content"
 
 export const dynamic = "force-dynamic"
 
-const WORK_ITEMS: WorkItem[] = [
-  { title: "Airport activations", href: "/work/airport-activations_work" },
-  { title: "Brand activations", href: "/work/brand-activations_work" },
-  { title: "Corporate events", href: "/work/corporate-events_work" },
-  { title: "Entertainers", href: "/work/entertainers_work" },
-  { title: "Event staffing", href: "/work/event-staffing_work" },
-  { title: "Exhibitions", href: "/work/exhibitions_work" },
-  { title: "F & B staffing", href: "/work/f-b-staffing_work" },
-  { title: "Hosts & hostesses", href: "/work/hosts-hostesses_work" },
-  { title: "In-store promoters", href: "/work/in-store-promoters_work" },
-  { title: "Lead generation", href: "/work/lead-generation_work" },
-  { title: "Registration staff", href: "/work/registration-staff_work" },
-  { title: "Retail support", href: "/work/retail-support_work" },
-  { title: "Roadshows", href: "/work/roadshows_work" },
-  { title: "Mall activations", href: "/work/mall-activations_work" },
-  { title: "Models", href: "/work/models_work" },
-  { title: "Social media content", href: "/work/social-media-content_work" },
-  { title: "Sporting events", href: "/work/sporting-events_work" },
-  { title: "Trade events", href: "/work/trade-events_work" },
-  { title: "Themed promoters", href: "/work/themed-promoters_work" },
-  { title: "Virtual promoters", href: "/work/virtual-promoters_work" }
+const DEFAULT_WORK_ITEMS: WorkItem[] = [
+  { title: "Airport activations", href: "/work/airport-activations" },
+  { title: "Brand activations", href: "/work/brand-activations" },
+  { title: "Corporate events", href: "/work/corporate-events" },
+  { title: "Entertainers", href: "/work/entertainers" },
+  { title: "Event staffing", href: "/work/event-staffing" },
+  { title: "Exhibitions", href: "/work/exhibitions" },
+  { title: "F & B staffing", href: "/work/f-b-staffing" },
+  { title: "Hosts & hostesses", href: "/work/hosts-hostesses" },
+  { title: "In-store promoters", href: "/work/in-store-promoters" },
+  { title: "Lead generation", href: "/work/lead-generation" },
+  { title: "Registration staff", href: "/work/registration-staff" },
+  { title: "Retail support", href: "/work/retail-support" },
+  { title: "Roadshows", href: "/work/roadshows" },
+  { title: "Mall activations", href: "/work/mall-activations" },
+  { title: "Models", href: "/work/models" },
+  { title: "Social media content", href: "/work/social-media-content" },
+  { title: "Sporting events", href: "/work/sporting-events" },
+  { title: "Trade events", href: "/work/trade-events" },
+  { title: "Themed promoters", href: "/work/themed-promoters" },
+  { title: "Virtual promoters", href: "/work/virtual-promoters" }
 ]
 
 export default async function WorkPage() {
   const page = await getPage("work").catch(() => null)
-  const content = extractWorkContent(page, WORK_ITEMS)
+  const content = extractWorkContent(page, DEFAULT_WORK_ITEMS)
+  
+  const dbWorkItems = await getAllWorkItems().catch(() => [])
+  const workItemsFromDb = dbWorkItems.map((item) => ({
+    title: item.title,
+    href: `/work/${item.slug}`
+  }))
+
+  const displayItems = workItemsFromDb.length > 0 ? workItemsFromDb : content.items
 
   return (
     <main className="min-h-screen bg-white">
@@ -57,7 +65,7 @@ export default async function WorkPage() {
           <p className="text-gray-300 text-lg mb-8">{content.intro}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-12">
-            {content.items.map((item) => (
+            {displayItems.map((item) => (
               <div key={item.href}>
                 <Link href={item.href} className="block text-white no-underline">
                   <span className="block text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>

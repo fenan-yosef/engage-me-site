@@ -799,6 +799,14 @@ function isDeletableMedia(url: string, content: HomeContent) {
   return isUploadMedia(url) && !isMediaUsedOnHome(url, content)
 }
 
+type CmsWorkItem = {
+  slug: string
+  title: string
+  bannerUrl: string | null
+  description: string | null
+  contentImages: string[] | null
+}
+
 function WorkEditor() {
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState<string | null>(null)
@@ -826,6 +834,11 @@ function WorkEditor() {
       { title: "Virtual promoters", href: "/work/virtual-promoters_work" },
     ])
   )
+  const [workItems, setWorkItems] = useState<CmsWorkItem[]>([])
+  const [media, setMedia] = useState<ImageURL[]>([])
+  const [editingItem, setEditingItem] = useState<CmsWorkItem | null>(null)
+  const [itemMessage, setItemMessage] = useState<string | null>(null)
+  const [picker, setPicker] = useState<null | { field: "bannerUrl" | "leftImage" | "rightImage"; title: string }>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -834,6 +847,13 @@ function WorkEditor() {
         const pageResp = await fetch(`/api/cms/pages/work`)
         const page = pageResp.status === 404 ? null : await pageResp.json().catch(() => null)
         setContent((prev) => extractWorkContent(page, prev.items))
+        const itemsResp = await fetch(`/api/cms/work-items`).catch(() => null)
+        if (itemsResp?.ok) {
+          const items = await itemsResp.json().catch(() => [])
+          setWorkItems(items)
+        }
+        const imgs = await fetch(`/api/cms/list-uploads`).then((r) => r.json()).catch(() => [])
+        setMedia(Array.isArray(imgs) ? imgs : [])
       } finally {
         setLoading(false)
       }
@@ -851,6 +871,74 @@ function WorkEditor() {
     const body = await res.json().catch(() => ({}))
     if (res.ok) setMessage("Saved")
     else setMessage(body?.error || "Save failed")
+  }
+
+  async function saveWorkItem(item: CmsWorkItem) {
+    setItemMessage(null)
+    const res = await fetch(`/api/cms/work-items/${item.slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (res.ok) {
+      setItemMessage("Work item saved")
+      setWorkItems((prev) => {
+        const idx = prev.findIndex((w) => w.slug === item.slug)
+        if (idx >= 0) {
+          const updated = [...prev]
+          updated[idx] = item
+          return updated
+        }
+        return [...prev, item]
+      })
+      setEditingItem(null)
+    } else {
+      setItemMessage(body?.error || "Save failed")
+    }
+  }
+
+  async function deleteWorkItem(slug: string) {
+    setItemMessage(null)
+    const res = await fetch(`/api/cms/work-items/${slug}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+    if (res.ok) {
+      setItemMessage("Work item deleted")
+      setWorkItems((prev) => prev.filter((w) => w.slug !== slug))
+    } else {
+      const body = await res.json().catch(() => ({}))
+      setItemMessage(body?.error || "Delete failed")
+    }
+  }
+
+  function startNewItem() {
+    setEditingItem({
+      slug: "",
+      title: "",
+      bannerUrl: null,
+      description: null,
+      contentImages: null,
+    })
+  }
+
+  function selectImage(field: "bannerUrl", url: string) {
+    if (!editingItem) return
+    setEditingItem({ ...editingItem, [field]: url })
+  }
+
+  function addContentImage(url: string) {
+    if (!editingItem) return
+    const current = editingItem.contentImages || []
+    if (current.includes(url)) return
+    setEditingItem({ ...editingItem, contentImages: [...current, url] })
+  }
+
+  function removeContentImage(idx: number) {
+    if (!editingItem) return
+    const current = editingItem.contentImages || []
+    setEditingItem({ ...editingItem, contentImages: current.filter((_, i) => i !== idx) })
   }
 
   if (loading) return <div>Loading…</div>
@@ -872,28 +960,37 @@ function WorkEditor() {
           <TextareaRow label="Intro" value={content.intro} onChange={(v) => setContent((p) => ({ ...p, intro: v }))} />
         </Section>
 
-        <Section title="Work items">
-          <div className="text-sm text-gray-600">Edit only the labels shown on the /work page. Links are fixed by the site.</div>
-          <div className="space-y-3">
-            {content.items.map((it, idx) => (
-              <div key={idx} className="border rounded p-3">
-                <div>
-                  <label className="block mb-2">Title {idx + 1}</label>
-                  <input
-                    className="w-full border p-2"
-                    value={it.title}
-                    onChange={(e) =>
-                      setContent((p) => {
-                        const items = [...p.items]
-                        items[idx] = { ...items[idx], title: e.target.value }
-                        return { ...p, items }
-                      })
-                    }
-                  />
+        <Section title="Work Item Details">
+          <div className="text-sm text-gray-600 mb-4">Manage individual work detail pages. Each item creates a page at /work/[slug]</div>
+          <div className="flex gap-2 mb-4">
+            <button className="btn-engage" onClick={startNewItem}>
+              Add New Work Item
+            </button>
+          </div>
+          {itemMessage && (
+            <div className={`mb-4 p-2 rounded ${itemMessage.includes("deleted") ? "bg-rose-100 text-rose-700" : "bg-emerald-100 text-emerald-700"}`}>
+              {itemMessage}
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {workItems.map((item) => (
+              <div key={item.slug} className="border rounded p-4">
+                <div className="font-medium mb-2">{item.title}</div>
+                <div className="text-xs text-gray-500 mb-3">Slug: {item.slug}</div>
+                <div className="flex gap-2">
+                  <button className="border px-2 py-1 text-sm" onClick={() => setEditingItem(item)}>
+                    Edit
+                  </button>
+                  <button className="border px-2 py-1 text-sm text-rose-600" onClick={() => deleteWorkItem(item.slug)}>
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
           </div>
+          {workItems.length === 0 && (
+            <div className="text-gray-500 text-sm">No work items yet. Click "Add New Work Item" to create one.</div>
+          )}
         </Section>
 
         <div className="flex gap-3 items-center">
@@ -903,6 +1000,212 @@ function WorkEditor() {
           {message && <div className="text-sm text-gray-700">{message}</div>}
         </div>
       </div>
+
+      {editingItem && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold">
+                {editingItem.slug ? `Edit: ${editingItem.title}` : "New Work Item"}
+              </h3>
+              <button className="text-gray-500 hover:text-gray-700" onClick={() => setEditingItem(null)}>
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-1 font-medium">Slug (URL part)</label>
+                <input
+                  className="w-full border p-2"
+                  value={editingItem.slug}
+                  onChange={(e) => setEditingItem({ ...editingItem, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-") })}
+                  placeholder="airport-activations"
+                  disabled={!!workItems.find((w) => w.slug === editingItem.slug && w.slug !== editingItem.slug)}
+                />
+                <div className="text-xs text-gray-500">Page URL: /work/{editingItem.slug || "slug"}</div>
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Title</label>
+                <input
+                  className="w-full border p-2"
+                  value={editingItem.title}
+                  onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                  placeholder="Airport Activations"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Hero Banner Image (shown at top of page)</label>
+                <div className="text-xs text-gray-500 mb-2">Full-width banner image for the work detail page</div>
+                {editingItem.bannerUrl ? (
+                  <div className="relative mb-2 w-full max-w-md">
+                    <img src={editingItem.bannerUrl} alt="Banner" className="h-40 w-full object-cover rounded border" />
+                    <button
+                      className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
+                      onClick={() => setEditingItem({ ...editingItem, bannerUrl: null })}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-full max-w-md h-40 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 mb-2">
+                    No banner selected
+                  </div>
+                )}
+                <button
+                  className="btn-engage text-sm"
+                  onClick={() => setPicker({ field: "bannerUrl", title: "Select Hero Banner Image" })}
+                >
+                  Add Banner Image
+                </button>
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Description Upper (right side, first paragraph)</label>
+                <textarea
+                  className="w-full border p-2"
+                  rows={3}
+                  value={editingItem.description ? editingItem.description.split("\n")[0] : ""}
+                  onChange={(e) => {
+                    const lower = editingItem.description ? editingItem.description.split("\n").slice(1).join("\n") : ""
+                    setEditingItem({ ...editingItem, description: e.target.value + (lower ? "\n" + lower : "") })
+                  }}
+                  placeholder="First paragraph (right side, upper)"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Description Lower (left side, second paragraph)</label>
+                <textarea
+                  className="w-full border p-2"
+                  rows={3}
+                  value={editingItem.description ? editingItem.description.split("\n").slice(1).join("\n") : ""}
+                  onChange={(e) => {
+                    const upper = editingItem.description ? editingItem.description.split("\n")[0] : ""
+                    setEditingItem({ ...editingItem, description: upper + (e.target.value ? "\n" + e.target.value : "") })
+                  }}
+                  placeholder="Second paragraph (left side, lower)"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Left Side Images (carousel - multiple images)</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {(editingItem.contentImages || []).slice(0, 3).map((url, idx) => (
+                    <div key={idx} className="relative">
+                      <img src={url} alt={`Left ${idx + 1}`} className="w-24 h-20 object-cover rounded border" />
+                      <button
+                        className="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        onClick={() => {
+                          const current = editingItem.contentImages || []
+                          const rightImg = current[3]
+                          const leftOnly = current.slice(0,3).filter((item, i) => i !== idx)
+                          const final: string[] = [...leftOnly]
+                          if (rightImg) final[3] = rightImg
+                          setEditingItem({ ...editingItem, contentImages: final })
+                        }}
+                      >
+                        ✕
+                      </button>
+                      <div className="absolute bottom-1 left-1 bg-cyan-500 text-white text-xs px-1 rounded">
+                        {idx + 1}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {(editingItem.contentImages?.length || 0) < 3 && (
+                  <button
+                    className="btn-engage text-sm"
+                    onClick={() => setPicker({ field: "leftImage", title: "Select Left Side Image" })}
+                  >
+                    Add Left Image
+                  </button>
+                )}
+                <div className="text-xs text-gray-500 mt-1">
+                  {(editingItem.contentImages?.length || 0) < 3 
+                    ? `Can add ${3 - (editingItem.contentImages?.length || 0)} more image(s) for carousel`
+                    : "Carousel full (3 images)"}
+                </div>
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Right Side Image (shown on right, lower section)</label>
+                {editingItem.contentImages && editingItem.contentImages[3] ? (
+                  <div className="relative mb-2 w-full max-w-md">
+                    <img src={editingItem.contentImages[3]} alt="Right side" className="h-40 w-full object-cover rounded border" />
+                    <button
+                      className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
+                      onClick={() => {
+                          const imgs = editingItem.contentImages || []
+                          const leftImgs = imgs.slice(0, 3).filter(Boolean)
+                          setEditingItem({ ...editingItem, contentImages: leftImgs as string[] })
+                        }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-full max-w-md h-40 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 mb-2">
+                    No image selected
+                  </div>
+                )}
+                <button
+                  className="btn-engage text-sm"
+                  onClick={() => setPicker({ field: "rightImage", title: "Select Right Side Image" })}
+                >
+                  Add Right Image
+                </button>
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <button className="btn-engage" onClick={() => saveWorkItem(editingItem)}>
+                  Save Work Item
+                </button>
+                <button className="border px-3 py-2" onClick={() => setEditingItem(null)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {picker && (
+        <ImagePickerModal
+          title={picker.title}
+          onClose={() => setPicker(null)}
+          onUpload={() => {}}
+          media={media}
+          onPick={(url) => {
+            if (picker.field === "bannerUrl") {
+              selectImage("bannerUrl", url)
+            } else if (picker.field === "leftImage") {
+              if (!editingItem) return
+              const current = editingItem.contentImages || []
+              const leftCount = current.filter((_, i) => i < 3).length
+              if (leftCount < 3 && !current.slice(0, 3).includes(url)) {
+                const newImgs = [...current]
+                for (let i = 0; i < 3; i++) {
+                  if (!newImgs[i]) {
+                    newImgs[i] = url
+                    break
+                  }
+                }
+                setEditingItem({ ...editingItem, contentImages: newImgs as string[] })
+              }
+            } else if (picker.field === "rightImage") {
+              if (!editingItem) return
+              const current = editingItem.contentImages || []
+              const withRight: string[] = [...current]
+              withRight[3] = url
+              setEditingItem({ ...editingItem, contentImages: withRight })
+            }
+            setPicker(null)
+          }}
+        />
+      )}
     </div>
   )
 }
