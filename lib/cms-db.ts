@@ -216,7 +216,7 @@ export type CmsWorkItem = {
   title: string
   bannerUrl: string | null
   description: string | null
-  contentImages: string[] | null
+  contentImages: (string | null)[] | null
 }
 
 interface CmsWorkItemRow extends RowDataPacket {
