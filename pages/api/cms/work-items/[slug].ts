@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       
       const contentImages: (string | null | undefined)[] = item.contentImages || []
       
-      const final: string[] = [null, null, null, null]
+      const final: (string | null)[] = [null, null, null, null]
       for (let i = 0; i < 3; i++) {
         if (contentImages[i]) final[i] = contentImages[i] as string
       }
@@ -42,7 +42,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         title: item.title,
         bannerUrl: item.bannerUrl || null,
         description: item.description || null,
-        contentImages: final,
+        contentImages: final as string[],
       })
       return res.status(200).json({ ok: true })
     } catch (e: unknown) {
