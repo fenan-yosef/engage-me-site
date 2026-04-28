@@ -28,6 +28,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (!item?.title) {
         return res.status(400).json({ error: "Missing title" })
       }
+      if (!slugStr || !/^[a-z0-9][a-z0-9_-]*$/.test(slugStr)) {
+        return res.status(400).json({ error: "Invalid slug - use only lowercase letters, numbers, and hyphens" })
+      }
       
       const contentImages: (string | null | undefined)[] = item.contentImages || []
       
