@@ -899,6 +899,9 @@ function WorkEditor() {
   }
 
   async function deleteWorkItem(slug: string) {
+    if (!confirm("Are you sure you want to delete this work item? This action cannot be undone.")) {
+      return
+    }
     setItemMessage(null)
     const res = await fetch(`/api/cms/work-items/${slug}`, {
       method: "DELETE",
