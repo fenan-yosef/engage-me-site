@@ -928,19 +928,6 @@ function WorkEditor() {
     setEditingItem({ ...editingItem, [field]: url })
   }
 
-  function addContentImage(url: string) {
-    if (!editingItem) return
-    const current = editingItem.contentImages || []
-    if (current.includes(url)) return
-    setEditingItem({ ...editingItem, contentImages: [...current, url] })
-  }
-
-  function removeContentImage(idx: number) {
-    if (!editingItem) return
-    const current = editingItem.contentImages || []
-    setEditingItem({ ...editingItem, contentImages: current.filter((_, i) => i !== idx) })
-  }
-
   if (loading) return <div>Loading…</div>
 
   return (
@@ -989,7 +976,7 @@ function WorkEditor() {
             ))}
           </div>
           {workItems.length === 0 && (
-            <div className="text-gray-500 text-sm">No work items yet. Click "Add New Work Item" to create one.</div>
+            <div className="text-gray-500 text-sm">No work items yet. Click &quot;Add New Work Item&quot; to create one.</div>
           )}
         </Section>
 

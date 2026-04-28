@@ -15,14 +15,12 @@ type WorkItemData = {
 }
 
 export default function WorkDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const [slug, setSlug] = useState<string>("")
   const [data, setData] = useState<WorkItemData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>("")
 
   useEffect(() => {
     params.then((p) => {
-      setSlug(p.slug)
       loadWorkItem(p.slug)
     })
   }, [params])
@@ -42,7 +40,7 @@ export default function WorkDetailPage({ params }: { params: Promise<{ slug: str
       }
       const itemData = await res.json()
       setData(itemData)
-    } catch (e) {
+    } catch {
       setError("Failed to load work item")
     }
     setLoading(false)
