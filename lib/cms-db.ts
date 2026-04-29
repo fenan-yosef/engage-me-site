@@ -1,4 +1,5 @@
 import { type ResultSetHeader, type RowDataPacket } from "mysql2/promise"
+import { unstable_noStore as noStore } from "next/cache"
 import { getDbPool } from "./db"
 
 export type CmsBlockType = "heading" | "text" | "image" | "gallery"
@@ -80,6 +81,7 @@ function coerceSlug(slug: string) {
 }
 
 export async function getPage(slugRaw: string): Promise<CmsPageData | null> {
+  noStore()
   const slug = coerceSlug(slugRaw)
   const pool = getDbPool()
 
@@ -246,6 +248,7 @@ function parseContentImages(val: unknown): (string | null)[] | null {
 }
 
 export async function getWorkItem(slugRaw: string): Promise<CmsWorkItem | null> {
+  noStore()
   const slug = coerceSlug(slugRaw)
   const pool = getDbPool()
   const [rows] = await pool.query<CmsWorkItemRow[]>("SELECT * FROM cms_work_items WHERE slug = ? LIMIT 1", [slug])
@@ -261,6 +264,7 @@ export async function getWorkItem(slugRaw: string): Promise<CmsWorkItem | null> 
 }
 
 export async function getAllWorkItems(): Promise<CmsWorkItem[]> {
+  noStore()
   const pool = getDbPool()
   const [rows] = await pool.query<CmsWorkItemRow[]>("SELECT * FROM cms_work_items ORDER BY title ASC")
   return rows.map((row) => ({
