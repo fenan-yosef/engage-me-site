@@ -111,6 +111,7 @@ export default function BringingBrandsToLife({
                           src={image.src || "/placeholder.svg"}
                           alt={image.alt}
                           fill
+                          unoptimized
                           className="w-full h-full object-cover"
                         />
                       </div>

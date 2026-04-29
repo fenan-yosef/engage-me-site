@@ -27,7 +27,7 @@ export default function ContactClient({ content }: { content: ContactContent }) 
       <Header />
 
       <div className="relative w-full h-[calc(100vh-5.5rem)] min-h-[440px] bg-gray-200 overflow-hidden">
-        <Image src={content.heroImageUrl} alt="Engage Me contact" fill priority sizes="100vw" className="object-cover" />
+        <Image src={content.heroImageUrl} alt="Engage Me contact" fill priority unoptimized sizes="100vw" className="object-cover" />
       </div>
 
       <section id="contact" className="bg-white py-16 px-6">

@@ -143,6 +143,7 @@ export default async function JobsPage() {
           src={content.heroImageUrl}
           alt="Engage Me jobs board"
           fill
+          unoptimized
           priority
           sizes="100vw"
           className="object-cover"

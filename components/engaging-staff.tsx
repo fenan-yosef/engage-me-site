@@ -45,6 +45,7 @@ export default function EngagingStaff({
                     src={src || "/placeholder.svg"}
                     alt={`Staff ${i + 1}`}
                     fill
+                    unoptimized
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -120,6 +121,7 @@ export default function EngagingStaff({
                 src={insightImageUrl}
                 alt="Driving Results"
                 fill
+                unoptimized
                 className="w-full h-full object-cover"
               />
             </div>

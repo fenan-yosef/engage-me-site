@@ -42,6 +42,7 @@ export default async function InsightPage() {
                   src={content.intro.imageUrl}
                   alt="Insight reporting"
                   fill
+                  unoptimized
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="w-full h-full object-cover"
                   priority
@@ -62,6 +63,7 @@ export default async function InsightPage() {
                   src={content.incentives.imageUrl}
                   alt="Staff incentives"
                   fill
+                  unoptimized
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="w-full h-full object-cover"
                 />

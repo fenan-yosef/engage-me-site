@@ -96,7 +96,7 @@ export default function PeopleClient({ initial }: { initial: PeopleContent }) {
                           className="carousel-item content_side_img relative w-full h-full flex-shrink-0"
                           style={{ width: `${100 / 6}%` }}
                         >
-                          <Image src={c.a2z.carouselUrls[idx] || "/placeholder.svg"} alt={`A to Z ${idx + 1}`} fill className="w-full h-full object-cover" />
+                          <Image src={c.a2z.carouselUrls[idx] || "/placeholder.svg"} alt={`A to Z ${idx + 1}`} fill unoptimized className="w-full h-full object-cover" />
                         </div>
                       ))}
                     </div>
@@ -142,6 +142,7 @@ export default function PeopleClient({ initial }: { initial: PeopleContent }) {
                       src={c.founders.f1.imageUrl}
                       alt="Founder portrait"
                       fill
+                      unoptimized
                       sizes="(max-width: 768px) 100vw, 25vw"
                       className="object-cover grayscale"
                     />
@@ -165,6 +166,7 @@ export default function PeopleClient({ initial }: { initial: PeopleContent }) {
                       src={c.founders.f2.imageUrl}
                       alt="Founder portrait"
                       fill
+                      unoptimized
                       sizes="(max-width: 768px) 100vw, 25vw"
                       className="object-cover grayscale"
                     />
@@ -213,7 +215,7 @@ export default function PeopleClient({ initial }: { initial: PeopleContent }) {
 
             <div className="content_side_img relative flex items-center justify-center w-full">
               <div className="relative w-full h-[22rem] sm:h-[26rem] md:h-[30rem] lg:h-[34rem] bg-gray-200 overflow-hidden">
-                <Image src={c.join.imageUrl} alt="Engage Me team" fill sizes="(max-width: 768px) 100vw, 50vw" className="w-full h-full object-cover" />
+                <Image src={c.join.imageUrl} alt="Engage Me team" fill unoptimized sizes="(max-width: 768px) 100vw, 50vw" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
