@@ -2107,7 +2107,7 @@ function ImagePickerModal({
 }: {
   title: string
   onClose: () => void
-  onUpload: (file: File) => Promise<string | undefined>
+  onUpload: (file: File) => Promise<string | void>
   uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
@@ -2147,10 +2147,10 @@ function ImagePickerModal({
                   if (!file) return
                   try {
                     const url = await onUpload(file)
-                    if (url) {
+                    if (typeof url === "string" && url) {
                       onPick(url)
-                      closeModal()
                     }
+                    closeModal()
                   } finally {
                     input.value = ""
                   }
@@ -2189,7 +2189,7 @@ function GalleryPickerModal({
 }: {
   title: string
   onClose: () => void
-  onUpload: (file: File) => Promise<string | undefined>
+  onUpload: (file: File) => Promise<string | void>
   uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
@@ -2230,10 +2230,10 @@ function GalleryPickerModal({
                   if (!file) return
                   try {
                     const url = await onUpload(file)
-                    if (url) {
+                    if (typeof url === "string" && url) {
                       onPick(url)
-                      closeModal()
                     }
+                    closeModal()
                   } finally {
                     input.value = ""
                   }
