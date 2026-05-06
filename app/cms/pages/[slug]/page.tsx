@@ -545,12 +545,13 @@ function HomeEditor({
   }
 
   async function handleUploadToLibrary(e: React.ChangeEvent<HTMLInputElement>) {
+    const input = e.currentTarget
     const file = e.target.files?.[0]
     if (!file) return
     const url = await uploadFile(file)
     if (!url) return
     setMedia((m) => [url, ...m])
-    e.currentTarget.value = ""
+    input.value = ""
   }
 
   function onPickFromLibrary(url: string) {
@@ -2162,10 +2163,11 @@ function GalleryPickerModal({
                 type="file"
                 accept="image/*"
                 onChange={async (e) => {
+                  const input = e.currentTarget
                   const file = e.target.files?.[0]
                   if (!file) return
                   await onUpload(file)
-                  e.currentTarget.value = ""
+                  input.value = ""
                 }}
               />
             </label>
