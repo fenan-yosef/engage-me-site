@@ -2136,12 +2136,21 @@ function ImagePickerModal({
   media: ImageURL[]
   onPick: (url: string) => void
 }) {
+  const [dismissed, setDismissed] = useState(false)
+
+  function closeModal() {
+    setDismissed(true)
+    onClose()
+  }
+
+  if (dismissed) return null
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-white w-full max-w-4xl rounded shadow-lg border">
-          <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4 border-b">
           <div className="font-medium">Change image: {title}</div>
-          <button className="border px-3 py-1 text-sm disabled:opacity-50" onClick={onClose} type="button" disabled={uploading}>
+          <button className="border px-3 py-1 text-sm disabled:opacity-50" onClick={closeModal} type="button" disabled={uploading}>
             Close
           </button>
         </div>
@@ -2162,7 +2171,7 @@ function ImagePickerModal({
                   if (!file) return
                   try {
                     await onUpload(file)
-                    onClose()
+                    closeModal()
                   } finally {
                     input.value = ""
                   }
@@ -2207,12 +2216,21 @@ function GalleryPickerModal({
   onPick: (url: string) => void
   selectedUrls: string[]
 }) {
+  const [dismissed, setDismissed] = useState(false)
+
+  function closeModal() {
+    setDismissed(true)
+    onClose()
+  }
+
+  if (dismissed) return null
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-white w-full max-w-5xl rounded shadow-lg border">
         <div className="flex items-center justify-between p-4 border-b">
           <div className="font-medium">Gallery uploads: {title}</div>
-          <button className="border px-3 py-1 text-sm disabled:opacity-50" onClick={onClose} type="button" disabled={uploading}>
+          <button className="border px-3 py-1 text-sm disabled:opacity-50" onClick={closeModal} type="button" disabled={uploading}>
             Close
           </button>
         </div>
@@ -2233,7 +2251,7 @@ function GalleryPickerModal({
                   if (!file) return
                   try {
                     await onUpload(file)
-                    onClose()
+                    closeModal()
                   } finally {
                     input.value = ""
                   }
