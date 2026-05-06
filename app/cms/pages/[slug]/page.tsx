@@ -201,6 +201,7 @@ export default function PageEditor() {
   const [message, setMessage] = useState<string | null>(null)
   const [media, setMedia] = useState<ImageURL[]>([])
   const [galleryPicker, setGalleryPicker] = useState<GalleryPickerState | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     if (!slug) return
@@ -272,10 +273,15 @@ export default function PageEditor() {
   async function handleUploadAndInsert(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    const url = await uploadFile(file)
-    if (url) {
-      setData((prev) => ({ ...prev, images: [...(prev.images || []), url] }))
-      setMedia((m) => [url, ...m])
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (url) {
+        setData((prev) => ({ ...prev, images: [...(prev.images || []), url] }))
+        setMedia((m) => [url, ...m])
+      }
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -347,10 +353,15 @@ export default function PageEditor() {
   }
 
   async function uploadGalleryImage(file: File) {
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    if (galleryPicker) addGalleryImage(galleryPicker.blockIndex, url)
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+      if (galleryPicker) addGalleryImage(galleryPicker.blockIndex, url)
+    } finally {
+      setUploading(false)
+    }
   }
 
   const galleryUploadMedia = media.filter((m) => m.startsWith("/uploads/"))
@@ -367,9 +378,9 @@ export default function PageEditor() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold">Edit: {slug}</h2>
         <div className="flex items-center gap-2">
-          <label className="btn-engage cursor-pointer">
-            Upload image
-            <input className="hidden" type="file" accept="image/*" onChange={handleUploadAndInsert} />
+          <label className={`btn-engage ${uploading ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}>
+            {uploading ? "Uploading..." : "Upload image"}
+            <input className="hidden" type="file" accept="image/*" disabled={uploading} onChange={handleUploadAndInsert} />
           </label>
           <Link href="/cms" className="btn-engage">
             Back
@@ -490,6 +501,7 @@ export default function PageEditor() {
           media={galleryUploadMedia}
           onClose={() => setGalleryPicker(null)}
           onUpload={uploadGalleryImage}
+          uploading={uploading}
           onPick={(url) => addGalleryImage(galleryPicker.blockIndex, url)}
           selectedUrls={activeGalleryBlock?.urls || []}
         />
@@ -512,6 +524,7 @@ function HomeEditor({
   const [mediaQuery, setMediaQuery] = useState("")
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [deleteSelection, setDeleteSelection] = useState<string[]>([])
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -538,20 +551,30 @@ function HomeEditor({
 
   async function handleUploadToPickerField(file: File) {
     if (!file) return
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    if (picker?.field) setContent((prev) => setImageField(prev, picker.field, url))
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+      if (picker?.field) setContent((prev) => setImageField(prev, picker.field, url))
+    } finally {
+      setUploading(false)
+    }
   }
 
   async function handleUploadToLibrary(e: React.ChangeEvent<HTMLInputElement>) {
     const input = e.currentTarget
     const file = e.target.files?.[0]
     if (!file) return
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    input.value = ""
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+    } finally {
+      input.value = ""
+      setUploading(false)
+    }
   }
 
   function onPickFromLibrary(url: string) {
@@ -713,9 +736,9 @@ function HomeEditor({
           <h3 className="font-medium mb-2">Media library</h3>
           <div className="mb-3 text-sm text-gray-600">This shows every image currently available to the CMS.</div>
           <div className="mb-3 flex flex-wrap gap-2">
-            <label className="btn-engage cursor-pointer inline-flex">
-              Upload photo
-              <input className="hidden" type="file" accept="image/*" onChange={handleUploadToLibrary} />
+            <label className={`btn-engage inline-flex ${uploading ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}>
+              {uploading ? "Uploading..." : "Upload photo"}
+              <input className="hidden" type="file" accept="image/*" disabled={uploading} onChange={handleUploadToLibrary} />
             </label>
             <button type="button" className="border px-3 py-2" onClick={openDeleteModal}>
               Delete images
@@ -752,6 +775,7 @@ function HomeEditor({
           title={picker.title}
           onClose={() => setPicker(null)}
           onUpload={handleUploadToPickerField}
+          uploading={uploading}
           media={filteredMedia}
           onPick={onPickFromLibrary}
         />
@@ -862,6 +886,7 @@ function WorkEditor() {
   const [itemMessage, setItemMessage] = useState<string | null>(null)
   const [picker, setPicker] = useState<null | { field: "bannerUrl" | "leftImage" | "rightImage"; title: string }>(null)
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -893,30 +918,34 @@ function WorkEditor() {
 
   async function handleUploadToPickerField(file: File) {
     if (!file || !editingItem || !picker) return
-
-    const url = await uploadFile(file)
-    if (!url) {
-      setItemMessage("Upload failed")
-      return
-    }
-
-    setMedia((current) => (current.includes(url) ? current : [url, ...current]))
-
-    if (picker.field === "bannerUrl") {
-      setEditingItem({ ...editingItem, bannerUrl: url })
-    } else if (picker.field === "leftImage") {
-      if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {
-        setEditingItem({
-          ...editingItem,
-          leftImages: [...editingItem.leftImages, url],
-        })
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) {
+        setItemMessage("Upload failed")
+        return
       }
-    } else if (picker.field === "rightImage") {
-      setEditingItem({ ...editingItem, rightImages: [url] })
-    }
 
-    setPicker(null)
-    setItemMessage("Image uploaded")
+      setMedia((current) => (current.includes(url) ? current : [url, ...current]))
+
+      if (picker.field === "bannerUrl") {
+        setEditingItem({ ...editingItem, bannerUrl: url })
+      } else if (picker.field === "leftImage") {
+        if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {
+          setEditingItem({
+            ...editingItem,
+            leftImages: [...editingItem.leftImages, url],
+          })
+        }
+      } else if (picker.field === "rightImage") {
+        setEditingItem({ ...editingItem, rightImages: [url] })
+      }
+
+      setPicker(null)
+      setItemMessage("Image uploaded")
+    } finally {
+      setUploading(false)
+    }
   }
 
   async function save() {
@@ -1264,6 +1293,7 @@ function WorkEditor() {
           title={picker.title}
           onClose={() => setPicker(null)}
           onUpload={handleUploadToPickerField}
+          uploading={uploading}
           media={media}
           onPick={(url) => {
             if (picker.field === "bannerUrl") {
@@ -1320,6 +1350,7 @@ function InsightEditor() {
   const [media, setMedia] = useState<ImageURL[]>([])
   const [picker, setPicker] = useState<null | { field: "intro.imageUrl" | "incentives.imageUrl"; title: string }>(null)
   const [mediaQuery, setMediaQuery] = useState("")
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -1346,12 +1377,17 @@ function InsightEditor() {
 
   async function handleUpload(file: File) {
     if (!file) return
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    if (!picker) return
-    setContent((prev) => setInsightImage(prev, picker.field, url))
-    setPicker(null)
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+      if (!picker) return
+      setContent((prev) => setInsightImage(prev, picker.field, url))
+      setPicker(null)
+    } finally {
+      setUploading(false)
+    }
   }
 
   function onPickFromLibrary(url: string) {
@@ -1434,7 +1470,7 @@ function InsightEditor() {
       </div>
 
       {picker ? (
-        <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} />
+        <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} />
       ) : null}
     </div>
   )
@@ -1452,6 +1488,7 @@ function PeopleEditor() {
   const [media, setMedia] = useState<ImageURL[]>([])
   const [picker, setPicker] = useState<null | { field: string; title: string }>(null)
   const [mediaQuery, setMediaQuery] = useState("")
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -1478,12 +1515,17 @@ function PeopleEditor() {
 
   async function handleUpload(file: File) {
     if (!file) return
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    if (!picker) return
-    setContent((prev) => setPeopleImage(prev, picker.field, url))
-    setPicker(null)
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+      if (!picker) return
+      setContent((prev) => setPeopleImage(prev, picker.field, url))
+      setPicker(null)
+    } finally {
+      setUploading(false)
+    }
   }
 
   function onPickFromLibrary(url: string) {
@@ -1605,7 +1647,7 @@ function PeopleEditor() {
         </aside>
       </div>
 
-      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
     </div>
   )
 }
@@ -1633,6 +1675,7 @@ function JobsEditor() {
   const [media, setMedia] = useState<ImageURL[]>([])
   const [picker, setPicker] = useState<null | { field: "heroImageUrl"; title: string }>(null)
   const [mediaQuery, setMediaQuery] = useState("")
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -1659,12 +1702,17 @@ function JobsEditor() {
 
   async function handleUpload(file: File) {
     if (!file) return
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    if (!picker) return
-    setContent((prev) => ({ ...prev, heroImageUrl: url }))
-    setPicker(null)
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+      if (!picker) return
+      setContent((prev) => ({ ...prev, heroImageUrl: url }))
+      setPicker(null)
+    } finally {
+      setUploading(false)
+    }
   }
 
   function onPickFromLibrary(url: string) {
@@ -1818,7 +1866,7 @@ function JobsEditor() {
         </aside>
       </div>
 
-      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
     </div>
   )
 }
@@ -1830,6 +1878,7 @@ function ContactEditor() {
   const [media, setMedia] = useState<ImageURL[]>([])
   const [picker, setPicker] = useState<null | { field: "heroImageUrl"; title: string }>(null)
   const [mediaQuery, setMediaQuery] = useState("")
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -1856,12 +1905,17 @@ function ContactEditor() {
 
   async function handleUpload(file: File) {
     if (!file) return
-    const url = await uploadFile(file)
-    if (!url) return
-    setMedia((m) => [url, ...m])
-    if (!picker) return
-    setContent((prev) => ({ ...prev, heroImageUrl: url }))
-    setPicker(null)
+    setUploading(true)
+    try {
+      const url = await uploadFile(file)
+      if (!url) return
+      setMedia((m) => [url, ...m])
+      if (!picker) return
+      setContent((prev) => ({ ...prev, heroImageUrl: url }))
+      setPicker(null)
+    } finally {
+      setUploading(false)
+    }
   }
 
   function onPickFromLibrary(url: string) {
@@ -1947,7 +2001,7 @@ function ContactEditor() {
         </aside>
       </div>
 
-      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
     </div>
   )
 }
@@ -2072,12 +2126,14 @@ function ImagePickerModal({
   title,
   onClose,
   onUpload,
+  uploading,
   media,
   onPick,
 }: {
   title: string
   onClose: () => void
   onUpload: (file: File) => Promise<void>
+  uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
 }) {
@@ -2094,22 +2150,28 @@ function ImagePickerModal({
         <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="border rounded p-4">
             <div className="font-medium mb-2">Upload</div>
-            <label className="btn-engage cursor-pointer inline-block">
-              Upload file
+            <label className={`btn-engage inline-block ${uploading ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}>
+              {uploading ? "Uploading..." : "Upload file"}
               <input
                 className="hidden"
                 type="file"
                 accept="image/*"
+                disabled={uploading}
                 onChange={async (e) => {
                   const input = e.currentTarget
                   const file = e.target.files?.[0]
                   if (!file) return
-                  await onUpload(file)
-                  input.value = ""
+                  try {
+                    await onUpload(file)
+                  } finally {
+                    input.value = ""
+                  }
                 }}
               />
             </label>
-            <div className="text-xs text-gray-600 mt-2">Files are saved to `public/uploads` and the path is stored in DB.</div>
+            <div className={`mt-2 text-xs ${uploading ? "text-cyan-700" : "text-gray-600"}`} aria-live="polite">
+              {uploading ? "Uploading image now. Please wait..." : "Files are saved to `public/uploads` and the path is stored in DB."}
+            </div>
           </div>
 
           <div className="border rounded p-4">
@@ -2132,6 +2194,7 @@ function GalleryPickerModal({
   title,
   onClose,
   onUpload,
+  uploading,
   media,
   onPick,
   selectedUrls,
@@ -2139,6 +2202,7 @@ function GalleryPickerModal({
   title: string
   onClose: () => void
   onUpload: (file: File) => Promise<void>
+  uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
   selectedUrls: string[]
@@ -2156,22 +2220,28 @@ function GalleryPickerModal({
         <div className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="border rounded p-4">
             <div className="font-medium mb-2">Upload a photo</div>
-            <label className="btn-engage cursor-pointer inline-block">
-              Upload file
+            <label className={`btn-engage inline-block ${uploading ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}>
+              {uploading ? "Uploading..." : "Upload file"}
               <input
                 className="hidden"
                 type="file"
                 accept="image/*"
+                disabled={uploading}
                 onChange={async (e) => {
                   const input = e.currentTarget
                   const file = e.target.files?.[0]
                   if (!file) return
-                  await onUpload(file)
-                  input.value = ""
+                  try {
+                    await onUpload(file)
+                  } finally {
+                    input.value = ""
+                  }
                 }}
               />
             </label>
-            <div className="text-xs text-gray-600 mt-2">Only uploaded images can be added to the gallery. Files stay in `public/uploads`.</div>
+            <div className={`mt-2 text-xs ${uploading ? "text-cyan-700" : "text-gray-600"}`} aria-live="polite">
+              {uploading ? "Uploading image now. Please wait..." : "Only uploaded images can be added to the gallery. Files stay in `public/uploads`."}
+            </div>
           </div>
 
           <div className="border rounded p-4">
