@@ -3,6 +3,11 @@ import { getIronSession } from "iron-session"
 import { sessionOptions, type SessionData } from "../../../../lib/session"
 import { getWorkItem, saveWorkItem, deleteWorkItem } from "../../../../lib/cms-db"
 
+function normalizeImages(value: unknown, max: number) {
+  if (!Array.isArray(value)) return []
+  return value.filter((img): img is string => typeof img === "string" && img.trim().length > 0).slice(0, max)
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { slug } = req.query
   const slugStr = Array.isArray(slug) ? slug[0] : String(slug || "")
@@ -32,21 +37,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: "Invalid slug - use only lowercase letters, numbers, and hyphens" })
       }
       
-      const contentImages: (string | null | undefined)[] = item.contentImages || []
-      
-      const final: (string | null)[] = [null, null, null, null]
-      for (let i = 0; i < 3; i++) {
-        if (contentImages[i]) final[i] = contentImages[i] as string
-      }
-      if (contentImages[3]) final[3] = contentImages[3] as string
-      
       await saveWorkItem({
-        slug: slugStr,
+        slug: item.slug || slugStr,
         title: item.title,
         bannerUrl: item.bannerUrl || null,
         description: item.description || null,
-        contentImages: final as string[],
-      })
+        leftImages: normalizeImages(item.leftImages, 3),
+        rightImages: normalizeImages(item.rightImages, 1),
+      }, item.originalSlug || slugStr)
       return res.status(200).json({ ok: true })
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Database error"

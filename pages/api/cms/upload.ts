@@ -34,48 +34,70 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!session.user) return res.status(401).json({ error: "Unauthorized" })
 
   const form = new IncomingForm({ multiples: false })
-  form.parse(req, (err: Error | null, fields: UploadParseFields, files: UploadParseFiles) => {
-    if (err) {
-      console.error("upload parse error", err)
-      return res.status(500).json({ error: "Upload parse error" })
-    }
-
-    const uploaded = files.file || files.upload || null
-    if (!uploaded) return res.status(400).json({ error: "No file uploaded" })
-
-    const file = Array.isArray(uploaded) ? uploaded[0] : uploaded
-    const tempPath = file.filepath || file.path
-    if (!tempPath) return res.status(500).json({ error: "Upload file path missing" })
-    const originalName = file.originalFilename || file.name || `upload-${Date.now()}`
-
-    if (!isImage(String(originalName))) return res.status(400).json({ error: "Only image uploads allowed" })
-
-    const uploadsDir = path.join(process.cwd(), "public", "uploads")
-    fs.mkdirSync(uploadsDir, { recursive: true })
-
-    const destField = fields.dest ? String(fields.dest) : undefined
-    try {
-      const data = fs.readFileSync(tempPath)
-      if (destField) {
-        // sanitize and write into public/ (allow overwrite)
-        const safe = path.normalize(destField).replace(/^\/+/, "")
-        const out = path.join(process.cwd(), "public", safe)
-        if (!out.startsWith(path.join(process.cwd(), "public"))) {
-          return res.status(400).json({ error: "Invalid destination" })
-        }
-        fs.mkdirSync(path.dirname(out), { recursive: true })
-        fs.writeFileSync(out, data)
-        return res.status(200).json({ url: `/${path.relative(path.join(process.cwd(), "public"), out).replace(/\\/g, "/")}` })
+  await new Promise<void>((resolve) => {
+    form.parse(req, (err: Error | null, fields: UploadParseFields, files: UploadParseFiles) => {
+      if (err) {
+        console.error("upload parse error", err)
+        res.status(500).json({ error: "Upload parse error" })
+        resolve()
+        return
       }
 
-      const filename = `${Date.now()}-${originalName}`
-      const outPath = path.join(uploadsDir, filename)
-      fs.writeFileSync(outPath, data)
-      return res.status(200).json({ url: `/uploads/${filename}` })
-    } catch (e) {
-      console.error("upload save error", e)
-      return res.status(500).json({ error: "Could not save file" })
-    }
+      const uploaded = files.file || files.upload || null
+      if (!uploaded) {
+        res.status(400).json({ error: "No file uploaded" })
+        resolve()
+        return
+      }
+
+      const file = Array.isArray(uploaded) ? uploaded[0] : uploaded
+      const tempPath = file.filepath || file.path
+      if (!tempPath) {
+        res.status(500).json({ error: "Upload file path missing" })
+        resolve()
+        return
+      }
+      const originalName = file.originalFilename || file.name || `upload-${Date.now()}`
+
+      if (!isImage(String(originalName))) {
+        res.status(400).json({ error: "Only image uploads allowed" })
+        resolve()
+        return
+      }
+
+      const uploadsDir = path.join(process.cwd(), "public", "uploads")
+      fs.mkdirSync(uploadsDir, { recursive: true })
+
+      const destField = fields.dest ? String(fields.dest) : undefined
+      try {
+        const data = fs.readFileSync(tempPath)
+        if (destField) {
+          // sanitize and write into public/ (allow overwrite)
+          const safe = path.normalize(destField).replace(/^\/+/, "")
+          const out = path.join(process.cwd(), "public", safe)
+          if (!out.startsWith(path.join(process.cwd(), "public"))) {
+            res.status(400).json({ error: "Invalid destination" })
+            resolve()
+            return
+          }
+          fs.mkdirSync(path.dirname(out), { recursive: true })
+          fs.writeFileSync(out, data)
+          res.status(200).json({ url: `/${path.relative(path.join(process.cwd(), "public"), out).replace(/\\/g, "/")}` })
+          resolve()
+          return
+        }
+
+        const filename = `${Date.now()}-${originalName}`
+        const outPath = path.join(uploadsDir, filename)
+        fs.writeFileSync(outPath, data)
+        res.status(200).json({ url: `/uploads/${filename}` })
+        resolve()
+      } catch (e) {
+        console.error("upload save error", e)
+        res.status(500).json({ error: "Could not save file" })
+        resolve()
+      }
+    })
   })
 }
 

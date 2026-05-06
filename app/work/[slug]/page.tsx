@@ -11,7 +11,8 @@ type WorkItemData = {
   title: string
   bannerUrl: string | null
   description: string | null
-  contentImages: string[] | null
+  leftImages: string[]
+  rightImages: string[]
 }
 
 export default function WorkDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -98,16 +99,15 @@ export default function WorkDetailPage({ params }: { params: Promise<{ slug: str
     )
   }
 
-const images = data.contentImages || []
-  // Left side: exactly indices 0-2 (carousel positions)
-  // Right side: exactly index 3
-  const left0 = images[0] || null
-  const left1 = images[1] || null
-  const left2 = images[2] || null
-  // Check if index 3 exists and is not null/undefined
-  const right0 = (images.length > 3 && images[3]) ? images[3] : null
+  const leftImages = data.leftImages || []
+  const rightImages = data.rightImages || []
+  const left0 = leftImages[0] || null
+  const left1 = leftImages[1] || null
+  const left2 = leftImages[2] || null
+  const right0 = rightImages[0] || null
   const hasCarousel = (!!left1 || !!left2)
-  const hasSecondImage = (!!left0)
+  const hasSingleSideLayout = !!left0 || !!right0
+  const displayPrimaryImage = left0 || right0
 
   return (
     <main className="min-h-screen bg-white">
@@ -186,7 +186,7 @@ const images = data.contentImages || []
                   )}
                 </div>
               </>
-            ) : hasSecondImage ? (
+            ) : hasSingleSideLayout ? (
               <>
                 <div className="px-10 py-10 md:py-12 comn_img_side_txt flex flex-col justify-center order-1 md:order-2">
                   <h2
@@ -203,8 +203,8 @@ const images = data.contentImages || []
                 </div>
                 <div className="home_imggroup order-2 md:order-1">
                   <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
-                    {left0 ? (
-                      <img src={left0} alt={`${data.title} image 1`} className="w-full h-full object-cover" />
+                    {displayPrimaryImage ? (
+                      <img src={displayPrimaryImage} alt={`${data.title} image 1`} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full bg-gray-200 min-h-[22rem] md:min-h-[42vw]" />
                     )}
@@ -229,15 +229,13 @@ const images = data.contentImages || []
                     </div>
                   </div>
                 </div>
-                <div className="home_imggroup order-4 md:order-4">
-                  <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
-                    {right0 ? (
+                {left0 && right0 ? (
+                  <div className="home_imggroup order-4 md:order-4">
+                    <div className="relative w-full h-full min-h-[22rem] md:min-h-[42vw]">
                       <img src={right0} alt={`${data.title} image 2`} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full bg-gray-200 min-h-[22rem] md:min-h-[42vw]" />
-                    )}
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </>
             ) : (
               <>
@@ -286,7 +284,13 @@ function WorkCarousel({ images, className = "" }: { images: string[]; className?
       setCurrentSlide((prev) => (prev + 1) % images.length)
     }, 2500)
     return () => clearInterval(interval)
-  }, [images.length])
+  }, [images])
+
+  useEffect(() => {
+    if (currentSlide >= images.length) {
+      setCurrentSlide(0)
+    }
+  }, [currentSlide, images.length])
 
   if (!images || images.length === 0) return null
 

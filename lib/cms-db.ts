@@ -218,7 +218,8 @@ export type CmsWorkItem = {
   title: string
   bannerUrl: string | null
   description: string | null
-  contentImages: (string | null)[] | null
+  leftImages: string[]
+  rightImages: string[]
 }
 
 interface CmsWorkItemRow extends RowDataPacket {
@@ -230,21 +231,51 @@ interface CmsWorkItemRow extends RowDataPacket {
   content_images: string | null
 }
 
-function parseContentImages(val: unknown): (string | null)[] | null {
-  if (!val) return null
-  if (Array.isArray(val)) return val.map((v) => typeof v === "string" ? v : null)
+type ParsedContentImages = {
+  leftImages: string[]
+  rightImages: string[]
+}
+
+function toImageList(val: unknown) {
+  if (!Array.isArray(val)) return []
+  return val.filter((v): v is string => typeof v === "string" && v.trim().length > 0)
+}
+
+function parseContentImages(val: unknown): ParsedContentImages {
+  if (!val) return { leftImages: [], rightImages: [] }
+  if (Array.isArray(val)) {
+    return {
+      leftImages: toImageList(val.slice(0, 3)),
+      rightImages: toImageList(val.slice(3, 4)),
+    }
+  }
   if (typeof val === "string") {
     try {
       const parsed = JSON.parse(val)
       if (Array.isArray(parsed)) {
-        return parsed.map((v) => typeof v === "string" ? v : null)
+        return {
+          leftImages: toImageList(parsed.slice(0, 3)),
+          rightImages: toImageList(parsed.slice(3, 4)),
+        }
       }
-      return null
+      if (isRecord(parsed)) {
+        return {
+          leftImages: toImageList(parsed["leftImages"]),
+          rightImages: toImageList(parsed["rightImages"]),
+        }
+      }
+      return { leftImages: [], rightImages: [] }
     } catch {
-      return null
+      return { leftImages: [], rightImages: [] }
     }
   }
-  return null
+  if (isRecord(val)) {
+    return {
+      leftImages: toImageList(val["leftImages"]),
+      rightImages: toImageList(val["rightImages"]),
+    }
+  }
+  return { leftImages: [], rightImages: [] }
 }
 
 export async function getWorkItem(slugRaw: string): Promise<CmsWorkItem | null> {
@@ -259,7 +290,7 @@ export async function getWorkItem(slugRaw: string): Promise<CmsWorkItem | null> 
     title: row.title,
     bannerUrl: row.banner_url,
     description: row.description,
-    contentImages: parseContentImages(row.content_images),
+    ...parseContentImages(row.content_images),
   }
 }
 
@@ -272,24 +303,34 @@ export async function getAllWorkItems(): Promise<CmsWorkItem[]> {
     title: row.title,
     bannerUrl: row.banner_url,
     description: row.description,
-    contentImages: parseContentImages(row.content_images),
+    ...parseContentImages(row.content_images),
   }))
 }
 
-export async function saveWorkItem(item: CmsWorkItem): Promise<void> {
+export async function saveWorkItem(item: CmsWorkItem, previousSlugRaw?: string): Promise<void> {
   const slug = coerceSlug(item.slug)
+  const previousSlug = previousSlugRaw ? coerceSlug(previousSlugRaw) : slug
   const pool = getDbPool()
-  const contentImages = item.contentImages ? JSON.stringify(item.contentImages) : null
+  const contentImages = JSON.stringify({
+    leftImages: toImageList(item.leftImages).slice(0, 3),
+    rightImages: toImageList(item.rightImages).slice(0, 1),
+  })
 
   const conn = await pool.getConnection()
   try {
     await conn.beginTransaction()
 
-    const [existingRows] = await conn.query<CmsIdRow[]>("SELECT id FROM cms_work_items WHERE slug = ? LIMIT 1", [slug])
+    const [existingRows] = await conn.query<CmsIdRow[]>("SELECT id FROM cms_work_items WHERE slug = ? LIMIT 1", [previousSlug])
     if (existingRows[0]?.id) {
+      if (previousSlug !== slug) {
+        const [duplicateRows] = await conn.query<CmsIdRow[]>("SELECT id FROM cms_work_items WHERE slug = ? LIMIT 1", [slug])
+        if (duplicateRows[0]?.id) {
+          throw new Error("A work item with this slug already exists")
+        }
+      }
       await conn.query(
-        "UPDATE cms_work_items SET title = ?, banner_url = ?, description = ?, content_images = ?, updated_at = CURRENT_TIMESTAMP WHERE slug = ?",
-        [item.title, item.bannerUrl, item.description, contentImages, slug]
+        "UPDATE cms_work_items SET slug = ?, title = ?, banner_url = ?, description = ?, content_images = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+        [slug, item.title, item.bannerUrl, item.description, contentImages, existingRows[0].id]
       )
     } else {
       await conn.query(

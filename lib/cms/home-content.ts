@@ -78,7 +78,7 @@ export function extractHomeContent(page: CmsPageData | null): HomeContent {
       staffGridUrls: getGallery(
         m,
         HOME_KEYS.staffGrid,
-        Array.from({ length: 9 }, (_, i) => `/staff-${i + 1}.jpg?height=200&width=200&query=staff member ${i + 1}`)
+        Array.from({ length: 9 }, (_, i) => `/staff-${i + 1}.jpg`)
       ),
     },
     insight: {

@@ -536,8 +536,7 @@ function HomeEditor({
     return body?.url as string | undefined
   }
 
-  async function handleUploadToPickerField(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
+  async function handleUploadToPickerField(file: File) {
     if (!file) return
     const url = await uploadFile(file)
     if (!url) return
@@ -804,7 +803,29 @@ type CmsWorkItem = {
   title: string
   bannerUrl: string | null
   description: string | null
-  contentImages: string[] | null
+  leftImages: string[]
+  rightImages: string[]
+}
+
+type EditableCmsWorkItem = CmsWorkItem & {
+  originalSlug?: string
+}
+
+function sanitizeWorkSlug(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
+
+function toEditableWorkItem(item: CmsWorkItem): EditableCmsWorkItem {
+  return {
+    ...item,
+    originalSlug: item.slug,
+    leftImages: [...item.leftImages],
+    rightImages: [...item.rightImages],
+  }
 }
 
 function WorkEditor() {
@@ -812,31 +833,31 @@ function WorkEditor() {
   const [message, setMessage] = useState<string | null>(null)
   const [content, setContent] = useState<WorkContent>(() =>
     extractWorkContent(null, [
-      { title: "Airport activations", href: "/work/airport-activations_work" },
-      { title: "Brand activations", href: "/work/brand-activations_work" },
-      { title: "Corporate events", href: "/work/corporate-events_work" },
-      { title: "Entertainers", href: "/work/entertainers_work" },
-      { title: "Event staffing", href: "/work/event-staffing_work" },
-      { title: "Exhibitions", href: "/work/exhibitions_work" },
-      { title: "F & B staffing", href: "/work/f-b-staffing_work" },
-      { title: "Hosts & hostesses", href: "/work/hosts-hostesses_work" },
-      { title: "In-store promoters", href: "/work/in-store-promoters_work" },
-      { title: "Lead generation", href: "/work/lead-generation_work" },
-      { title: "Registration staff", href: "/work/registration-staff_work" },
-      { title: "Retail support", href: "/work/retail-support_work" },
-      { title: "Roadshows", href: "/work/roadshows_work" },
-      { title: "Mall activations", href: "/work/mall-activations_work" },
-      { title: "Models", href: "/work/models_work" },
-      { title: "Social media content", href: "/work/social-media-content_work" },
-      { title: "Sporting events", href: "/work/sporting-events_work" },
-      { title: "Trade events", href: "/work/trade-events_work" },
-      { title: "Themed promoters", href: "/work/themed-promoters_work" },
-      { title: "Virtual promoters", href: "/work/virtual-promoters_work" },
+      { title: "Airport activations", href: "/work/airport-activations" },
+      { title: "Brand activations", href: "/work/brand-activations" },
+      { title: "Corporate events", href: "/work/corporate-events" },
+      { title: "Entertainers", href: "/work/entertainers" },
+      { title: "Event staffing", href: "/work/event-staffing" },
+      { title: "Exhibitions", href: "/work/exhibitions" },
+      { title: "F & B staffing", href: "/work/f-b-staffing" },
+      { title: "Hosts & hostesses", href: "/work/hosts-hostesses" },
+      { title: "In-store promoters", href: "/work/in-store-promoters" },
+      { title: "Lead generation", href: "/work/lead-generation" },
+      { title: "Registration staff", href: "/work/registration-staff" },
+      { title: "Retail support", href: "/work/retail-support" },
+      { title: "Roadshows", href: "/work/roadshows" },
+      { title: "Mall activations", href: "/work/mall-activations" },
+      { title: "Models", href: "/work/models" },
+      { title: "Social media content", href: "/work/social-media-content" },
+      { title: "Sporting events", href: "/work/sporting-events" },
+      { title: "Trade events", href: "/work/trade-events" },
+      { title: "Themed promoters", href: "/work/themed-promoters" },
+      { title: "Virtual promoters", href: "/work/virtual-promoters" },
     ])
   )
   const [workItems, setWorkItems] = useState<CmsWorkItem[]>([])
   const [media, setMedia] = useState<ImageURL[]>([])
-  const [editingItem, setEditingItem] = useState<CmsWorkItem | null>(null)
+  const [editingItem, setEditingItem] = useState<EditableCmsWorkItem | null>(null)
   const [itemMessage, setItemMessage] = useState<string | null>(null)
   const [picker, setPicker] = useState<null | { field: "bannerUrl" | "leftImage" | "rightImage"; title: string }>(null)
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState<string | null>(null)
@@ -861,6 +882,42 @@ function WorkEditor() {
     })()
   }, [])
 
+  async function uploadFile(file: File) {
+    const form = new FormData()
+    form.append("file", file)
+    const res = await fetch("/api/cms/upload", { method: "POST", body: form })
+    const body = await res.json().catch(() => ({}))
+    return body?.url as string | undefined
+  }
+
+  async function handleUploadToPickerField(file: File) {
+    if (!file || !editingItem || !picker) return
+
+    const url = await uploadFile(file)
+    if (!url) {
+      setItemMessage("Upload failed")
+      return
+    }
+
+    setMedia((current) => (current.includes(url) ? current : [url, ...current]))
+
+    if (picker.field === "bannerUrl") {
+      setEditingItem({ ...editingItem, bannerUrl: url })
+    } else if (picker.field === "leftImage") {
+      if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {
+        setEditingItem({
+          ...editingItem,
+          leftImages: [...editingItem.leftImages, url],
+        })
+      }
+    } else if (picker.field === "rightImage") {
+      setEditingItem({ ...editingItem, rightImages: [url] })
+    }
+
+    setPicker(null)
+    setItemMessage("Image uploaded")
+  }
+
   async function save() {
     setMessage(null)
     const payload = buildWorkPageData(content)
@@ -874,24 +931,60 @@ function WorkEditor() {
     else setMessage(body?.error || "Save failed")
   }
 
-  async function saveWorkItem(item: CmsWorkItem) {
+  async function saveWorkItem(item: EditableCmsWorkItem) {
     setItemMessage(null)
-    const res = await fetch(`/api/cms/work-items/${item.slug}`, {
+    const slug = sanitizeWorkSlug(item.slug)
+    const title = item.title.trim()
+    const originalSlug = item.originalSlug
+
+    if (!slug) {
+      setItemMessage("Slug is required")
+      return
+    }
+
+    if (!title) {
+      setItemMessage("Title is required")
+      return
+    }
+
+    const duplicate = workItems.find((workItem) => workItem.slug === slug && workItem.slug !== originalSlug)
+    if (duplicate) {
+      setItemMessage("A work item with this slug already exists")
+      return
+    }
+
+    const payload: EditableCmsWorkItem = {
+      ...item,
+      slug,
+      title,
+      originalSlug,
+    }
+
+    const res = await fetch(`/api/cms/work-items/${originalSlug || slug}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(item),
+      body: JSON.stringify(payload),
     })
     const body = await res.json().catch(() => ({}))
     if (res.ok) {
       setItemMessage("Work item saved")
       setWorkItems((prev) => {
-        const idx = prev.findIndex((w) => w.slug === item.slug)
+        const nextItem: CmsWorkItem = {
+          slug,
+          title,
+          bannerUrl: payload.bannerUrl,
+          description: payload.description,
+          leftImages: [...payload.leftImages],
+          rightImages: [...payload.rightImages],
+        }
+        const filtered = originalSlug ? prev.filter((w) => w.slug !== originalSlug) : prev
+        const idx = filtered.findIndex((w) => w.slug === slug)
         if (idx >= 0) {
-          const updated = [...prev]
-          updated[idx] = item
+          const updated = [...filtered]
+          updated[idx] = nextItem
           return updated
         }
-        return [...prev, item]
+        return [...filtered, nextItem]
       })
       setEditingItem(null)
     } else {
@@ -927,7 +1020,9 @@ function WorkEditor() {
       title: "",
       bannerUrl: null,
       description: null,
-      contentImages: null,
+      leftImages: [],
+      rightImages: [],
+      originalSlug: undefined,
     })
   }
 
@@ -973,7 +1068,7 @@ function WorkEditor() {
                 <div className="font-medium mb-2">{item.title}</div>
                 <div className="text-xs text-gray-500 mb-3">Slug: {item.slug}</div>
                 <div className="flex gap-2">
-                  <button className="border px-2 py-1 text-sm" onClick={() => setEditingItem(item)}>
+                  <button className="border px-2 py-1 text-sm" onClick={() => setEditingItem(toEditableWorkItem(item))}>
                     Edit
                   </button>
                   <button className="border px-2 py-1 text-sm text-rose-600" onClick={() => deleteWorkItem(item.slug)}>
@@ -1014,11 +1109,13 @@ function WorkEditor() {
                 <input
                   className="w-full border p-2"
                   value={editingItem.slug}
-                  onChange={(e) => setEditingItem({ ...editingItem, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-") })}
+                  onChange={(e) => setEditingItem({ ...editingItem, slug: sanitizeWorkSlug(e.target.value) })}
                   placeholder="airport-activations"
-                  disabled={!!workItems.find((w) => w.slug === editingItem.slug && w.slug !== editingItem.slug)}
                 />
                 <div className="text-xs text-gray-500">Page URL: /work/{editingItem.slug || "slug"}</div>
+                {workItems.some((w) => w.slug === editingItem.slug && w.slug !== editingItem.originalSlug) ? (
+                  <div className="text-xs text-rose-600 mt-1">This slug is already in use.</div>
+                ) : null}
               </div>
 
               <div>
@@ -1088,18 +1185,16 @@ function WorkEditor() {
               <div>
                 <label className="block mb-1 font-medium">Left Side Images (carousel - multiple images)</label>
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {(editingItem.contentImages || []).slice(0, 3).map((url, idx) => (
+                  {editingItem.leftImages.map((url, idx) => (
                     <div key={idx} className="relative">
                       <img src={url} alt={`Left ${idx + 1}`} className="w-24 h-20 object-cover rounded border" />
                       <button
                         className="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                         onClick={() => {
-                          const current = editingItem.contentImages || []
-                          const rightImg = current[3]
-                          const leftOnly = current.slice(0,3).filter((item, i) => i !== idx)
-                          const final: string[] = [...leftOnly]
-                          if (rightImg) final[3] = rightImg
-                          setEditingItem({ ...editingItem, contentImages: final })
+                          setEditingItem({
+                            ...editingItem,
+                            leftImages: editingItem.leftImages.filter((_, imageIndex) => imageIndex !== idx),
+                          })
                         }}
                       >
                         ✕
@@ -1110,7 +1205,7 @@ function WorkEditor() {
                     </div>
                   ))}
                 </div>
-                {(editingItem.contentImages?.length || 0) < 3 && (
+                {editingItem.leftImages.length < 3 && (
                   <button
                     className="btn-engage text-sm"
                     onClick={() => setPicker({ field: "leftImage", title: "Select Left Side Image" })}
@@ -1119,24 +1214,20 @@ function WorkEditor() {
                   </button>
                 )}
                 <div className="text-xs text-gray-500 mt-1">
-                  {(editingItem.contentImages?.length || 0) < 3 
-                    ? `Can add ${3 - (editingItem.contentImages?.length || 0)} more image(s) for carousel`
+                  {editingItem.leftImages.length < 3
+                    ? `Can add ${3 - editingItem.leftImages.length} more image(s) for carousel`
                     : "Carousel full (3 images)"}
                 </div>
               </div>
 
               <div>
                 <label className="block mb-1 font-medium">Right Side Image (shown on right, lower section)</label>
-                {editingItem.contentImages && editingItem.contentImages[3] ? (
+                {editingItem.rightImages[0] ? (
                   <div className="relative mb-2 w-full max-w-md">
-                    <img src={editingItem.contentImages[3]} alt="Right side" className="h-40 w-full object-cover rounded border" />
+                    <img src={editingItem.rightImages[0]} alt="Right side" className="h-40 w-full object-cover rounded border" />
                     <button
                       className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
-                      onClick={() => {
-                          const imgs = editingItem.contentImages || []
-                          const leftImgs = imgs.slice(0, 3).filter(Boolean)
-                          setEditingItem({ ...editingItem, contentImages: leftImgs as string[] })
-                        }}
+                      onClick={() => setEditingItem({ ...editingItem, rightImages: [] })}
                     >
                       ✕
                     </button>
@@ -1171,31 +1262,22 @@ function WorkEditor() {
         <ImagePickerModal
           title={picker.title}
           onClose={() => setPicker(null)}
-          onUpload={() => {}}
+          onUpload={handleUploadToPickerField}
           media={media}
           onPick={(url) => {
             if (picker.field === "bannerUrl") {
               selectImage("bannerUrl", url)
             } else if (picker.field === "leftImage") {
               if (!editingItem) return
-              const current = editingItem.contentImages || []
-              const leftCount = current.filter((_, i) => i < 3).length
-              if (leftCount < 3 && !current.slice(0, 3).includes(url)) {
-                const newImgs = [...current]
-                for (let i = 0; i < 3; i++) {
-                  if (!newImgs[i]) {
-                    newImgs[i] = url
-                    break
-                  }
-                }
-                setEditingItem({ ...editingItem, contentImages: newImgs as string[] })
+              if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {
+                setEditingItem({
+                  ...editingItem,
+                  leftImages: [...editingItem.leftImages, url],
+                })
               }
             } else if (picker.field === "rightImage") {
               if (!editingItem) return
-              const current = editingItem.contentImages || []
-              const withRight: string[] = [...current]
-              withRight[3] = url
-              setEditingItem({ ...editingItem, contentImages: withRight })
+              setEditingItem({ ...editingItem, rightImages: [url] })
             }
             setPicker(null)
           }}
@@ -1261,8 +1343,7 @@ function InsightEditor() {
     return body?.url as string | undefined
   }
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
+  async function handleUpload(file: File) {
     if (!file) return
     const url = await uploadFile(file)
     if (!url) return
@@ -1394,8 +1475,7 @@ function PeopleEditor() {
     return body?.url as string | undefined
   }
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
+  async function handleUpload(file: File) {
     if (!file) return
     const url = await uploadFile(file)
     if (!url) return
@@ -1576,8 +1656,7 @@ function JobsEditor() {
     return body?.url as string | undefined
   }
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
+  async function handleUpload(file: File) {
     if (!file) return
     const url = await uploadFile(file)
     if (!url) return
@@ -1774,8 +1853,7 @@ function ContactEditor() {
     return body?.url as string | undefined
   }
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
+  async function handleUpload(file: File) {
     if (!file) return
     const url = await uploadFile(file)
     if (!url) return
@@ -1998,7 +2076,7 @@ function ImagePickerModal({
 }: {
   title: string
   onClose: () => void
-  onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onUpload: (file: File) => Promise<void>
   media: ImageURL[]
   onPick: (url: string) => void
 }) {
@@ -2017,7 +2095,18 @@ function ImagePickerModal({
             <div className="font-medium mb-2">Upload</div>
             <label className="btn-engage cursor-pointer inline-block">
               Upload file
-              <input className="hidden" type="file" accept="image/*" onChange={onUpload} />
+              <input
+                className="hidden"
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const input = e.currentTarget
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  await onUpload(file)
+                  input.value = ""
+                }}
+              />
             </label>
             <div className="text-xs text-gray-600 mt-2">Files are saved to `public/uploads` and the path is stored in DB.</div>
           </div>
