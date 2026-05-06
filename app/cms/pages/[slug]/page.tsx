@@ -359,6 +359,7 @@ export default function PageEditor() {
       if (!url) return
       setMedia((m) => [url, ...m])
       if (galleryPicker) addGalleryImage(galleryPicker.blockIndex, url)
+      setGalleryPicker(null)
     } finally {
       setUploading(false)
     }
@@ -557,6 +558,7 @@ function HomeEditor({
       if (!url) return
       setMedia((m) => [url, ...m])
       if (picker?.field) setContent((prev) => setImageField(prev, picker.field, url))
+      setPicker(null)
     } finally {
       setUploading(false)
     }
@@ -2142,7 +2144,7 @@ function ImagePickerModal({
       <div className="bg-white w-full max-w-4xl rounded shadow-lg border">
         <div className="flex items-center justify-between p-4 border-b">
           <div className="font-medium">Change image: {title}</div>
-          <button className="border px-3 py-1 text-sm" onClick={onClose} type="button">
+          <button className="border px-3 py-1 text-sm disabled:opacity-50" onClick={onClose} type="button" disabled={uploading}>
             Close
           </button>
         </div>
@@ -2212,7 +2214,7 @@ function GalleryPickerModal({
       <div className="bg-white w-full max-w-5xl rounded shadow-lg border">
         <div className="flex items-center justify-between p-4 border-b">
           <div className="font-medium">Gallery uploads: {title}</div>
-          <button className="border px-3 py-1 text-sm" onClick={onClose} type="button">
+          <button className="border px-3 py-1 text-sm disabled:opacity-50" onClick={onClose} type="button" disabled={uploading}>
             Close
           </button>
         </div>
