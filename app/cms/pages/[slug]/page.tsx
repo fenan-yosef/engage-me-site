@@ -356,10 +356,11 @@ export default function PageEditor() {
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      if (!url) return
+      if (!url) return false
       setMedia((m) => [url, ...m])
       if (galleryPicker) addGalleryImage(galleryPicker.blockIndex, url)
       setGalleryPicker(null)
+      return true
     } finally {
       setUploading(false)
     }
@@ -551,14 +552,15 @@ function HomeEditor({
   }
 
   async function handleUploadToPickerField(file: File) {
-    if (!file) return
+    if (!file) return false
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      if (!url) return
+      if (!url) return false
       setMedia((m) => [url, ...m])
       if (picker?.field) setContent((prev) => setImageField(prev, picker.field, url))
       setPicker(null)
+      return true
     } finally {
       setUploading(false)
     }
@@ -919,13 +921,13 @@ function WorkEditor() {
   }
 
   async function handleUploadToPickerField(file: File) {
-    if (!file || !editingItem || !picker) return
+    if (!file || !editingItem || !picker) return false
     setUploading(true)
     try {
       const url = await uploadFile(file)
       if (!url) {
         setItemMessage("Upload failed")
-        return
+        return false
       }
 
       setMedia((current) => (current.includes(url) ? current : [url, ...current]))
@@ -945,6 +947,7 @@ function WorkEditor() {
 
       setPicker(null)
       setItemMessage("Image uploaded")
+      return true
     } finally {
       setUploading(false)
     }
@@ -1378,15 +1381,16 @@ function InsightEditor() {
   }
 
   async function handleUpload(file: File) {
-    if (!file) return
+    if (!file) return false
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      if (!url) return
+      if (!url) return false
       setMedia((m) => [url, ...m])
-      if (!picker) return
+      if (!picker) return false
       setContent((prev) => setInsightImage(prev, picker.field, url))
       setPicker(null)
+      return true
     } finally {
       setUploading(false)
     }
@@ -1516,15 +1520,16 @@ function PeopleEditor() {
   }
 
   async function handleUpload(file: File) {
-    if (!file) return
+    if (!file) return false
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      if (!url) return
+      if (!url) return false
       setMedia((m) => [url, ...m])
-      if (!picker) return
+      if (!picker) return false
       setContent((prev) => setPeopleImage(prev, picker.field, url))
       setPicker(null)
+      return true
     } finally {
       setUploading(false)
     }
@@ -1703,15 +1708,16 @@ function JobsEditor() {
   }
 
   async function handleUpload(file: File) {
-    if (!file) return
+    if (!file) return false
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      if (!url) return
+      if (!url) return false
       setMedia((m) => [url, ...m])
-      if (!picker) return
+      if (!picker) return false
       setContent((prev) => ({ ...prev, heroImageUrl: url }))
       setPicker(null)
+      return true
     } finally {
       setUploading(false)
     }
@@ -1906,15 +1912,16 @@ function ContactEditor() {
   }
 
   async function handleUpload(file: File) {
-    if (!file) return
+    if (!file) return false
     setUploading(true)
     try {
       const url = await uploadFile(file)
-      if (!url) return
+      if (!url) return false
       setMedia((m) => [url, ...m])
-      if (!picker) return
+      if (!picker) return false
       setContent((prev) => ({ ...prev, heroImageUrl: url }))
       setPicker(null)
+      return true
     } finally {
       setUploading(false)
     }
@@ -2134,7 +2141,7 @@ function ImagePickerModal({
 }: {
   title: string
   onClose: () => void
-  onUpload: (file: File) => Promise<void>
+  onUpload: (file: File) => Promise<boolean>
   uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
@@ -2164,7 +2171,7 @@ function ImagePickerModal({
                   const file = e.target.files?.[0]
                   if (!file) return
                   try {
-                    await onUpload(file)
+                    if (await onUpload(file)) onClose()
                   } finally {
                     input.value = ""
                   }
@@ -2203,7 +2210,7 @@ function GalleryPickerModal({
 }: {
   title: string
   onClose: () => void
-  onUpload: (file: File) => Promise<void>
+  onUpload: (file: File) => Promise<boolean>
   uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
@@ -2234,7 +2241,7 @@ function GalleryPickerModal({
                   const file = e.target.files?.[0]
                   if (!file) return
                   try {
-                    await onUpload(file)
+                    if (await onUpload(file)) onClose()
                   } finally {
                     input.value = ""
                   }
