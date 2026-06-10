@@ -39,16 +39,36 @@ export default async function WorkPage() {
   const content = extractWorkContent(page, FALLBACK_ITEMS)
 
   const dbWorkItems = await getAllWorkItems().catch(() => [])
-  const itemsWithThumbnails = dbWorkItems.filter((item) => item.thumbnailUrl != null)
+  const dbThumbnailMap = new Map<string, { title: string; thumbnailUrl: string }>()
+  for (const item of dbWorkItems) {
+    if (item.thumbnailUrl) {
+      dbThumbnailMap.set(item.slug, { title: item.title, thumbnailUrl: item.thumbnailUrl })
+    }
+  }
 
-  const displayItems =
-    itemsWithThumbnails.length > 0
-      ? itemsWithThumbnails.map((item) => ({
-          title: item.title,
-          href: `/work/${item.slug}`,
-          image: item.thumbnailUrl!,
-        }))
-      : FALLBACK_ITEMS
+  // start with fallback items, overriding with DB thumbnails when available
+  const displayMap = new Map<string, { title: string; href: string; image: string }>()
+  for (const item of FALLBACK_ITEMS) {
+    const slug = item.href.replace("/work/", "")
+    const dbData = dbThumbnailMap.get(slug)
+    displayMap.set(slug, {
+      title: dbData?.title || item.title,
+      href: item.href,
+      image: dbData?.thumbnailUrl || item.image,
+    })
+    dbThumbnailMap.delete(slug)
+  }
+
+  // add any extra DB items that have thumbnails but aren't in the fallback list
+  for (const [slug, data] of dbThumbnailMap) {
+    displayMap.set(slug, {
+      title: data.title,
+      href: `/work/${slug}`,
+      image: data.thumbnailUrl,
+    })
+  }
+
+  const displayItems = Array.from(displayMap.values())
 
   return (
     <main className="min-h-screen bg-white">
