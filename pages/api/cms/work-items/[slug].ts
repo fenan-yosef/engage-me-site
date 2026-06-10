@@ -41,6 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         slug: item.slug || slugStr,
         title: item.title,
         bannerUrl: item.bannerUrl || null,
+        thumbnailUrl: item.thumbnailUrl || null,
         description: item.description || null,
         leftImages: normalizeImages(item.leftImages, 3),
         rightImages: normalizeImages(item.rightImages, 1),

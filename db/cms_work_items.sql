@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS cms_work_items (
   slug VARCHAR(64) NOT NULL,
   title VARCHAR(255) NOT NULL,
   banner_url VARCHAR(512) NULL,
+  thumbnail_url VARCHAR(512) NULL,
   description LONGTEXT NULL,
   content_images JSON NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

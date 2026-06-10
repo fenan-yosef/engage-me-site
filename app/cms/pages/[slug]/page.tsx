@@ -828,6 +828,7 @@ type CmsWorkItem = {
   slug: string
   title: string
   bannerUrl: string | null
+  thumbnailUrl: string | null
   description: string | null
   leftImages: string[]
   rightImages: string[]
@@ -885,7 +886,7 @@ function WorkEditor() {
   const [media, setMedia] = useState<ImageURL[]>([])
   const [editingItem, setEditingItem] = useState<EditableCmsWorkItem | null>(null)
   const [itemMessage, setItemMessage] = useState<string | null>(null)
-  const [picker, setPicker] = useState<null | { field: "bannerUrl" | "leftImage" | "rightImage"; title: string }>(null)
+  const [picker, setPicker] = useState<null | { field: "bannerUrl" | "thumbnailUrl" | "leftImage" | "rightImage"; title: string }>(null)
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
 
@@ -986,6 +987,7 @@ function WorkEditor() {
           slug,
           title,
           bannerUrl: payload.bannerUrl,
+          thumbnailUrl: payload.thumbnailUrl,
           description: payload.description,
           leftImages: [...payload.leftImages],
           rightImages: [...payload.rightImages],
@@ -1032,6 +1034,7 @@ function WorkEditor() {
       slug: "",
       title: "",
       bannerUrl: null,
+      thumbnailUrl: null,
       description: null,
       leftImages: [],
       rightImages: [],
@@ -1039,7 +1042,7 @@ function WorkEditor() {
     })
   }
 
-  function selectImage(field: "bannerUrl", url: string) {
+  function selectImage(field: "bannerUrl" | "thumbnailUrl", url: string) {
     if (!editingItem) return
     setEditingItem({ ...editingItem, [field]: url })
   }
@@ -1139,6 +1142,32 @@ function WorkEditor() {
                   onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
                   placeholder="Airport Activations"
                 />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Thumbnail Image (shown on work listing grid)</label>
+                <div className="text-xs text-gray-500 mb-2">Grid thumbnail image for the Work page</div>
+                {editingItem.thumbnailUrl ? (
+                  <div className="relative mb-2 w-full max-w-md">
+                    <img src={editingItem.thumbnailUrl} alt="Thumbnail" className="h-40 w-full object-cover rounded border" />
+                    <button
+                      className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
+                      onClick={() => setEditingItem({ ...editingItem, thumbnailUrl: null })}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-full max-w-md h-40 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 mb-2">
+                    No thumbnail selected
+                  </div>
+                )}
+                <button
+                  className="btn-engage text-sm"
+                  onClick={() => setPicker({ field: "thumbnailUrl", title: "Select Thumbnail Image" })}
+                >
+                  Add Thumbnail Image
+                </button>
               </div>
 
               <div>
@@ -1281,6 +1310,8 @@ function WorkEditor() {
           onPick={(url) => {
             if (picker.field === "bannerUrl") {
               selectImage("bannerUrl", url)
+            } else if (picker.field === "thumbnailUrl") {
+              selectImage("thumbnailUrl", url)
             } else if (picker.field === "leftImage") {
               if (!editingItem) return
               if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {

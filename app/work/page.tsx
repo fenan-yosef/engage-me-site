@@ -7,47 +7,55 @@ import { extractWorkContent, type WorkItem } from "@/lib/cms/work-content"
 
 export const dynamic = "force-dynamic"
 
-const DEFAULT_WORK_ITEMS: WorkItem[] = [
-  { title: "Airport activations", href: "/work/airport-activations" },
-  { title: "Brand activations", href: "/work/brand-activations" },
-  { title: "Corporate events", href: "/work/corporate-events" },
-  { title: "Entertainers", href: "/work/entertainers" },
-  { title: "Event staffing", href: "/work/event-staffing" },
-  { title: "Exhibitions", href: "/work/exhibitions" },
-  { title: "F & B staffing", href: "/work/f-b-staffing" },
-  { title: "Hosts & hostesses", href: "/work/hosts-hostesses" },
-  { title: "In-store promoters", href: "/work/in-store-promoters" },
-  { title: "Lead generation", href: "/work/lead-generation" },
-  { title: "Registration staff", href: "/work/registration-staff" },
-  { title: "Retail support", href: "/work/retail-support" },
-  { title: "Roadshows", href: "/work/roadshows" },
-  { title: "Mall activations", href: "/work/mall-activations" },
-  { title: "Models", href: "/work/models" },
-  { title: "Social media content", href: "/work/social-media-content" },
-  { title: "Sporting events", href: "/work/sporting-events" },
-  { title: "Trade events", href: "/work/trade-events" },
-  { title: "Themed promoters", href: "/work/themed-promoters" },
-  { title: "Virtual promoters", href: "/work/virtual-promoters" }
-]
+const FALLBACK_THUMBNAILS: Record<string, string> = {
+  "brand-activations": "/images/work-categories/brand-activations.jpg",
+  "corporate-events": "/images/work-categories/corporate-events.jpg",
+  "entertainers": "/images/work-categories/entertainers.jpg",
+  "event-staffing": "/images/work-categories/event-staffing.jpg",
+  "exhibitions": "/images/work-categories/exhibitions.jpg",
+  "f-b-staffing": "/images/work-categories/f-b-staffing.jpg",
+  "hosts-hostesses": "/images/work-categories/hosts-hostesses.jpg",
+  "in-store-promoters": "/images/work-categories/in-store-promoters.jpg",
+  "lead-generation": "/images/work-categories/lead-generation.jpg",
+  "mall-activations": "/images/work-categories/mall-activations.jpg",
+  "models": "/images/work-categories/models.jpg",
+  "sporting-events": "/images/work-categories/sporting-events.jpg",
+}
+
+const FALLBACK_ITEMS = Object.entries(FALLBACK_THUMBNAILS).map(([slug, image]): WorkItem & { image: string } => {
+  const title = slug
+    .split("-")
+    .map((w) => {
+      if (w === "f") return "F"
+      if (w === "b") return "B"
+      return w.charAt(0).toUpperCase() + w.slice(1)
+    })
+    .join(" ")
+  return { title, href: `/work/${slug}`, image }
+})
 
 export default async function WorkPage() {
   const page = await getPage("work").catch(() => null)
-  const content = extractWorkContent(page, DEFAULT_WORK_ITEMS)
-  
-  const dbWorkItems = await getAllWorkItems().catch(() => [])
-  const workItemsFromDb = dbWorkItems.map((item) => ({
-    title: item.title,
-    href: `/work/${item.slug}`
-  }))
+  const content = extractWorkContent(page, FALLBACK_ITEMS)
 
-  const displayItems = workItemsFromDb.length > 0 ? workItemsFromDb : content.items
+  const dbWorkItems = await getAllWorkItems().catch(() => [])
+  const itemsWithThumbnails = dbWorkItems.filter((item) => item.thumbnailUrl != null)
+
+  const displayItems =
+    itemsWithThumbnails.length > 0
+      ? itemsWithThumbnails.map((item) => ({
+          title: item.title,
+          href: `/work/${item.slug}`,
+          image: item.thumbnailUrl!,
+        }))
+      : FALLBACK_ITEMS
 
   return (
     <main className="min-h-screen bg-white">
       <Header />
 
-      <section className="py-12 px-4 bg-[#212529]">
-        <div className="max-w-7xl mx-auto" style={{ fontFamily: "run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial" }}>
+      <section className="py-16 px-4 md:px-8 bg-[#212529]">
+        <div className="max-w-7xl mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -57,26 +65,44 @@ export default async function WorkPage() {
           `}</style>
 
           <h1
-            className="section-title text-5xl md:text-8xl font-bold mb-8"
+            className="text-5xl md:text-8xl font-bold mb-8"
             style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
           >
             {content.heading}
           </h1>
-          <p className="text-gray-300 text-lg mb-8">{content.intro}</p>
+          <p className="text-gray-300 text-lg">{content.intro}</p>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-12">
+      <section className="py-12 px-4 md:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayItems.map((item) => (
-              <div key={item.href}>
-                <Link href={item.href} className="block text-white no-underline">
-                  <span className="block text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}>
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group relative block overflow-hidden aspect-[4/3] bg-gray-200"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span
+                    className="text-white text-3xl md:text-4xl lg:text-5xl leading-tight text-center px-4"
+                    style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
                     {item.title}
                   </span>
-                </Link>
-              </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
+
+      <div className="bg-[#212529] py-8" />
 
       <Footer />
       <FloatingButtons />

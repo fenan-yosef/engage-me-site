@@ -217,6 +217,7 @@ export type CmsWorkItem = {
   slug: string
   title: string
   bannerUrl: string | null
+  thumbnailUrl: string | null
   description: string | null
   leftImages: string[]
   rightImages: string[]
@@ -227,6 +228,7 @@ interface CmsWorkItemRow extends RowDataPacket {
   slug: string
   title: string
   banner_url: string | null
+  thumbnail_url: string | null
   description: string | null
   content_images: string | null
 }
@@ -289,6 +291,7 @@ export async function getWorkItem(slugRaw: string): Promise<CmsWorkItem | null> 
     slug: row.slug,
     title: row.title,
     bannerUrl: row.banner_url,
+    thumbnailUrl: row.thumbnail_url,
     description: row.description,
     ...parseContentImages(row.content_images),
   }
@@ -302,6 +305,7 @@ export async function getAllWorkItems(): Promise<CmsWorkItem[]> {
     slug: row.slug,
     title: row.title,
     bannerUrl: row.banner_url,
+    thumbnailUrl: row.thumbnail_url,
     description: row.description,
     ...parseContentImages(row.content_images),
   }))
@@ -329,13 +333,13 @@ export async function saveWorkItem(item: CmsWorkItem, previousSlugRaw?: string):
         }
       }
       await conn.query(
-        "UPDATE cms_work_items SET slug = ?, title = ?, banner_url = ?, description = ?, content_images = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-        [slug, item.title, item.bannerUrl, item.description, contentImages, existingRows[0].id]
+        "UPDATE cms_work_items SET slug = ?, title = ?, banner_url = ?, thumbnail_url = ?, description = ?, content_images = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+        [slug, item.title, item.bannerUrl, item.thumbnailUrl, item.description, contentImages, existingRows[0].id]
       )
     } else {
       await conn.query(
-        "INSERT INTO cms_work_items (slug, title, banner_url, description, content_images) VALUES (?, ?, ?, ?, ?)",
-        [slug, item.title, item.bannerUrl, item.description, contentImages]
+        "INSERT INTO cms_work_items (slug, title, banner_url, thumbnail_url, description, content_images) VALUES (?, ?, ?, ?, ?, ?)",
+        [slug, item.title, item.bannerUrl, item.thumbnailUrl, item.description, contentImages]
       )
     }
 
