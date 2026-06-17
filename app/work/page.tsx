@@ -75,9 +75,8 @@ export default async function WorkPage() {
         </div>
       </section>
 
-      <section className="py-12 px-4 md:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section className="bg-white">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-200">
             {displayItems.map((item) => (
               <Link
                 key={item.href}
@@ -100,7 +99,6 @@ export default async function WorkPage() {
               </Link>
             ))}
           </div>
-        </div>
       </section>
 
       <div className="bg-[#212529] py-8" />
