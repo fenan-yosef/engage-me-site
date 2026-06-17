@@ -75,7 +75,7 @@ export default async function WorkPage() {
         </div>
       </section>
 
-      <section className="bg-white w-full !border-4 !border-red-500">
+      <section className="bg-white w-full !p-0 !m-0 !border-4 !border-red-500">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 m-0 p-0 !border-4 !border-blue-500">
             {displayItems.map((item) => (
               <Link
