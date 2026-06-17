@@ -76,7 +76,7 @@ export default async function WorkPage() {
       </section>
 
       <section className="bg-white">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
             {displayItems.map((item) => (
               <Link
                 key={item.href}
