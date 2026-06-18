@@ -95,10 +95,15 @@ export default async function WorkPage() {
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                 <span
-                  className="text-white text-2xl md:text-3xl lg:text-4xl leading-tight text-center px-2"
-                  style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  className="text-white text-center px-2"
+                  style={{
+                    fontFamily: '"Roboto Condensed", "Arial Narrow", sans-serif',
+                    fontSize: "20px",
+                    fontWeight: 300,
+                    lineHeight: 1.1,
+                  }}
                 >
                   {item.title}
                 </span>
