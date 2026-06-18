@@ -80,13 +80,13 @@ export default async function WorkPage() {
         </div>
       </section>
 
-      <section className="bg-white max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
+      <section className="bg-white max-w-5xl mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative block overflow-hidden aspect-[4/3] bg-gray-200"
+                className="group relative block overflow-hidden aspect-square bg-gray-200"
               >
                 <img
                   src={item.image}
