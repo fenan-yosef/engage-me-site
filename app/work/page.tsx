@@ -76,6 +76,7 @@ export default async function WorkPage() {
           >
             {content.heading}
           </h1>
+          <p className="text-gray-300 text-lg mt-4">{content.intro}</p>
         </div>
       </div>
 
