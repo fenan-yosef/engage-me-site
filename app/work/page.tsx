@@ -80,8 +80,8 @@ export default async function WorkPage() {
         </div>
       </section>
 
-      <section className="bg-white max-w-5xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
+      <section className="bg-white max-w-5xl mx-auto px-4 md:px-8 py-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
             {displayItems.map((item) => (
               <Link
                 key={item.href}
