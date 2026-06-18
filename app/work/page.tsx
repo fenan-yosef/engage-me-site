@@ -60,8 +60,8 @@ export default async function WorkPage() {
     <main className="min-h-screen bg-white">
       <Header />
 
-      <div className="bg-[#212529] px-6 py-4">
-        <div className="max-w-[918px] mx-auto">
+      <div className="bg-[#212529] px-4 md:px-8 py-6">
+        <div className="max-w-[638px] mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
