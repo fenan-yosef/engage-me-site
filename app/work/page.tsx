@@ -60,8 +60,8 @@ export default async function WorkPage() {
     <main className="min-h-screen bg-white">
       <Header />
 
-      <div className="bg-white">
-        <div className="bg-[#212529] max-w-[918px] mx-auto px-6 py-4">
+      <div className="bg-[#212529] px-6 py-4">
+        <div className="max-w-[918px] mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -109,7 +109,7 @@ export default async function WorkPage() {
 
       <div className="h-3 md:h-4" />
 
-      <div className="bg-[#212529] max-w-[918px] mx-auto h-6" />
+      <div className="bg-[#212529] h-6" />
 
       <Footer />
       <FloatingButtons />
