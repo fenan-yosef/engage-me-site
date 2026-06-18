@@ -1,10 +1,5 @@
-import type { Metadata } from "next"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-
-export const metadata: Metadata = {
-  title: "Engage Me - Insight",
-}
 import FloatingButtons from "@/components/floating-buttons"
 import Image from "next/image"
 import { getPage } from "@/lib/cms-db"

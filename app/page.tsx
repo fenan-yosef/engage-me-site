@@ -1,10 +1,5 @@
-import type { Metadata } from "next"
 import Header from "@/components/header"
 import Hero from "@/components/hero"
-
-export const metadata: Metadata = {
-  title: "Engage Me",
-}
 import BringingBrandsToLife from "@/components/bringing-brands-to-life"
 import EngagingStaff from "@/components/engaging-staff"
 import Footer from "@/components/footer"

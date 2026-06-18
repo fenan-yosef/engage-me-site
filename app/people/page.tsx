@@ -1,10 +1,5 @@
-import type { Metadata } from "next"
 import PeopleClient from "@/components/people-client"
 import { getPage } from "@/lib/cms-db"
-
-export const metadata: Metadata = {
-  title: "Engage Me - People",
-}
 import { extractPeopleContent } from "@/lib/cms/people-content"
 
 export const dynamic = "force-dynamic"

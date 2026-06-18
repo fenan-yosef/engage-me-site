@@ -8,9 +8,9 @@ import 'react-phone-number-input/style.css'
 import AnalyticsClient from "../components/analytics"
 
 export const metadata: Metadata = {
-  title: "Engage Me",
+  title: "Engage Me - Event Staffing",
   description:
-    "Engage Me is dedicated to bringing brands to life with effective on-ground management and engaging staff.",
+    "Our mission is to drive results for our clients by pairing the right staff with effective on-ground management. It's that simple.",
   generator: "v0.app",
   icons: {
     icon: [
