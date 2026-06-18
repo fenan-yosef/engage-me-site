@@ -60,8 +60,8 @@ export default async function WorkPage() {
     <main className="min-h-screen bg-white">
       <Header />
 
-      <section className="py-16 px-4 md:px-8 bg-[#212529]">
-        <div className="max-w-7xl mx-auto">
+      <div className="bg-white">
+        <div className="bg-[#212529] max-w-[918px] mx-auto px-6 py-4">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -71,42 +71,45 @@ export default async function WorkPage() {
           `}</style>
 
           <h1
-            className="text-5xl md:text-8xl font-bold mb-8"
+            className="text-4xl md:text-5xl font-bold"
             style={{ lineHeight: "1", color: "#3AFCAD", fontFamily: "Run, var(--font-sans)" }}
           >
             {content.heading}
           </h1>
-          <p className="text-gray-300 text-lg">{content.intro}</p>
         </div>
-      </section>
+      </div>
 
-      <section className="bg-white max-w-5xl mx-auto px-4 md:px-8 py-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px">
-            {displayItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="group relative block overflow-hidden aspect-[432/262] bg-gray-200"
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                  <span
-                    className="text-white text-3xl md:text-4xl lg:text-5xl leading-tight text-center px-4"
-                    style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
-                  >
-                    {item.title}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-      </section>
+      <div className="h-3 md:h-4" />
 
-      <div className="bg-[#212529] py-8" />
+      <div className="bg-white max-w-[638px] mx-auto px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px">
+          {displayItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group relative block overflow-hidden aspect-[432/262] bg-gray-200"
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <span
+                  className="text-white text-2xl md:text-3xl lg:text-4xl leading-tight text-center px-2"
+                  style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                >
+                  {item.title}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-3 md:h-4" />
+
+      <div className="bg-[#212529] max-w-[918px] mx-auto h-6" />
 
       <Footer />
       <FloatingButtons />
