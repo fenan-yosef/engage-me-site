@@ -86,7 +86,7 @@ export default async function WorkPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative block overflow-hidden aspect-square bg-gray-200"
+                className="group relative block overflow-hidden aspect-[432/262] bg-gray-200"
               >
                 <img
                   src={item.image}
