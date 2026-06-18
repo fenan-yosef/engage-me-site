@@ -93,7 +93,7 @@ export default async function WorkPage() {
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                   <span
                     className="text-white text-3xl md:text-4xl lg:text-5xl leading-tight text-center px-4"
                     style={{ fontFamily: 'run, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
