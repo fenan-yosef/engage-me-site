@@ -165,6 +165,13 @@ export default function ImageCropper({
     }
   }, [box, clampMove, resize])
 
+  // Nudge the crop framing in a direction by a small step (also draggable).
+  function nudge(dx: number, dy: number) {
+    setBox((b) => (b ? clampMove({ ...b, x: b.x + dx, y: b.y + dy }) : b))
+  }
+  const stepX = Math.max(5, Math.round(dispW * 0.05))
+  const stepY = Math.max(5, Math.round(dispH * 0.05))
+
   function startMove(e: React.PointerEvent) {
     if (!box) return
     e.preventDefault()
@@ -306,6 +313,22 @@ export default function ImageCropper({
                 </>
               )}
             </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-600">Move:</span>
+            <div className="inline-grid grid-cols-3 gap-1">
+              <span />
+              <button type="button" aria-label="Move up" title="Move up" className="border rounded w-7 h-7 leading-none hover:bg-gray-100" onClick={() => nudge(0, -stepY)}>↑</button>
+              <span />
+              <button type="button" aria-label="Move left" title="Move left" className="border rounded w-7 h-7 leading-none hover:bg-gray-100" onClick={() => nudge(-stepX, 0)}>←</button>
+              <span />
+              <button type="button" aria-label="Move right" title="Move right" className="border rounded w-7 h-7 leading-none hover:bg-gray-100" onClick={() => nudge(stepX, 0)}>→</button>
+              <span />
+              <button type="button" aria-label="Move down" title="Move down" className="border rounded w-7 h-7 leading-none hover:bg-gray-100" onClick={() => nudge(0, stepY)}>↓</button>
+              <span />
+            </div>
+            <span className="text-xs text-gray-500">or drag the box / image area</span>
           </div>
 
           <div className="flex justify-end gap-2">
