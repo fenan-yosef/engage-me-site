@@ -888,7 +888,7 @@ function WorkEditor() {
   const [media, setMedia] = useState<ImageURL[]>([])
   const [editingItem, setEditingItem] = useState<EditableCmsWorkItem | null>(null)
   const [itemMessage, setItemMessage] = useState<string | null>(null)
-  const [picker, setPicker] = useState<null | { field: "bannerUrl" | "thumbnailUrl" | "leftImage" | "rightImage"; title: string }>(null)
+  const [picker, setPicker] = useState<null | { field: "bannerUrl" | "thumbnailUrl" | "leftImage" | "rightImage"; title: string; editUrl?: string; editIndex?: number }>(null)
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
 
@@ -1153,6 +1153,12 @@ function WorkEditor() {
                   <div className="relative mb-2 w-full max-w-md">
                     <img src={editingItem.thumbnailUrl} alt="Thumbnail" className="h-40 w-full object-cover rounded border" />
                     <button
+                      className="absolute top-2 left-2 inline-flex items-center gap-1 bg-black/70 text-white rounded px-2 py-1 text-xs shadow hover:bg-black/85"
+                      onClick={() => setPicker({ field: "thumbnailUrl", title: "Edit Thumbnail Image", editUrl: editingItem.thumbnailUrl || undefined })}
+                    >
+                      <span aria-hidden>✎</span> Edit
+                    </button>
+                    <button
                       className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
                       onClick={() => setEditingItem({ ...editingItem, thumbnailUrl: null })}
                     >
@@ -1178,6 +1184,12 @@ function WorkEditor() {
                 {editingItem.bannerUrl ? (
                   <div className="relative mb-2 w-full max-w-md">
                     <img src={editingItem.bannerUrl} alt="Banner" className="h-40 w-full object-cover rounded border" />
+                    <button
+                      className="absolute top-2 left-2 inline-flex items-center gap-1 bg-black/70 text-white rounded px-2 py-1 text-xs shadow hover:bg-black/85"
+                      onClick={() => setPicker({ field: "bannerUrl", title: "Edit Hero Banner Image", editUrl: editingItem.bannerUrl || undefined })}
+                    >
+                      <span aria-hidden>✎</span> Edit
+                    </button>
                     <button
                       className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
                       onClick={() => setEditingItem({ ...editingItem, bannerUrl: null })}
@@ -1243,6 +1255,12 @@ function WorkEditor() {
                       >
                         ✕
                       </button>
+                      <button
+                        className="absolute bottom-1 right-1 inline-flex items-center gap-0.5 bg-black/70 text-white rounded px-1 py-0.5 text-[10px] hover:bg-black/85"
+                        onClick={() => setPicker({ field: "leftImage", title: `Edit Left Image ${idx + 1}`, editUrl: url, editIndex: idx })}
+                      >
+                        <span aria-hidden>✎</span> Edit
+                      </button>
                       <div className="absolute bottom-1 left-1 bg-cyan-500 text-white text-xs px-1 rounded">
                         {idx + 1}
                       </div>
@@ -1269,6 +1287,12 @@ function WorkEditor() {
                 {editingItem.rightImages[0] ? (
                   <div className="relative mb-2 w-full max-w-md">
                     <img src={editingItem.rightImages[0]} alt="Right side" className="h-40 w-full object-cover rounded border" />
+                    <button
+                      className="absolute top-2 left-2 inline-flex items-center gap-1 bg-black/70 text-white rounded px-2 py-1 text-xs shadow hover:bg-black/85"
+                      onClick={() => setPicker({ field: "rightImage", title: "Edit Right Side Image", editUrl: editingItem.rightImages[0] || undefined })}
+                    >
+                      <span aria-hidden>✎</span> Edit
+                    </button>
                     <button
                       className="absolute top-2 right-2 bg-rose-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow"
                       onClick={() => setEditingItem({ ...editingItem, rightImages: [] })}
@@ -1316,7 +1340,11 @@ function WorkEditor() {
               selectImage("thumbnailUrl", url)
             } else if (picker.field === "leftImage") {
               if (!editingItem) return
-              if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {
+              if (picker.editIndex != null) {
+                const next = [...editingItem.leftImages]
+                next[picker.editIndex] = url
+                setEditingItem({ ...editingItem, leftImages: next })
+              } else if (editingItem.leftImages.length < 3 && !editingItem.leftImages.includes(url)) {
                 setEditingItem({
                   ...editingItem,
                   leftImages: [...editingItem.leftImages, url],
@@ -1329,6 +1357,7 @@ function WorkEditor() {
             setPicker(null)
           }}
           aspect={cropAspectForField(picker.field)}
+          initialCropUrl={picker.editUrl}
         />
       )}
 
@@ -2139,6 +2168,7 @@ function ImagePickerModal({
   media,
   onPick,
   aspect = null,
+  initialCropUrl = null,
 }: {
   title: string
   onClose: () => void
@@ -2147,9 +2177,12 @@ function ImagePickerModal({
   media: ImageURL[]
   onPick: (url: string) => void
   aspect?: number | null
+  initialCropUrl?: string | null
 }) {
   const [dismissed, setDismissed] = useState(false)
-  const [crop, setCrop] = useState<null | { src: string; name: string; objectUrl?: string }>(null)
+  const [crop, setCrop] = useState<null | { src: string; name: string; objectUrl?: string }>(
+    initialCropUrl ? { src: initialCropUrl, name: initialCropUrl.split("/").pop() || "image" } : null
+  )
 
   function clearCrop() {
     if (crop?.objectUrl) URL.revokeObjectURL(crop.objectUrl)
@@ -2219,10 +2252,10 @@ function ImagePickerModal({
                   <button
                     type="button"
                     onClick={() => setCrop({ src: m, name: m.split("/").pop() || "image" })}
-                    className="absolute bottom-1 right-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white"
-                    title="Re-crop this image"
+                    className="absolute bottom-1 right-1 inline-flex items-center gap-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white hover:bg-black/85"
+                    title="Edit / re-crop this image"
                   >
-                    Crop
+                    <span aria-hidden>✎</span> Edit
                   </button>
                 </div>
               ))}
@@ -2339,10 +2372,10 @@ function GalleryPickerModal({
                       <button
                         type="button"
                         onClick={() => setCrop({ src: m, name: m.split("/").pop() || "image" })}
-                        className="absolute bottom-1 right-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white"
-                        title="Re-crop this image"
+                        className="absolute bottom-1 right-1 inline-flex items-center gap-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white hover:bg-black/85"
+                        title="Edit / re-crop this image"
                       >
-                        Crop
+                        <span aria-hidden>✎</span> Edit
                       </button>
                     </div>
                   )

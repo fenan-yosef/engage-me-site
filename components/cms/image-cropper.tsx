@@ -24,10 +24,25 @@ export function cropAspectForField(field: string): number | null {
   return null
 }
 
-const VIEW_MAX = 520 // max on-screen viewport width in px
+const MAX_W = 620 // max displayed image width
+const MAX_H = 460 // max displayed image height
+const MIN_BOX = 24 // min crop box size in display px
 const OUTPUT_MAX = 1600 // cap exported width in px
 
-type Point = { x: number; y: number }
+type Box = { x: number; y: number; w: number; h: number }
+type Handle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w"
+
+// Largest box of the given aspect centered inside w x h. Free aspect -> full.
+function fitBox(dispW: number, dispH: number, aspect: number | null): Box {
+  if (aspect == null) return { x: 0, y: 0, w: dispW, h: dispH }
+  let w = dispW
+  let h = w / aspect
+  if (h > dispH) {
+    h = dispH
+    w = h * aspect
+  }
+  return { x: (dispW - w) / 2, y: (dispH - h) / 2, w, h }
+}
 
 export default function ImageCropper({
   src,
@@ -47,83 +62,133 @@ export default function ImageCropper({
   const wrapRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null)
-  const [viewW, setViewW] = useState(VIEW_MAX)
+  const [maxW, setMaxW] = useState(MAX_W)
   const [aspect, setAspect] = useState<number | null>(defaultAspect)
-  const [zoom, setZoom] = useState(1)
-  const [offset, setOffset] = useState<Point>({ x: 0, y: 0 })
-  const drag = useRef<null | { sx: number; sy: number; ox: number; oy: number }>(null)
+  const [box, setBox] = useState<Box | null>(null)
+  const drag = useRef<null | { mode: "move" | Handle; sx: number; sy: number; start: Box }>(null)
 
-  // Effective aspect: locked value, or the image's own ratio when "Free".
-  const aspectRatio = aspect ?? (natural ? natural.w / natural.h : 1)
-  const viewH = viewW / aspectRatio
+  // Display sizing: fit the image inside MAX_W x MAX_H.
+  const scale = natural ? Math.min(maxW / natural.w, MAX_H / natural.h) : 1
+  const dispW = natural ? natural.w * scale : maxW
+  const dispH = natural ? natural.h * scale : MAX_H
 
-  // Measure available width so the viewport fits the modal.
   useEffect(() => {
     function measure() {
-      const w = wrapRef.current?.clientWidth ?? VIEW_MAX
-      setViewW(Math.max(220, Math.min(VIEW_MAX, w)))
+      const w = wrapRef.current?.clientWidth ?? MAX_W
+      setMaxW(Math.max(240, Math.min(MAX_W, w)))
     }
     measure()
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
   }, [])
 
-  // Scale that makes the image cover the viewport at zoom = 1.
-  const coverScale = natural ? Math.max(viewW / natural.w, viewH / natural.h) : 1
-  const dispW = natural ? natural.w * coverScale * zoom : viewW
-  const dispH = natural ? natural.h * coverScale * zoom : viewH
-
-  const clamp = useCallback(
-    (o: Point): Point => ({
-      x: Math.min(0, Math.max(viewW - dispW, o.x)),
-      y: Math.min(0, Math.max(viewH - dispH, o.y)),
-    }),
-    [viewW, viewH, dispW, dispH]
-  )
-
-  // Re-center / re-clamp whenever sizing inputs change.
-  useEffect(() => {
-    setOffset((o) => ({
-      x: Math.min(0, Math.max(viewW - dispW, o.x)),
-      y: Math.min(0, Math.max(viewH - dispH, o.y)),
-    }))
-  }, [viewW, viewH, dispW, dispH])
-
   function onImgLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     const el = e.currentTarget
     imgRef.current = el
     setNatural({ w: el.naturalWidth, h: el.naturalHeight })
-    setZoom(1)
-    setOffset({ x: 0, y: 0 })
   }
 
-  function onPointerDown(e: React.PointerEvent) {
-    e.currentTarget.setPointerCapture(e.pointerId)
-    drag.current = { sx: e.clientX, sy: e.clientY, ox: offset.x, oy: offset.y }
+  // (Re)initialise the crop box when image size or aspect changes.
+  useEffect(() => {
+    if (!natural) return
+    setBox(fitBox(dispW, dispH, aspect))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [natural, aspect, dispW, dispH])
+
+  const clampMove = useCallback(
+    (b: Box): Box => ({
+      ...b,
+      x: Math.min(Math.max(0, b.x), dispW - b.w),
+      y: Math.min(Math.max(0, b.y), dispH - b.h),
+    }),
+    [dispW, dispH]
+  )
+
+  const resize = useCallback(
+    (handle: Handle, start: Box, px: number, py: number): Box => {
+      const cx = Math.min(Math.max(0, px), dispW)
+      const cy = Math.min(Math.max(0, py), dispH)
+
+      if (aspect != null) {
+        // Locked ratio: anchor at the opposite corner, grow toward the handle.
+        const sx = handle.includes("e") ? 1 : handle.includes("w") ? -1 : 1
+        const sy = handle.includes("s") ? 1 : handle.includes("n") ? -1 : 1
+        const ax = sx > 0 ? start.x : start.x + start.w
+        const ay = sy > 0 ? start.y : start.y + start.h
+        const availW = sx > 0 ? dispW - ax : ax
+        const availH = sy > 0 ? dispH - ay : ay
+        let w = Math.min(Math.max(Math.abs(cx - ax), MIN_BOX), availW)
+        let h = w / aspect
+        if (h > availH) {
+          h = availH
+          w = h * aspect
+        }
+        return { x: sx > 0 ? ax : ax - w, y: sy > 0 ? ay : ay - h, w, h }
+      }
+
+      // Free: move only the edges the handle controls.
+      let l = start.x
+      let t = start.y
+      let r = start.x + start.w
+      let b = start.y + start.h
+      if (handle.includes("w")) l = Math.min(cx, r - MIN_BOX)
+      if (handle.includes("e")) r = Math.max(cx, l + MIN_BOX)
+      if (handle.includes("n")) t = Math.min(cy, b - MIN_BOX)
+      if (handle.includes("s")) b = Math.max(cy, t + MIN_BOX)
+      return { x: l, y: t, w: r - l, h: b - t }
+    },
+    [aspect, dispW, dispH]
+  )
+
+  useEffect(() => {
+    function onMove(e: PointerEvent) {
+      const d = drag.current
+      if (!d || !box) return
+      const rect = wrapRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const px = e.clientX - rect.left
+      const py = e.clientY - rect.top
+      if (d.mode === "move") {
+        setBox(clampMove({ ...d.start, x: d.start.x + (e.clientX - d.sx), y: d.start.y + (e.clientY - d.sy) }))
+      } else {
+        setBox(resize(d.mode, d.start, px, py))
+      }
+    }
+    function onUp() {
+      drag.current = null
+    }
+    window.addEventListener("pointermove", onMove)
+    window.addEventListener("pointerup", onUp)
+    return () => {
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("pointerup", onUp)
+    }
+  }, [box, clampMove, resize])
+
+  function startMove(e: React.PointerEvent) {
+    if (!box) return
+    e.preventDefault()
+    drag.current = { mode: "move", sx: e.clientX, sy: e.clientY, start: box }
   }
-  function onPointerMove(e: React.PointerEvent) {
-    if (!drag.current) return
-    const dx = e.clientX - drag.current.sx
-    const dy = e.clientY - drag.current.sy
-    setOffset(clamp({ x: drag.current.ox + dx, y: drag.current.oy + dy }))
-  }
-  function onPointerUp(e: React.PointerEvent) {
-    drag.current = null
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId)
-    } catch {}
+  function startResize(handle: Handle) {
+    return (e: React.PointerEvent) => {
+      if (!box) return
+      e.preventDefault()
+      e.stopPropagation()
+      drag.current = { mode: handle, sx: e.clientX, sy: e.clientY, start: box }
+    }
   }
 
   function exportBlob() {
     const img = imgRef.current
-    if (!img || !natural) return
-    const sf = 1 / (coverScale * zoom) // displayed px -> source px
-    const srcX = -offset.x * sf
-    const srcY = -offset.y * sf
-    const srcW = viewW * sf
-    const srcH = viewH * sf
+    if (!img || !natural || !box) return
+    const sf = 1 / scale // display px -> source px
+    const srcX = box.x * sf
+    const srcY = box.y * sf
+    const srcW = box.w * sf
+    const srcH = box.h * sf
     const outW = Math.min(OUTPUT_MAX, Math.round(srcW))
-    const outH = Math.round(outW / aspectRatio)
+    const outH = Math.round((outW * srcH) / srcW)
     const canvas = document.createElement("canvas")
     canvas.width = outW
     canvas.height = outH
@@ -146,18 +211,31 @@ export default function ImageCropper({
     )
   }
 
+  const handles: Handle[] = aspect != null ? ["nw", "ne", "se", "sw"] : ["nw", "n", "ne", "e", "se", "s", "sw", "w"]
+  const handlePos: Record<Handle, { left: string; top: string; cursor: string }> = {
+    nw: { left: "0%", top: "0%", cursor: "nwse-resize" },
+    n: { left: "50%", top: "0%", cursor: "ns-resize" },
+    ne: { left: "100%", top: "0%", cursor: "nesw-resize" },
+    e: { left: "100%", top: "50%", cursor: "ew-resize" },
+    se: { left: "100%", top: "100%", cursor: "nwse-resize" },
+    s: { left: "50%", top: "100%", cursor: "ns-resize" },
+    sw: { left: "0%", top: "100%", cursor: "nesw-resize" },
+    w: { left: "0%", top: "50%", cursor: "ew-resize" },
+  }
+
   return (
     <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="bg-white w-full max-w-2xl rounded shadow-lg border">
+      <div className="bg-white w-full max-w-3xl rounded shadow-lg border">
         <div className="flex items-center justify-between p-4 border-b">
-          <div className="font-medium">Crop image</div>
+          <div className="font-medium">Edit image — drag to position, drag the corners to resize</div>
           <button className="border px-3 py-1 text-sm disabled:opacity-50" type="button" onClick={onCancel} disabled={busy}>
             Cancel
           </button>
         </div>
 
         <div className="p-4 space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-gray-600">Aspect ratio:</span>
             {PRESETS.map((p) => {
               const active = (p.value === null && aspect === null) || (p.value !== null && aspect !== null && Math.abs(p.value - aspect) < 1e-6)
               return (
@@ -173,55 +251,69 @@ export default function ImageCropper({
             })}
           </div>
 
-          <div ref={wrapRef} className="w-full flex justify-center">
+          <div className="w-full flex justify-center">
             <div
-              className="relative overflow-hidden bg-gray-100 border touch-none select-none"
-              style={{ width: viewW, height: viewH, cursor: drag.current ? "grabbing" : "grab" }}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              onPointerCancel={onPointerUp}
+              ref={wrapRef}
+              className="relative bg-gray-100 border select-none touch-none"
+              style={{ width: dispW, height: dispH }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
-                alt="Crop preview"
+                alt="Crop source"
                 crossOrigin="anonymous"
                 onLoad={onImgLoad}
                 draggable={false}
-                style={{
-                  position: "absolute",
-                  left: offset.x,
-                  top: offset.y,
-                  width: dispW,
-                  height: dispH,
-                  maxWidth: "none",
-                }}
+                style={{ position: "absolute", left: 0, top: 0, width: dispW, height: dispH }}
               />
+
+              {box && (
+                <>
+                  {/* the box's boxShadow dims everything outside the crop region */}
+                  <div
+                    className="absolute bg-transparent"
+                    style={{
+                      left: box.x,
+                      top: box.y,
+                      width: box.w,
+                      height: box.h,
+                      boxShadow: "0 0 0 9999px rgba(0,0,0,0.5)",
+                      outline: "2px solid #3AFCAD",
+                      cursor: "move",
+                    }}
+                    onPointerDown={startMove}
+                  >
+                    {handles.map((h) => (
+                      <div
+                        key={h}
+                        onPointerDown={startResize(h)}
+                        style={{
+                          position: "absolute",
+                          left: handlePos[h].left,
+                          top: handlePos[h].top,
+                          width: 14,
+                          height: 14,
+                          transform: "translate(-50%, -50%)",
+                          background: "#fff",
+                          border: "2px solid #3AFCAD",
+                          borderRadius: 2,
+                          cursor: handlePos[h].cursor,
+                          touchAction: "none",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-600 w-12">Zoom</span>
-            <input
-              type="range"
-              min={1}
-              max={4}
-              step={0.01}
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="flex-1"
-            />
-          </div>
-
-          <p className="text-xs text-gray-600">Drag the image to reposition, use the slider to zoom. The shaded area is what will be saved.</p>
 
           <div className="flex justify-end gap-2">
             <button className="border px-3 py-2 text-sm disabled:opacity-50" type="button" onClick={onCancel} disabled={busy}>
               Cancel
             </button>
-            <button className="btn-engage disabled:opacity-50" type="button" onClick={exportBlob} disabled={busy || !natural}>
-              {busy ? "Saving..." : "Crop & use"}
+            <button className="btn-engage disabled:opacity-50" type="button" onClick={exportBlob} disabled={busy || !natural || !box}>
+              {busy ? "Saving..." : "Save crop"}
             </button>
           </div>
         </div>
