@@ -15,6 +15,7 @@ import type { JobsContent } from "../../../../lib/cms/jobs-content"
 import { buildJobsPageData, extractJobsContent } from "../../../../lib/cms/jobs-content"
 import type { ContactContent } from "../../../../lib/cms/contact-content"
 import { buildContactPageData, extractContactContent } from "../../../../lib/cms/contact-content"
+import ImageCropper, { cropAspectForField } from "../../../../components/cms/image-cropper"
 
 type ImageURL = string
 
@@ -779,6 +780,7 @@ function HomeEditor({
           uploading={uploading}
           media={filteredMedia}
           onPick={onPickFromLibrary}
+          aspect={cropAspectForField(picker.field)}
         />
       ) : null}
 
@@ -1326,6 +1328,7 @@ function WorkEditor() {
             }
             setPicker(null)
           }}
+          aspect={cropAspectForField(picker.field)}
         />
       )}
 
@@ -1482,7 +1485,7 @@ function InsightEditor() {
       </div>
 
       {picker ? (
-        <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} />
+        <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} aspect={cropAspectForField(picker.field)} />
       ) : null}
     </div>
   )
@@ -1657,7 +1660,7 @@ function PeopleEditor() {
         </aside>
       </div>
 
-      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} aspect={cropAspectForField(picker.field)} /> : null}
     </div>
   )
 }
@@ -1874,7 +1877,7 @@ function JobsEditor() {
         </aside>
       </div>
 
-      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} aspect={cropAspectForField(picker.field)} /> : null}
     </div>
   )
 }
@@ -2007,7 +2010,7 @@ function ContactEditor() {
         </aside>
       </div>
 
-      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} /> : null}
+      {picker ? <ImagePickerModal title={picker.title} onClose={() => setPicker(null)} onUpload={handleUpload} uploading={uploading} media={filteredMedia} onPick={onPickFromLibrary} aspect={cropAspectForField(picker.field)} /> : null}
     </div>
   )
 }
@@ -2135,6 +2138,7 @@ function ImagePickerModal({
   uploading,
   media,
   onPick,
+  aspect = null,
 }: {
   title: string
   onClose: () => void
@@ -2142,12 +2146,27 @@ function ImagePickerModal({
   uploading: boolean
   media: ImageURL[]
   onPick: (url: string) => void
+  aspect?: number | null
 }) {
   const [dismissed, setDismissed] = useState(false)
+  const [crop, setCrop] = useState<null | { src: string; name: string; objectUrl?: string }>(null)
+
+  function clearCrop() {
+    if (crop?.objectUrl) URL.revokeObjectURL(crop.objectUrl)
+    setCrop(null)
+  }
 
   function closeModal() {
+    clearCrop()
     setDismissed(true)
     onClose()
+  }
+
+  async function handleCropConfirm(file: File) {
+    const url = await onUpload(file)
+    clearCrop()
+    if (typeof url === "string" && url) onPick(url)
+    closeModal()
   }
 
   if (dismissed) return null
@@ -2172,39 +2191,56 @@ function ImagePickerModal({
                 type="file"
                 accept="image/*"
                 disabled={uploading}
-                onChange={async (e) => {
+                onChange={(e) => {
                   const input = e.currentTarget
                   const file = e.target.files?.[0]
-                  if (!file) return
-                  try {
-                    const url = await onUpload(file)
-                    if (typeof url === "string" && url) {
-                      onPick(url)
-                    }
-                    closeModal()
-                  } finally {
-                    input.value = ""
+                  if (file) {
+                    const objectUrl = URL.createObjectURL(file)
+                    setCrop({ src: objectUrl, name: file.name, objectUrl })
                   }
+                  input.value = ""
                 }}
               />
             </label>
             <div className={`mt-2 text-xs ${uploading ? "text-cyan-700" : "text-gray-600"}`} aria-live="polite">
-              {uploading ? "Uploading image now. Please wait..." : "Files are saved to `public/uploads` and the path is stored in DB."}
+              {uploading ? "Uploading image now. Please wait..." : "Choose a file, then crop it before it is saved to `public/uploads`."}
             </div>
           </div>
 
           <div className="border rounded p-4">
             <div className="font-medium mb-2">Choose from library</div>
+            <div className="text-xs text-gray-600 mb-2">Click to use as-is, or use Crop to re-frame a saved image.</div>
             <div className="grid grid-cols-3 gap-2 max-h-80 overflow-auto">
               {media.map((m) => (
-                <button key={m} onClick={() => onPick(m)} className="border p-0" type="button">
-                  <img src={m} alt="" className="w-full h-20 object-cover" />
-                </button>
+                <div key={m} className="relative border">
+                  <button onClick={() => onPick(m)} className="block w-full p-0" type="button" title="Use this image">
+                    <img src={m} alt="" className="w-full h-20 object-cover" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCrop({ src: m, name: m.split("/").pop() || "image" })}
+                    className="absolute bottom-1 right-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white"
+                    title="Re-crop this image"
+                  >
+                    Crop
+                  </button>
+                </div>
               ))}
             </div>
           </div>
         </div>
       </div>
+
+      {crop && (
+        <ImageCropper
+          src={crop.src}
+          fileName={crop.name}
+          defaultAspect={aspect}
+          busy={uploading}
+          onCancel={clearCrop}
+          onConfirm={handleCropConfirm}
+        />
+      )}
     </div>
   )
 }
@@ -2217,6 +2253,7 @@ function GalleryPickerModal({
   media,
   onPick,
   selectedUrls,
+  aspect = null,
 }: {
   title: string
   onClose: () => void
@@ -2225,12 +2262,26 @@ function GalleryPickerModal({
   media: ImageURL[]
   onPick: (url: string) => void
   selectedUrls: string[]
+  aspect?: number | null
 }) {
   const [dismissed, setDismissed] = useState(false)
+  const [crop, setCrop] = useState<null | { src: string; name: string; objectUrl?: string }>(null)
+
+  function clearCrop() {
+    if (crop?.objectUrl) URL.revokeObjectURL(crop.objectUrl)
+    setCrop(null)
+  }
 
   function closeModal() {
+    clearCrop()
     setDismissed(true)
     onClose()
+  }
+
+  async function handleCropConfirm(file: File) {
+    const url = await onUpload(file)
+    clearCrop()
+    if (typeof url === "string" && url) onPick(url)
   }
 
   if (dismissed) return null
@@ -2255,24 +2306,19 @@ function GalleryPickerModal({
                 type="file"
                 accept="image/*"
                 disabled={uploading}
-                onChange={async (e) => {
+                onChange={(e) => {
                   const input = e.currentTarget
                   const file = e.target.files?.[0]
-                  if (!file) return
-                  try {
-                    const url = await onUpload(file)
-                    if (typeof url === "string" && url) {
-                      onPick(url)
-                    }
-                    closeModal()
-                  } finally {
-                    input.value = ""
+                  if (file) {
+                    const objectUrl = URL.createObjectURL(file)
+                    setCrop({ src: objectUrl, name: file.name, objectUrl })
                   }
+                  input.value = ""
                 }}
               />
             </label>
             <div className={`mt-2 text-xs ${uploading ? "text-cyan-700" : "text-gray-600"}`} aria-live="polite">
-              {uploading ? "Uploading image now. Please wait..." : "Only uploaded images can be added to the gallery. Files stay in `public/uploads`."}
+              {uploading ? "Uploading image now. Please wait..." : "Choose a file, then crop it before it is added. Files stay in `public/uploads`."}
             </div>
           </div>
 
@@ -2283,18 +2329,22 @@ function GalleryPickerModal({
                 {media.map((m) => {
                   const active = selectedUrls.includes(m)
                   return (
-                    <button
-                      key={m}
-                      onClick={() => onPick(m)}
-                      className={`border p-0 relative ${active ? "ring-2 ring-[#3AFCAD]" : ""}`}
-                      type="button"
-                      aria-pressed={active}
-                    >
-                      <img src={m} alt="" className="w-full h-20 object-cover" />
-                      <span className="absolute bottom-1 right-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white">
+                    <div key={m} className={`border relative ${active ? "ring-2 ring-[#3AFCAD]" : ""}`}>
+                      <button onClick={() => onPick(m)} className="block w-full p-0" type="button" aria-pressed={active} title="Add this image">
+                        <img src={m} alt="" className="w-full h-20 object-cover" />
+                      </button>
+                      <span className="pointer-events-none absolute bottom-1 left-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white">
                         {active ? "Added" : "Add"}
                       </span>
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => setCrop({ src: m, name: m.split("/").pop() || "image" })}
+                        className="absolute bottom-1 right-1 rounded bg-black/70 px-2 py-0.5 text-[10px] text-white"
+                        title="Re-crop this image"
+                      >
+                        Crop
+                      </button>
+                    </div>
                   )
                 })}
               </div>
@@ -2304,6 +2354,17 @@ function GalleryPickerModal({
           </div>
         </div>
       </div>
+
+      {crop && (
+        <ImageCropper
+          src={crop.src}
+          fileName={crop.name}
+          defaultAspect={aspect}
+          busy={uploading}
+          onCancel={clearCrop}
+          onConfirm={handleCropConfirm}
+        />
+      )}
     </div>
   )
 }
