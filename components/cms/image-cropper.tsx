@@ -24,7 +24,8 @@ export function cropAspectForField(field: string): number | null {
   return null
 }
 
-const VIEW_MAX = 560 // max on-screen viewport width in px
+const VIEW_MAX = 560 // max editing-surface width in px
+const FRAME_MARGIN = 0.86 // crop frame size relative to the surface
 const OUTPUT_MAX = 1600 // cap exported width in px
 
 type Point = { x: number; y: number }
@@ -47,64 +48,75 @@ export default function ImageCropper({
   const wrapRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null)
-  const [viewW, setViewW] = useState(VIEW_MAX)
+  const [contW, setContW] = useState(VIEW_MAX)
   const [aspect, setAspect] = useState<number | null>(defaultAspect)
   const [zoom, setZoom] = useState(1)
   const [offset, setOffset] = useState<Point>({ x: 0, y: 0 })
   const offsetRef = useRef<Point>({ x: 0, y: 0 })
 
-  // Effective aspect: locked value, or the image's own ratio when "Free".
+  // Editing surface + centred crop frame.
+  const contH = Math.max(280, Math.min(440, Math.round(contW * 0.78)))
   const aspectRatio = aspect ?? (natural ? natural.w / natural.h : 1)
-  const viewH = viewW / aspectRatio
+  let cropW = contW * FRAME_MARGIN
+  let cropH = cropW / aspectRatio
+  if (cropH > contH * FRAME_MARGIN) {
+    cropH = contH * FRAME_MARGIN
+    cropW = cropH * aspectRatio
+  }
+  const cropX = (contW - cropW) / 2
+  const cropY = (contH - cropH) / 2
 
-  // Scale that makes the image cover the viewport at zoom = 1, then × zoom.
-  const coverScale = natural ? Math.max(viewW / natural.w, viewH / natural.h) : 1
-  const dispW = natural ? natural.w * coverScale * zoom : viewW
-  const dispH = natural ? natural.h * coverScale * zoom : viewH
+  // Image scaled to cover the crop frame at zoom = 1, then × zoom.
+  const coverScale = natural ? Math.max(cropW / natural.w, cropH / natural.h) : 1
+  const dispW = natural ? natural.w * coverScale * zoom : cropW
+  const dispH = natural ? natural.h * coverScale * zoom : cropH
 
-  // Measure available width so the viewport fits the modal.
+  // Measure available width so the surface fits the modal.
   useEffect(() => {
     function measure() {
       const w = wrapRef.current?.parentElement?.clientWidth ?? VIEW_MAX
-      setViewW(Math.max(240, Math.min(VIEW_MAX, w)))
+      setContW(Math.max(240, Math.min(VIEW_MAX, w)))
     }
     measure()
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
   }, [])
 
-  // Keep the image clamped/centred when sizing inputs change.
+  function clampPt(o: Point): Point {
+    return {
+      x: Math.min(cropX, Math.max(cropX + cropW - dispW, o.x)),
+      y: Math.min(cropY, Math.max(cropY + cropH - dispH, o.y)),
+    }
+  }
+
+  // Re-centre when the image first loads or the aspect/zoom/size changes.
   useEffect(() => {
-    setOffset((o) => {
-      const next = { x: Math.min(0, Math.max(viewW - dispW, o.x)), y: Math.min(0, Math.max(viewH - dispH, o.y)) }
-      offsetRef.current = next
-      return next
-    })
-  }, [viewW, viewH, dispW, dispH])
+    if (!natural) return
+    const next = clampPt({ x: cropX + (cropW - dispW) / 2, y: cropY + (cropH - dispH) / 2 })
+    offsetRef.current = next
+    setOffset(next)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [natural, aspect, zoom, contW])
 
   function onImgLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     const el = e.currentTarget
     imgRef.current = el
     setNatural({ w: el.naturalWidth, h: el.naturalHeight })
     setZoom(1)
-    const o = { x: 0, y: 0 }
-    offsetRef.current = o
-    setOffset(o)
   }
 
-  // Smooth drag: update the DOM transform directly during the gesture,
-  // commit to React state only on release (no re-render per frame).
+  // Smooth drag: update the transform directly during the gesture, commit on release.
   function onPointerDown(e: React.PointerEvent) {
     if (!natural) return
     e.preventDefault()
     const start = { ...offsetRef.current }
     const sx = e.clientX
     const sy = e.clientY
-    const minX = viewW - dispW
-    const minY = viewH - dispH
+    const minX = cropX + cropW - dispW
+    const minY = cropY + cropH - dispH
     function move(ev: PointerEvent) {
-      const nx = Math.min(0, Math.max(minX, start.x + ev.clientX - sx))
-      const ny = Math.min(0, Math.max(minY, start.y + ev.clientY - sy))
+      const nx = Math.min(cropX, Math.max(minX, start.x + ev.clientX - sx))
+      const ny = Math.min(cropY, Math.max(minY, start.y + ev.clientY - sy))
       offsetRef.current = { x: nx, y: ny }
       if (imgRef.current) imgRef.current.style.transform = `translate3d(${nx}px, ${ny}px, 0)`
     }
@@ -122,10 +134,10 @@ export default function ImageCropper({
     if (!img || !natural) return
     const o = offsetRef.current
     const sf = 1 / (coverScale * zoom) // displayed px -> source px
-    const srcX = -o.x * sf
-    const srcY = -o.y * sf
-    const srcW = viewW * sf
-    const srcH = viewH * sf
+    const srcX = (cropX - o.x) * sf
+    const srcY = (cropY - o.y) * sf
+    const srcW = cropW * sf
+    const srcH = cropH * sf
     const outW = Math.min(OUTPUT_MAX, Math.round(srcW))
     const outH = Math.round((outW * srcH) / srcW)
     const canvas = document.createElement("canvas")
@@ -154,7 +166,7 @@ export default function ImageCropper({
     <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-white w-full max-w-2xl rounded shadow-lg border">
         <div className="flex items-center justify-between p-4 border-b">
-          <div className="font-medium">Edit image — drag to position</div>
+          <div className="font-medium">Edit image — drag the photo to position it inside the crop box</div>
           <button className="border px-3 py-1 text-sm disabled:opacity-50" type="button" onClick={onCancel} disabled={busy}>
             Cancel
           </button>
@@ -181,8 +193,8 @@ export default function ImageCropper({
           <div className="w-full flex justify-center">
             <div
               ref={wrapRef}
-              className="relative overflow-hidden bg-gray-100 border touch-none select-none cursor-grab active:cursor-grabbing"
-              style={{ width: viewW, height: viewH }}
+              className="relative overflow-hidden bg-gray-200 border touch-none select-none cursor-grab active:cursor-grabbing"
+              style={{ width: contW, height: contH }}
               onPointerDown={onPointerDown}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -203,6 +215,18 @@ export default function ImageCropper({
                   willChange: "transform",
                 }}
               />
+              {/* crop frame: dims everything outside, highlights the saved area */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: cropX,
+                  top: cropY,
+                  width: cropW,
+                  height: cropH,
+                  boxShadow: "0 0 0 9999px rgba(0,0,0,0.5)",
+                  outline: "2px solid #3AFCAD",
+                }}
+              />
             </div>
           </div>
 
@@ -219,7 +243,7 @@ export default function ImageCropper({
             />
           </div>
 
-          <p className="text-xs text-gray-600">Drag the image to position it inside the frame, use the slider to zoom. The visible frame is what gets saved.</p>
+          <p className="text-xs text-gray-600">Drag the photo to move it up/down/sideways inside the crop box, use the slider to zoom. Only the bright area is saved.</p>
 
           <div className="flex justify-end gap-2">
             <button className="border px-3 py-2 text-sm disabled:opacity-50" type="button" onClick={onCancel} disabled={busy}>
