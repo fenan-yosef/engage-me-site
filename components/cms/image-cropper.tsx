@@ -1,11 +1,12 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
-import Cropper, { type Area } from "react-easy-crop"
+import { useRef, useState } from "react"
+import { Cropper, type ReactCropperElement } from "react-cropper"
+import "cropperjs/dist/cropper.css"
 
 export type AspectPreset = { label: string; value: number | null }
 
-// Aspect presets offered in the cropper. `null` = free (use the image ratio).
+// Aspect presets offered in the cropper. `null` = free (any ratio).
 const PRESETS: AspectPreset[] = [
   { label: "Tile (work grid)", value: 432 / 262 },
   { label: "Wide 16:9", value: 16 / 9 },
@@ -27,16 +28,6 @@ export function cropAspectForField(field: string): number | null {
 
 const OUTPUT_MAX = 1600 // cap exported width in px
 
-function loadImage(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.crossOrigin = "anonymous"
-    img.onload = () => resolve(img)
-    img.onerror = reject
-    img.src = src
-  })
-}
-
 export default function ImageCropper({
   src,
   fileName,
@@ -52,33 +43,19 @@ export default function ImageCropper({
   onConfirm: (file: File) => void | Promise<void>
   busy?: boolean
 }) {
+  const cropperRef = useRef<ReactCropperElement>(null)
   const [aspectChoice, setAspectChoice] = useState<number | null>(defaultAspect)
-  const [natRatio, setNatRatio] = useState<number | null>(null)
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const areaRef = useRef<Area | null>(null)
 
-  const aspect = aspectChoice ?? natRatio ?? 1
+  function applyAspect(value: number | null) {
+    setAspectChoice(value)
+    cropperRef.current?.cropper.setAspectRatio(value ?? NaN)
+  }
 
-  const onCropComplete = useCallback((_area: Area, areaPixels: Area) => {
-    areaRef.current = areaPixels
-  }, [])
-
-  async function save() {
-    const area = areaRef.current
-    if (!area) return
-    const image = await loadImage(src)
-    const srcW = Math.max(1, Math.round(area.width))
-    const srcH = Math.max(1, Math.round(area.height))
-    const outW = Math.min(OUTPUT_MAX, srcW)
-    const outH = Math.round((outW * srcH) / srcW)
-    const canvas = document.createElement("canvas")
-    canvas.width = outW
-    canvas.height = outH
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-    ctx.imageSmoothingQuality = "high"
-    ctx.drawImage(image, area.x, area.y, area.width, area.height, 0, 0, outW, outH)
+  function save() {
+    const cropper = cropperRef.current?.cropper
+    if (!cropper) return
+    const canvas = cropper.getCroppedCanvas({ maxWidth: OUTPUT_MAX, imageSmoothingQuality: "high" })
+    if (!canvas) return
     const isPng = /\.png$/i.test(fileName) || fileName.startsWith("image/png")
     const mime = isPng ? "image/png" : "image/jpeg"
     const ext = isPng ? "png" : "jpg"
@@ -98,7 +75,7 @@ export default function ImageCropper({
     <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="bg-white w-full max-w-2xl rounded shadow-lg border">
         <div className="flex items-center justify-between p-4 border-b">
-          <div className="font-medium">Edit image — drag the photo to position it, zoom to frame it</div>
+          <div className="font-medium">Edit image — drag the photo to move it, drag the box corners to resize</div>
           <button className="border px-3 py-1 text-sm disabled:opacity-50" type="button" onClick={onCancel} disabled={busy}>
             Cancel
           </button>
@@ -115,7 +92,7 @@ export default function ImageCropper({
                 <button
                   key={p.label}
                   type="button"
-                  onClick={() => setAspectChoice(p.value)}
+                  onClick={() => applyAspect(p.value)}
                   className={`text-xs border px-2 py-1 rounded ${active ? "bg-[#3AFCAD] border-[#3AFCAD]" : "bg-white"}`}
                 >
                   {p.label}
@@ -124,39 +101,27 @@ export default function ImageCropper({
             })}
           </div>
 
-          <div className="relative w-full h-[360px] bg-gray-800 overflow-hidden rounded">
+          <div className="w-full">
             <Cropper
-              image={src}
-              crop={crop}
-              zoom={zoom}
-              aspect={aspect}
-              minZoom={1}
-              maxZoom={5}
-              restrictPosition={false}
-              showGrid
-              zoomWithScroll
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-              onMediaLoaded={(m) => setNatRatio(m.naturalWidth / m.naturalHeight)}
-              mediaProps={{ crossOrigin: "anonymous" }}
+              ref={cropperRef}
+              src={src}
+              style={{ height: 380, width: "100%" }}
+              aspectRatio={aspectChoice ?? NaN}
+              viewMode={1}
+              dragMode="move"
+              cropBoxMovable
+              cropBoxResizable
+              toggleDragModeOnDblclick={false}
+              autoCropArea={0.85}
+              guides
+              background
+              responsive
+              restore
+              checkOrientation={false}
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-600 w-12">Zoom</span>
-            <input
-              type="range"
-              min={1}
-              max={5}
-              step={0.01}
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="flex-1"
-            />
-          </div>
-
-          <p className="text-xs text-gray-600">Drag the photo to move it up/down/sideways, scroll or use the slider to zoom. The area inside the frame is what gets saved.</p>
+          <p className="text-xs text-gray-600">Drag the photo to move it up/down/sideways. Drag the green corners/edges to resize the crop box. Only the area inside the box is saved.</p>
 
           <div className="flex justify-end gap-2">
             <button className="border px-3 py-2 text-sm disabled:opacity-50" type="button" onClick={onCancel} disabled={busy}>
