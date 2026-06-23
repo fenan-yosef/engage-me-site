@@ -90,7 +90,7 @@ export default async function WorkPage() {
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                 <span
                   className="text-white text-center px-2"
                   style={{
