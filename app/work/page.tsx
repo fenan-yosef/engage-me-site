@@ -56,7 +56,7 @@ export default async function WorkPage() {
       <Header />
 
       <div className="bg-[#212529] px-4 md:px-8 py-6">
-        <div className="max-w-[638px] mx-auto">
+        <div className="max-w-[918px] mx-auto">
           <style>{`
             @font-face {
               font-family: 'run';
@@ -77,7 +77,7 @@ export default async function WorkPage() {
 
       <div className="h-3 md:h-4" />
 
-      <div className="bg-white max-w-[638px] mx-auto px-4">
+      <div className="bg-white max-w-[918px] mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px">
           {displayItems.map((item) => (
             <Link
