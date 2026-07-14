@@ -99,10 +99,10 @@ export default async function WorkPage() {
                 <span
                   className="text-white text-center px-2"
                   style={{
-                    fontFamily: '"Run", sans-serif',
-                    fontSize: "22px",
-                    fontWeight: 700,
-                    lineHeight: 1,
+                    fontFamily: '"Montserrat", sans-serif',
+                    fontSize: "24px",
+                    fontWeight: 300,
+                    lineHeight: 1.1,
                   }}
                 >
                   {item.title}
