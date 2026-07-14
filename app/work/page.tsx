@@ -71,6 +71,17 @@ export default async function WorkPage() {
           >
             {content.heading}
           </h1>
+          <p
+            className="mt-4 text-lg"
+            style={{
+              color: "rgba(255, 255, 255, 0.78)",
+              fontFamily: '"Montserrat", sans-serif',
+              fontWeight: 300,
+              lineHeight: 1.6,
+            }}
+          >
+            {content.intro}
+          </p>
         </div>
       </div>
 
