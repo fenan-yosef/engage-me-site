@@ -71,7 +71,12 @@ export default async function WorkPage() {
           >
             {content.heading}
           </h1>
-          <p className="text-gray-300 text-lg mt-4">{content.intro}</p>
+          <p
+            className="text-gray-300 text-lg mt-4"
+            style={{ fontFamily: '"Montserrat", sans-serif', fontWeight: 300 }}
+          >
+            {content.intro}
+          </p>
         </div>
       </div>
 
@@ -94,10 +99,10 @@ export default async function WorkPage() {
                 <span
                   className="text-white text-center px-2"
                   style={{
-                    fontFamily: '"Roboto Condensed", "Arial Narrow", sans-serif',
-                    fontSize: "20px",
-                    fontWeight: 300,
-                    lineHeight: 1.1,
+                    fontFamily: '"Run", sans-serif',
+                    fontSize: "22px",
+                    fontWeight: 700,
+                    lineHeight: 1,
                   }}
                 >
                   {item.title}

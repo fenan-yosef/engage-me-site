@@ -110,7 +110,7 @@ export default function WorkDetailPage({ params }: { params: Promise<{ slug: str
   const displayPrimaryImage = left0 || right0
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="work-detail-page min-h-screen bg-white">
       <Header />
 
       <section className="work_post_banner">
@@ -130,9 +130,10 @@ export default function WorkDetailPage({ params }: { params: Promise<{ slug: str
               src: url('/fonts/run.ttf') format('truetype');
               font-display: swap;
             }
-            .section-title { font-family: run, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-transform: none; line-height:1; color: #3AFCAD; }
+            .work-detail-page .section-title { font-family: 'Run', sans-serif; font-weight: 700; text-transform: none; line-height:1; color: #3AFCAD; }
             .section-title.lowercase { text-transform: none; text-transform: lowercase; }
-            .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.125rem; line-height:1.4; font-family: Arial; }
+            .work-detail-page .f-text-xlarge p { margin: 0 0 1rem 0; font-size: 1.125rem; line-height:1.4; font-family: 'Montserrat', sans-serif; font-weight: 300; }
+            .work-detail-page .btn-brand-leaf { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; }
             .work_post_banner img { width:100%; object-fit:cover; display:block; }
             .home_imggroup img { width:100%; object-fit:cover; display:block; }
             .f-btn-tertiary { background:#3AFCAD; color:#fff; padding:0.75rem 1.25rem; border-radius:0.5rem; display:inline-block; }
